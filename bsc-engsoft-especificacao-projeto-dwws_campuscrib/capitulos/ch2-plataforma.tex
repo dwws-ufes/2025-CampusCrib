@@ -1,0 +1,122 @@
+% ==============================================================================
+% Projeto de Sistema - Gabriel Zonatelle Borges e Kaio Silva Rosa
+% Capítulo 2 - Plataforma de Desenvolvimento
+% ==============================================================================
+\chapter{Plataforma de Desenvolvimento}
+\label{sec-plataforma}
+\vspace{-1cm}
+
+%=======================================================================================================
+%			Tabela de Plataforma de Desenvolvimento e Tecnologias Utilizadas
+%=======================================================================================================
+
+Na Tabela~\ref{tabela-plataforma} são listadas as tecnologias utilizadas no desenvolvimento da ferramenta, bem como o propósito de sua utilização.
+
+\begin{footnotesize}
+\begin{longtable}{|p{1.8cm}|c|p{5cm}|p{6.3cm}|}
+	\caption{Plataforma de Desenvolvimento e Tecnologias Utilizadas.}	
+	\label{tabela-plataforma}\\\hline
+
+	\rowcolor{lightgray}
+	\textbf{Tecnologia} & \textbf{Versão} & \textbf{Descrição} & \textbf{Propósito} \\\hline 
+	\endfirsthead
+	\hline
+	\rowcolor{lightgray}
+	\textbf{Tecnologia} & \textbf{Versão} & \textbf{Descrição} & \textbf{Propósito} \\\hline 
+	\endhead
+		
+	% Java EE & 7 & Conjunto de especificação de APIs e tecnologias, que são implementadas por programas servidores de aplicação. & Redução da complexidade do desenvolvimento, implantação e gerenciamento de aplicações Web a partir de seus componentes de infra-estrutura prontos para o uso. \\ \hline
+
+	Java & 21 & Linguagem de programação orientada a objetos e independente de plataforma. & Escrita do código-fonte dos microsserviços que compõem o sistema. \\\hline
+
+    Spring Boot & 3.5.0 & Framework baseado no ecossistema Spring, que abstrai configurações e oferece uma estrutura opinativa para desenvolvimento de aplicações Java. & Desenvolvimento dos microsserviços utilizando uma arquitetura simplificada, criação de APIs e serviços com baixo acoplamento \\\hline
+	
+	Angular & 17.0 &  Framework SPA para front-end para construção de componentes gráficos  & Construção das páginas web, roteamento e implementação dos componentes visuais da aplicação  \\\hline  
+	
+	Angular Material  & 17.3.6 & Conjunto de componentes visuais da biblioteca oficial do Angular baseada no Material Design. & Fornecimento de um conjunto de componentes de interface prontos, acessíveis e responsivos \\\hline
+
+    Spring Web & 6.2.6 & Cria aplicações web, incluindo RESTful, usando Spring MVC. Use o Apache Tomcat como contêiner embarcado padrão. & Criar as APIs RESTful dos microsserviços. \\\hline
+	
+    Spring Data JPA & 3.4.5 & Persista dados em armazenamentos SQL com a API de persistência Java usando Spring Data e Hibernate. & Persistência dos objetos de domínio sem necessidade de escrita dos comandos SQL. \\\hline
+
+    Spring Data JPA & 3.4.5 & Persista dados em armazenamentos SQL com a API de persistência Java usando Spring Data e Hibernate. & Persistência dos objetos de domínio sem necessidade de escrita dos comandos SQL nos microsserviços em Java. \\\hline
+
+    Spring Data MongoDB & 4.5.0 & Armazene dados em documentos flexíveis, semelhantes a JSON, o que significa que os campos podem variar de documento para documento e a estrutura de dados pode ser alterada ao longo do tempo. & Persistência dos objetos de domínio para banco de dados NoSQL MongoDB nos microsserviços em Java. \\\hline
+
+    Spring Data Redis & 3.5.0 & Cliente Java Redis avançado e thread-safe para uso síncrono, assíncrono e reativo. Suporta Cluster, Sentinel, Pipelining, Reconexão Automática e Codecs. & Cache dos objetos de domínio para o Redis (banco de dados em memória) nos microsserviços em Java. \\\hline
+
+    Spring Security & 6.4.5 & Estrutura de autenticação e controle de acesso altamente personalizável para aplicativos Spring. & Funcionalidades de segurança como BCrypt, autenticação de rotas e geração de tokens JWTPersistência dos objetos de domínio sem necessidade de escrita dos comandos SQL. \\\hline
+
+    Go & 1.24.2 & Linguagem de programação de código aberto, estaticamente tipada e compilada. & Escrita do código-fonte de microsserviços que compõem o sistema. \\\hline
+
+    pgx & 9.8.0 & Driver e toolkit avançado para PostgreSQL em Go, em que oferece suporte completo aos recursos específicos do PostgreSQL & Persistência dos objetos de domínio em PostgreSQL nos microsserviços em Go. \\\hline
+
+    mongo-driver & 1.17.3 & Driver oficial da MongoDB para Go, oferecendo uma API moderna e suporte a recursos como transações, criptografia e autenticação avançada. & Persistência dos objetos de domínio para banco de dados NoSQL MongoDB nos microsserviços em Go. \\\hline
+
+    go-redis & 9.8.0 & Biblioteca cliente oficial do Redis para a linguagem de programação Go, em que oferece uma interface simples para interagir com servidores Redis. & Cache dos objetos de domínio para o Redis (banco de dados em memória) nos microsserviços em Go. \\\hline
+	
+	% CDI & 1.1 & API para injeção de dependências. & Integração das diferentes camadas da arquitetura. \\\hline
+    
+	PostgreSQL & 14.17 & Sistema Gerenciador de Banco de Dados Relacional gratuito. & Armazenamento dos dados manipulados pela ferramenta. \\\hline
+
+    MongoDB & 8.0 & Sistema Gerenciador de Banco de Dados não relacional (NoSQL) orientado a documentos. & Armazenamento dos dados manipulados pela ferramenta. \\\hline
+
+    Redis & 7.0 & Um banco de dados de chave-valor de código aberto, em memória, conhecido por sua velocidade e versatilidade. & Armazenamento como cache dos dados para os microsserviços. \\\hline
+
+    DynamoDB & Online & Serviço de banco de dados NoSQL, fornecido pela Amazon Web Services, projetado para lidar com grandes volumes de dados e tráfego. & Armazenamento em nuvem com grande performance para serviços de alta demanda de requisições. \\\hline
+
+    ElasticSearch & 8.18 & Mecanismo de busca e análise RESTful open source distribuído, armazenamento de dados escalável e banco de dados de vetores. & Armazenamento indexado de dados para buscas com filtros complexos de forma performática. \\\hline
+	
+	Apache Tomcat & 10.1.40 & Contêiner de servlet Java gratuito e de código aberto e um servidor de aplicativos da web amplamente utilizado. & Fornecido padrão pelo Spring Boot (embarcado), eliminando a necessidade de instalação e configuração de servidores externos. Atua como um servidor web e contêiner de servlet, permitindo que aplicações Spring Boot processem solicitações HTTP e forneçam conteúdo web. \\\hline
+
+    Kong Gateway & 3.9.0 & Solução open source e cloud nativa para gerenciamento de APIs, oferece alto desempenho e extensibilidade por meio de plugins, sendo amplamente adotado por empresas para gerenciar, proteger e escalar APIs em arquiteturas de microsserviços. & Centralizar o gerenciamento, a segurança e o monitoramento das APIs expostas pelos microsserviços da aplicação, facilitando a escalabilidade, o controle de acesso e a observabilidade em um ambiente distribuído. \\\hline
+
+    Apache Kafka & 4.0.0 & Repositório de dados distribuído otimizado para ingestão e processamento de dados de streaming em tempo real. & Comunicação assíncrona entre os microsserviços através de eventos/mensagens em tópicos. \\\hline
+
+    Docker & 28.1.1 & Oferece a capacidade de empacotar e executar um aplicativo em um ambiente isolado chamado contêiner. & Rodar os microsserviços e banco de dados em contêineres para termos ambientes controlados. \\\hline
+
+    Amazon (SES) & Online & Serviço de e-mail baseado em nuvem oferecido pela AWS, permite enviar. & Utilizar como serviço para notificação via e-mail. \\\hline
+
+    Amazon S3 & Online & Serviço de armazenamento e recuperação de objetos que oferece escalabilidade, disponibilidade de dados, segurança e desempenho. & Utilizar como serviço para armazenamento e recuperação de imagens em nuvem. \\\hline
+\end{longtable}
+\end{footnotesize}
+
+
+
+
+
+
+%=======================================================================================================
+%			Tabela de Softwares de Apoio ao Desenvolvimento do Projeto
+%=======================================================================================================
+
+Na Tabela~\ref{tabela-software} vemos os softwares que apoiaram o desenvolvimento de documentos e também do código fonte.
+
+\begin{footnotesize}
+\begin{longtable}{|p{2.5cm}|c|p{5cm}|p{5.5cm}|}
+	\caption{Softwares de Apoio ao Desenvolvimento do Projeto}	
+	\label{tabela-software}\\\hline
+	
+	\rowcolor{lightgray}
+	\textbf{Tecnologia} & \textbf{Versão} & \textbf{Descrição} & \textbf{Propósito} \\\hline 
+	\endfirsthead
+	\hline
+	\rowcolor{lightgray}
+	\textbf{Tecnologia} & \textbf{Versão} & \textbf{Descrição} & \textbf{Propósito} \\\hline 
+	\endhead
+	 
+	FrameWeb Editor Plugin & 1.0 & Ferramenta CASE do método FrameWeb. & Criação dos modelos de Entidades, Aplicação, Persistência e Navegação. \\\hline
+    
+    Visual Paradigm & 17.2 & Ferramenta de modelagem visual para criação de diagramas UML, BPMN e outros modelos de software. Base para execução de plugins como o FrameWeb Editor. & Suporte à modelagem dos artefatos do sistema, servindo como ambiente para a criação dos modelos FrameWeb. \\\hline
+	Overleaf  & Online & Implementadão do \LaTeX & Documentação do projeto arquitetural do sistema. \\\hline      
+
+    Github  & Online & Plataforma de hospedagem de
+código-fonte e arquivos com controle de versão usando o Git. & Versionamento e armazenamento de código do projeto. \\\hline  
+
+	IntelliJ IDEA (Community Edition) & 2025.1.1.1 & Ambiente de desenvolvimento (IDE) com suporte ao desenvolvimento Java. & Implementação, implantação e testes dos microsserviços em Java. \\\hline
+
+    Visual Studio Code & 1.100.2 & Editor de texto com suporte de múltiplos \textit{plug-in} para  desenvolvimento. & Implementação, implantação e testes dos microsserviços em Go. \\\hline
+	
+	Apache Maven & 3.5 & Ferramenta de gerência/construção de projetos de software. & Obtenção e integração das dependências do projeto. \\\hline
+\end{longtable}
+\end{footnotesize}
