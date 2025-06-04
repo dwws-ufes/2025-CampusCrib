@@ -1,0 +1,42 @@
+<div class="login-card">
+<mat-card class="example-card" appearance="outlined">
+  <div class="example-container">
+    <mat-form-field>
+        <mat-label>Enter your email</mat-label>
+        <input
+        matInput
+        placeholder="pat@example.com"
+        [formControl]="email"
+        (blur)="updateErrorMessage()"
+        required
+        />
+        @if (email.invalid) {
+        <mat-error>{{errorMessage()}}</mat-error>
+        }
+    </mat-form-field>
+    
+    <mat-form-field>
+        <mat-label>Enter your password</mat-label>
+        <input
+        matInput
+        [formControl]="password"
+        (blur)="updateErrorMessage()"
+        required
+        />
+        @if (password.invalid) {
+        <mat-error>{{errorMessage()}}</mat-error>
+        }
+    </mat-form-field>
+
+    <div class="button-container">
+        <button mat-raised-button color="primary">Login</button>
+    </div>
+
+    <div class="extra-labels">
+    <span>Don't have an account?</span>
+    <button mat-button color="warn">Sign Up</button>
+    </div>
+</div>
+</mat-card>
+</div>
+

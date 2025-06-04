@@ -1,0 +1,18 @@
+.login-card{
+    margin: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.example-card {
+    padding: 5%;
+    max-width: 400px;
+}
+
+.example-container{
+    text-align: center;
+}
+
+.extra-labels{
+    margin-top: 10px;
+}
