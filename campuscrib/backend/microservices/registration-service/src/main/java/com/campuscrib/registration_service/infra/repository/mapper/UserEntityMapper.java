@@ -18,7 +18,7 @@ public class UserEntityMapper {
                 .birthDate(user.getBirthDate())
                 .profileImage(user.getProfileImage())
                 .role(UserRoleEntity.valueOf(user.getRole().name()))
-                .legalGuardian(user.getLegalGuardian())
+                .legalGuardianId(user.getLegalGuardian())
                 .build();
     }
 
@@ -33,7 +33,7 @@ public class UserEntityMapper {
                 .birthDate(entity.getBirthDate())
                 .profileImage(entity.getProfileImage())
                 .role(UserRole.valueOf(entity.getRole().name()))
-                .legalGuardian(entity.getLegalGuardian())
+                .legalGuardian(entity.getLegalGuardianId())
                 .build();
     }
 }

@@ -35,7 +35,6 @@ public class UserEntity {
     @Enumerated(EnumType.STRING)
     private UserRoleEntity role;
 
-    @ManyToOne
-    @JoinColumn(name = "legal_guardian_id")
-    private UUID legalGuardian;
+    @Column(name = "legal_guardian_id")
+    private UUID legalGuardianId;
 }

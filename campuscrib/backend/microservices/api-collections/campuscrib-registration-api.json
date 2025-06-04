@@ -1,0 +1,62 @@
+{
+  "_type": "export",
+  "__export_format": 4,
+  "__export_date": "2024-06-01T20:00:00.000Z",
+  "__export_source": "insomnia.desktop.app:v2023.5.8",
+  "resources": [
+    {
+      "_id": "wrk_123campuscrib",
+      "name": "CampusCrib Registration API",
+      "_type": "workspace"
+    },
+    {
+      "_id": "env_123base",
+      "parentId": "wrk_123campuscrib",
+      "_type": "environment",
+      "name": "Base Environment",
+      "data": {
+        "base_url": "http://localhost:8080"
+      }
+    },
+    {
+      "_id": "req_register_user",
+      "parentId": "wrk_123campuscrib",
+      "_type": "request",
+      "name": "Register User",
+      "method": "POST",
+      "url": "{{ base_url }}/api/registration/users/register",
+      "body": {
+        "mimeType": "multipart/form-data",
+        "params": [
+          { "name": "firstName", "value": "John" },
+          { "name": "lastName", "value": "Doe" },
+          { "name": "email", "value": "john.doe@example.com" },
+          { "name": "password", "value": "secret123" },
+          { "name": "birthDate", "value": "2000-01-01" },
+          { "name": "role", "value": "TENANT" },
+          { "name": "legalGuardianId", "value": "" },
+          { "name": "profileImage", "type": "file", "fileName": "" }
+        ]
+      }
+    },
+    {
+      "_id": "req_confirm_email",
+      "parentId": "wrk_123campuscrib",
+      "_type": "request",
+      "name": "Confirm Email",
+      "method": "GET",
+      "url": "{{ base_url }}/api/registration/users/confirm-email",
+      "parameters": [
+        { "name": "token", "value": "PASTE_YOUR_TOKEN_HERE" }
+      ]
+    },
+    {
+      "_id": "req_list_legal_guardians",
+      "parentId": "wrk_123campuscrib",
+      "_type": "request",
+      "name": "List Legal Guardians",
+      "method": "GET",
+      "url": "{{ base_url }}/api/registration/users/legal-guardians"
+    }
+  ]
+}
