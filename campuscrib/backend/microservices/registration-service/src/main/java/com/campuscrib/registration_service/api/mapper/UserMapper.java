@@ -1,5 +1,6 @@
 package com.campuscrib.registration_service.api.mapper;
 
+import com.campuscrib.registration_service.api.dto.LegalGuardianResponse;
 import com.campuscrib.registration_service.api.dto.RegisterUserRequest;
 import com.campuscrib.registration_service.api.dto.RegisterUserResponse;
 import com.campuscrib.registration_service.domain.model.User;
@@ -31,6 +32,16 @@ public class UserMapper {
                 .legalGuardian(user.getLegalGuardian())
                 .isEmailConfirmed(user.isEmailConfirmed())
                 .profileImage(user.getProfileImage())
+                .build();
+    }
+
+    public static LegalGuardianResponse toLegalGuardianResponse(User user) {
+        return LegalGuardianResponse.builder()
+                .id(user.getId())
+                .firstName(user.getFirstName())
+                .lastName(user.getLastName())
+                .email(user.getEmail())
+                .birthDate(user.getBirthDate())
                 .build();
     }
 }

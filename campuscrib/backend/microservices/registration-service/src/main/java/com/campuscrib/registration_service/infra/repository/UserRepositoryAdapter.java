@@ -6,6 +6,8 @@ import com.campuscrib.registration_service.infra.repository.mapper.UserEntityMap
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -30,6 +32,13 @@ public class UserRepositoryAdapter implements UserRepository {
     @Override
     public Optional<User> findById(UUID id) {
         return jpaUserRepository.findById(id).map(UserEntityMapper::toDomain);
+    }
+
+    @Override
+    public List<User> findByBirthDateBefore(LocalDate date) {
+        return jpaUserRepository.findByBirthDateBefore(date).stream()
+                .map(UserEntityMapper::toDomain)
+                .toList();
     }
 
     @Override
