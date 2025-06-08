@@ -1,0 +1,78 @@
+{
+  "_type": "export",
+  "__export_format": 4,
+  "__export_date": "2025-06-07T00:00:00.000Z",
+  "__export_source": "insomnia.desktop.app:v2024.2.2",
+  "resources": [
+    {
+      "_id": "wrk_authentication_service",
+      "name": "AuthenticationService",
+      "_type": "workspace"
+    },
+    {
+      "_id": "env_authentication_service",
+      "_type": "environment",
+      "parentId": "wrk_authentication_service",
+      "name": "Base Environment",
+      "data": {
+        "base_url": "http://localhost:8081",
+        "access_token": "",
+        "refresh_token": ""
+      }
+    },
+    {
+      "_id": "req_login",
+      "_type": "request",
+      "parentId": "wrk_authentication_service",
+      "name": "POST /api/auth/login",
+      "method": "POST",
+      "url": "{{ base_url }}/api/auth/login",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"email\": \"user@example.com\",\n  \"password\": \"plainPassword\"\n}"
+      }
+    },
+    {
+      "_id": "req_refresh",
+      "_type": "request",
+      "parentId": "wrk_authentication_service",
+      "name": "POST /api/auth/refresh",
+      "method": "POST",
+      "url": "{{ base_url }}/api/auth/refresh",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"refreshToken\": \"{{ refresh_token }}\"\n}"
+      }
+    },
+    {
+      "_id": "req_logout",
+      "_type": "request",
+      "parentId": "wrk_authentication_service",
+      "name": "POST /api/auth/logout",
+      "method": "POST",
+      "url": "{{ base_url }}/api/auth/logout",
+      "headers": [
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ access_token }}"
+        }
+      ],
+      "body": {
+        "mimeType": "application/json",
+        "text": "{}"
+      }
+    },
+    {
+      "_id": "req_register_integration",
+      "_type": "request",
+      "parentId": "wrk_authentication_service",
+      "name": "POST /api/auth/users/register-integration",
+      "method": "POST",
+      "url": "{{ base_url }}/api/auth/users/register-integration",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"userId\": \"uuid-string\",\n  \"email\": \"user@example.com\",\n  \"passwordHashed\": \"hashedPasswordHere\"\n}"
+      }
+    }
+  ]
+}
