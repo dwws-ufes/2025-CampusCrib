@@ -1,5 +1,8 @@
 package com.campuscrib.registration_service.application.services;
 
+import com.campuscrib.registration_service.application.exceptions.EmailAlreadyConfirmedException;
+import com.campuscrib.registration_service.application.exceptions.ExternalServiceException;
+import com.campuscrib.registration_service.application.exceptions.UserPersistenceException;
 import com.campuscrib.registration_service.application.ports.AuthenticationServiceClientPort;
 import com.campuscrib.registration_service.application.ports.ConfirmEmailUseCase;
 import com.campuscrib.registration_service.domain.model.User;
@@ -29,7 +32,7 @@ public class ConfirmEmailService implements ConfirmEmailUseCase {
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
 
         if (user.isEmailConfirmed()) {
-            return;
+            throw new EmailAlreadyConfirmedException("Email already confirmed");
         }
 
         User updatedUser = User.builder()
@@ -45,8 +48,22 @@ public class ConfirmEmailService implements ConfirmEmailUseCase {
                 .profileImage(user.getProfileImage())
                 .build();
 
-        User savedUser = userRepository.save(updatedUser);
+        User savedUser;
 
-        authenticationServiceClientPort.registerConfirmedUser(savedUser.getId(), savedUser.getEmail(), savedUser.getPasswordHash());
+        try {
+            savedUser = userRepository.save(updatedUser);
+        } catch (Exception e) {
+            throw new UserPersistenceException("Email confirmation failed", e);
+        }
+
+        try {
+            authenticationServiceClientPort.registerConfirmedUser(
+                    savedUser.getId(),
+                    savedUser.getEmail(),
+                    savedUser.getPasswordHash()
+            );
+        } catch (Exception e) {
+            throw new ExternalServiceException("Failed to enable user login", e);
+        }
     }
 }

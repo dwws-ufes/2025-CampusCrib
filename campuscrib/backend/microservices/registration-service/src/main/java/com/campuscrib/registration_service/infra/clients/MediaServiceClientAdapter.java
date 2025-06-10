@@ -1,4 +1,4 @@
-package com.campuscrib.registration_service.infra.serviceclient;
+package com.campuscrib.registration_service.infra.clients;
 
 import com.campuscrib.registration_service.application.ports.MediaServiceClientPort;
 import org.springframework.stereotype.Service;
