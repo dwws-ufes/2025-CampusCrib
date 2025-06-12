@@ -1,18 +1,87 @@
 .login-card{
-    margin: 20px;
+    margin: 40px 0;
     display: flex;
     align-items: center;
     justify-content: center;
+    padding-bottom: 80px; /* space for footer */
+    min-height: calc(100vh - 120px);
+    box-sizing: border-box;
 }
 .example-card {
-    padding: 5%;
+    padding: 24px 20px 16px 20px;
+    width: 100%;
     max-width: 400px;
+    border-radius: 16px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.10), 0 1.5px 6px rgba(0,0,0,0.08);
+    background: #fff;
+    box-sizing: border-box;
 }
 
 .example-container{
-    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+}
+
+.helper-text {
+    font-size: 0.8rem;
+    font-style: italic;
+    color: #666;
+    margin: -6px 0 10px 2px;
 }
 
 .extra-labels{
-    margin-top: 10px;
+    margin-top: 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+}
+
+.section-title {
+    font-weight: 500;
+    font-size: 1.1rem;
+    margin-bottom: 8px;
+    margin-top: 8px;
+    text-align: left;
+}
+
+.button-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 24px;
+}
+
+.signup-text{
+    font-size: 0.9rem;
+    color: #555;
+}
+
+.signup-button{
+    width: auto; /* fit content */
+    padding: 6px 24px;
+}
+
+mat-form-field{
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+button[mat-raised-button]{
+    width: 100%;
+    font-weight: 500;
+    font-size: 1.05rem;
+    border-radius: 8px;
+    padding: 12px 0;
+    transition: background 0.2s;
+}
+button[mat-raised-button]:hover{
+    background: #1565c0;
+}
+
+mat-card.example-card{
+    display:flex;
+    flex-direction: column;
+    align-items: stretch;
 }

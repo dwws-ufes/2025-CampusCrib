@@ -1,1 +1,99 @@
-<p>registration works!</p>
+<div class="registration-card">
+  <mat-card class="example-card" appearance="outlined">
+    <div class="example-container">
+      <form [formGroup]="registrationForm">
+        <div class="section-title">Personal Information</div>
+        <mat-form-field appearance="outline">
+          <mat-label>First Name</mat-label>
+          <mat-icon matPrefix>person</mat-icon>
+          <input matInput formControlName="firstName" required />
+          @if(registrationForm.get('firstName')?.invalid){
+            <mat-error>First name is required</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Last Name</mat-label>
+          <mat-icon matPrefix>person</mat-icon>
+          <input matInput formControlName="lastName" required />
+          @if(registrationForm.get('lastName')?.invalid){
+            <mat-error>Last name is required</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Birth Date</mat-label>
+          <mat-icon matPrefix>calendar_today</mat-icon>
+          <input matInput type="date" formControlName="birthDate" required />
+          @if(registrationForm.get('birthDate')?.invalid){
+            <mat-error>Birth date is required</mat-error>
+          }
+        </mat-form-field>
+
+        <div class="section-title">Account Credentials</div>
+        <mat-form-field appearance="outline">
+          <mat-label>Email</mat-label>
+          <mat-icon matPrefix>mail</mat-icon>
+          <input matInput formControlName="email" required />
+          @if(registrationForm.get('email')?.invalid){
+            <mat-error>Invalid email</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Password</mat-label>
+          <input matInput [type]="showPassword ? 'text' : 'password'" formControlName="password" required />
+          <button mat-icon-button matSuffix type="button" (click)="togglePasswordVisibility()" [attr.aria-label]="showPassword ? 'Hide password' : 'Show password'">
+            <mat-icon>{{ showPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+          </button>
+          @if(registrationForm.get('password')?.invalid){
+            <mat-error>Password required (min 6 chars)</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Confirm Password</mat-label>
+          <input matInput [type]="showConfirm ? 'text' : 'password'" formControlName="confirmPassword" required />
+          <button mat-icon-button matSuffix type="button" (click)="toggleConfirmVisibility()" [attr.aria-label]="showConfirm ? 'Hide password' : 'Show password'">
+            <mat-icon>{{ showConfirm ? 'visibility_off' : 'visibility' }}</mat-icon>
+          </button>
+          @if(registrationForm.get('confirmPassword')?.invalid){
+            <mat-error>Confirm your password</mat-error>
+          }
+          @if(registrationForm.hasError('passwordsMismatch')){
+            <mat-error>Passwords do not match</mat-error>
+          }
+        </mat-form-field>
+        <div class="helper-text">Password must be at least 6 characters long.</div>
+
+        <div class="section-title">User Type <mat-icon class="info-icon" matTooltip="LandLord: manage cribs (apartments). Tenant: looking for a crib.">help_outline</mat-icon></div>
+        <mat-radio-group formControlName="role" class="role-group">
+          <mat-radio-button value="Tenant" matTooltip="Looking for a crib / apartment">Tenant</mat-radio-button>
+          <mat-radio-button value="LandLord" matTooltip="Manage your cribs / apartments">LandLord</mat-radio-button>
+        </mat-radio-group>
+
+        <div class="section-title">Profile Image</div>
+        <div class="image-upload">
+          <div class="helper-text">Accepted formats: JPG, PNG, GIF. Max size: 2MB.</div>
+          <input id="profileImage" #fileInput type="file" (change)="onFileSelected($event)" accept="image/*" hidden />
+          <button mat-stroked-button color="primary" class="upload-button" type="button" (click)="fileInput.click()">
+            <mat-icon>file_upload</mat-icon>
+            <span>Choose Image</span>
+          </button>
+          @if(registrationForm.get('profileImage')?.value?.name){
+            <span class="selected-file">{{ registrationForm.get('profileImage')?.value?.name }}</span>
+          }
+          @if(imagePreview){
+            <div class="image-preview">
+              <img [src]="imagePreview" alt="Profile Preview" width="100" />
+            </div>
+          }
+        </div>
+
+        <div class="button-container">
+          <button mat-raised-button color="primary" type="submit" [disabled]="registrationForm.invalid">Register</button>
+        </div>
+      </form>
+    </div>
+  </mat-card>
+</div>
