@@ -1,5 +1,7 @@
 package ports
 
+import "context"
+
 type EmailSenderPort interface {
-	SendEmail(to, subject, body string) error
+	SendEmail(ctx context.Context, to, subject, body string) error
 }

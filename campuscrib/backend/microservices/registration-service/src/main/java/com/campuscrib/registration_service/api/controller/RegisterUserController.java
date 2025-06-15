@@ -6,6 +6,8 @@ import com.campuscrib.registration_service.api.mapper.UserMapper;
 import com.campuscrib.registration_service.application.ports.RegisterUserUseCase;
 import com.campuscrib.registration_service.domain.model.User;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,10 +29,13 @@ public class RegisterUserController {
 
     @PostMapping("/register")
     public ResponseEntity<?> register(
-            @ModelAttribute @Validated RegisterUserRequest request,
+            @RequestPart("data") String data,
             @RequestPart(value = "profileImage", required = false) MultipartFile profileImage
     ) {
         try {
+            ObjectMapper mapper = new ObjectMapper();
+            RegisterUserRequest request = mapper.readValue(data, RegisterUserRequest.class);
+
             byte[] profileImageBytes = null;
             if (profileImage != null && !profileImage.isEmpty()) {
                 profileImageBytes = profileImage.getBytes();
