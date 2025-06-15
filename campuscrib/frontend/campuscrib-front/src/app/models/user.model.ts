@@ -7,6 +7,6 @@ export interface User {
   isEmailConfirmed: boolean;
   passwordHashed: string;
   birthDate: Date | string;
-  profileImage: string; // URL
+  profileImage: string;
   role: UserRole;
 } 
