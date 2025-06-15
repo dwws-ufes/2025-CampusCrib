@@ -28,13 +28,7 @@
       "body": {
         "mimeType": "multipart/form-data",
         "params": [
-          { "name": "firstName", "value": "John" },
-          { "name": "lastName", "value": "Doe" },
-          { "name": "email", "value": "john.doe@example.com" },
-          { "name": "password", "value": "secret123" },
-          { "name": "birthDate", "value": "2000-01-01" },
-          { "name": "role", "value": "TENANT" },
-          { "name": "legalGuardianId", "value": "" },
+          {"name": "data", "value": "{\"firstName\":\"John\",\"lastName\":\"Doe\",\"email\":\"john.doe@example.com\",\"password\":\"secret123\",\"birthDate\":\"2000-01-01\",\"role\":\"TENANT\",\"legalGuardian\":null}", "type": "text"},
           { "name": "profileImage", "type": "file", "fileName": "" }
         ]
       }
