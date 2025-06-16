@@ -1,0 +1,15 @@
+<div class="crib-container">
+  <div class="search-section">
+    <app-crib-search 
+      (search)="onSearch($event)" 
+      (filtersChange)="onFiltersChange($event)">
+    </app-crib-search>
+  </div>
+
+  <div class="results-section">
+    <app-crib-list 
+      [cribs]="cribs" 
+      [loading]="loading">
+    </app-crib-list>
+  </div>
+</div> 

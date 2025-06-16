@@ -1,0 +1,24 @@
+.crib-container {
+  padding: 24px 20px 80px 20px; /* space for footer */
+  max-width: 1200px;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+.search-section {
+  margin-bottom: 32px;
+}
+
+.results-section {
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  .crib-container {
+    padding: 16px 8px 80px 8px;
+  }
+  
+  .search-section {
+    margin-bottom: 24px;
+  }
+} 

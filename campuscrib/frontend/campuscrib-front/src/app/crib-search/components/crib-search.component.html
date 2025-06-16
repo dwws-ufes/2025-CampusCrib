@@ -1,0 +1,18 @@
+<div class="search-container">
+  <mat-form-field appearance="outline" class="search-field">
+    <mat-label>Search by location or property name</mat-label>
+    <mat-icon matPrefix>search</mat-icon>
+    <input matInput 
+           [(ngModel)]="searchQuery" 
+           (keyup.enter)="onSearch()"
+           placeholder="Enter city, neighborhood, or property name">
+    <button mat-icon-button matSuffix type="button" (click)="onSearch()">
+      <mat-icon>search</mat-icon>
+    </button>
+  </mat-form-field>
+  
+  <button mat-stroked-button color="primary" class="location-button" (click)="onUseMyLocation()">
+    <mat-icon>my_location</mat-icon>
+    <span>Use My Location</span>
+  </button>
+</div> 

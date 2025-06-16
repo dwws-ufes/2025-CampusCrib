@@ -1,0 +1,49 @@
+<mat-card class="crib-card" appearance="outlined">
+  <div class="crib-image-placeholder">
+    <mat-icon>home</mat-icon>
+  </div>
+  
+  <mat-card-content>
+    <div class="crib-header">
+      <h3 class="crib-title">{{ crib.title }}</h3>
+      <span class="crib-price">${{ crib.price }}/month</span>
+    </div>
+    
+    <div class="crib-location">
+      <mat-icon>location_on</mat-icon>
+      <span>{{ crib.location.city }}, {{ crib.location.state }}</span>
+    </div>
+    
+    <p class="crib-description">{{ crib.description }}</p>
+    
+    <div class="crib-details">
+      <div class="detail-item">
+        <mat-icon>bed</mat-icon>
+        <span>{{ crib.numRooms }} rooms</span>
+      </div>
+      <div class="detail-item">
+        <mat-icon>bathroom</mat-icon>
+        <span>{{ crib.numBathrooms }} baths</span>
+      </div>
+      <div class="detail-item">
+        <mat-icon>people</mat-icon>
+        <span>{{ crib.numAvailableVacancies }} available</span>
+      </div>
+    </div>
+    
+    <div class="crib-tags">
+      <span class="gender-tag">{{ crib.acceptedGenders }}</span>
+      @if(crib.petsPolicy) {
+        <span class="pets-tag">
+          <mat-icon>pets</mat-icon>
+          Pets OK
+        </span>
+      }
+    </div>
+  </mat-card-content>
+  
+  <mat-card-actions class="crib-actions">
+    <button mat-button color="primary" (click)="onViewDetails()">View Details</button>
+    <button mat-raised-button color="primary" (click)="onContact()">Contact</button>
+  </mat-card-actions>
+</mat-card> 

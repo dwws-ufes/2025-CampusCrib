@@ -1,0 +1,22 @@
+<div class="crib-list-container">
+  @if(loading) {
+    <div class="loading-container">
+      <mat-progress-spinner diameter="50"></mat-progress-spinner>
+      <p>Finding cribs for you...</p>
+    </div>
+  } @else {
+    @if(cribs.length > 0) {
+      <div class="cribs-grid">
+        @for(crib of cribs; track crib.id) {
+          <app-crib-card [crib]="crib"></app-crib-card>
+        }
+      </div>
+    } @else {
+      <div class="no-results">
+        <mat-icon>search_off</mat-icon>
+        <h3>No cribs found</h3>
+        <p>Try adjusting your search criteria or location.</p>
+      </div>
+    }
+  }
+</div> 
