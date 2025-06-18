@@ -1,7 +1,7 @@
 <div class="registration-card">
   <mat-card class="example-card" appearance="outlined">
     <div class="example-container">
-      <form [formGroup]="registrationForm">
+      <form [formGroup]="registrationForm" (submit)="onSubmit()">
         <div class="section-title">Personal Information</div>
         <mat-form-field appearance="outline">
           <mat-label>First Name</mat-label>

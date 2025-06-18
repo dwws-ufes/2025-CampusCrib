@@ -8,6 +8,7 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatIconModule } from '@angular/material/icon';
 import { UserRole } from '../../models/user.model';
+import { RegistrationService } from '../services/registration.service';
 
 @Component({
   selector: 'app-registration',
@@ -17,6 +18,8 @@ import { UserRole } from '../../models/user.model';
   styleUrl: './registration.component.css'
 })
 export class RegistrationComponent {
+  private registrationService = inject(RegistrationService);
+
   static passwordsMatchValidator: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
     const password = control.get('password')?.value;
     const confirmPassword = control.get('confirmPassword')?.value;
@@ -60,5 +63,11 @@ export class RegistrationComponent {
 
   toggleConfirmVisibility() {
     this.showConfirm = !this.showConfirm;
+  }
+
+  onSubmit(){
+    if(this.registrationForm.valid){
+      this.registrationService.register(this.registrationForm.value);
+    }
   }
 }

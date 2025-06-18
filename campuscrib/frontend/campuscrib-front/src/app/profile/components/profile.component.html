@@ -1,0 +1,13 @@
+<mat-card class="profile-card" appearance="outlined" *ngIf="user(); else noUser">
+  <h2>{{ user()?.firstName }} {{ user()?.lastName }}</h2>
+  <p><strong>Email:</strong> {{ user()?.email }}</p>
+  <p><strong>Role:</strong> {{ user()?.role }}</p>
+  <p><strong>Date of Birth:</strong> {{ user()?.birthDate }}</p>
+  <button mat-raised-button color="primary" (click)="logout()">Logout</button>
+</mat-card>
+
+<ng-template #noUser>
+  <mat-card appearance="outlined">
+    <p>No user data.</p>
+  </mat-card>
+</ng-template> 
