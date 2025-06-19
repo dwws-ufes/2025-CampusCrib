@@ -1,6 +1,7 @@
 export type UserRole = 'Tenant' | 'LandLord';
 
 export interface User {
+  id?: string; // uuid
   firstName: string;
   lastName: string;
   email: string;
@@ -9,4 +10,5 @@ export interface User {
   birthDate: Date | string;
   profileImage: string;
   role: UserRole;
+  isLegalGuardian?: boolean;
 } 
