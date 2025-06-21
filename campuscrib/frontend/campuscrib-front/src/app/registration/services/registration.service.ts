@@ -17,22 +17,22 @@ export class RegistrationService {
 
   register(formData: any) {
     const formDataToSend = new FormData();
-    formDataToSend.append('data.firstName', formData.firstName);
-    formDataToSend.append('data.lastName', formData.lastName);
-    formDataToSend.append('data.email', formData.email);
-    formDataToSend.append('data.password', formData.password);
-    formDataToSend.append('data.birthDate', formData.birthDate);
-    formDataToSend.append('data.role', formData.role);
-    
-    if (formData.legalGuardian) {
-      formDataToSend.append('data.legalGuardian', formData.legalGuardian);
-    } else {
-      formDataToSend.append('data.legalGuardian', '');
-    }
-    
+    const userData ={
+      firstName: formData.firstName, 
+      lastName: formData.lastName,
+      email: formData.email,
+      password: formData.password,
+      birthDate: formData.birthDate,
+      role: formData.role,
+      legalGuardian: formData.legalGuardian || ''
+    };
+
+    formDataToSend.append('data', JSON.stringify(userData));
+   
     if (formData.profileImage) {
       formDataToSend.append('profileImage', formData.profileImage);
     }
+
 
     return this.http.post(`${this.apiUrl}/api/registration/users/register`, formDataToSend).subscribe({
       next: (response: any) => {
