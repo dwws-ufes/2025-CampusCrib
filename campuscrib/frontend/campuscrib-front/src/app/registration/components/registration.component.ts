@@ -33,8 +33,9 @@ export class RegistrationComponent {
     password: new FormControl('', [Validators.required, Validators.minLength(6)]),
     confirmPassword: new FormControl('', [Validators.required]),
     birthDate: new FormControl('', [Validators.required]),
-    role: new FormControl<UserRole>('Tenant', [Validators.required]),
+    role: new FormControl<UserRole>('TENANT', [Validators.required]),
     profileImage: new FormControl<File | null>(null),
+    legalGuardian: new FormControl<string | null>(null),
   }, { validators: RegistrationComponent.passwordsMatchValidator });
 
   errorMessage = signal('');
