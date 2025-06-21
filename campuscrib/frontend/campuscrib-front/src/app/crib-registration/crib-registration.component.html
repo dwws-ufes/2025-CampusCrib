@@ -1,1 +1,142 @@
-<p>crib-registration works!</p>
+<div class="registration-card">
+  <mat-card class="example-card">
+    <div class="example-container">
+      <h2 class="section-name">Crib Registration</h2>
+
+      <form [formGroup]="cribForm" (ngSubmit)="onSubmit()">
+
+        <!-- Name -->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-icon matPrefix>home</mat-icon>
+          <mat-label>Name</mat-label>
+          <input matInput formControlName="name" required />
+        </mat-form-field>
+
+        <!-- Description -->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-icon matPrefix>description</mat-icon>
+          <mat-label>Description</mat-label>
+          <textarea matInput formControlName="description" required></textarea>
+        </mat-form-field>
+
+        <!-- Price com símbolo de dólar e seletor de casas decimais -->
+<div style="display: flex; align-items: center;" class="full-width">
+  <mat-form-field appearance="outline" style="flex: 1;">
+    <mat-label>Price</mat-label>
+    <span matPrefix>$&nbsp;</span>
+    <input
+      matInput
+      type="number"
+      formControlName="price"
+      min="0"
+      step="0.01"
+      placeholder="Enter amount"
+      required
+    />
+  </mat-form-field>
+</div>
+        <!-- Number of Rooms -->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-icon matPrefix>meeting_room</mat-icon>
+          <mat-label>Number of Rooms</mat-label>
+          <input matInput type="number" formControlName="numRooms" required />
+        </mat-form-field>
+
+        <!-- Number of Bathrooms -->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-icon matPrefix>bathtub</mat-icon>
+          <mat-label>Number of Bathrooms</mat-label>
+          <input matInput type="number" formControlName="numBathrooms" required />
+        </mat-form-field>
+
+        <!-- Available Vacancies -->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-icon matPrefix>group</mat-icon>
+          <mat-label>Available Vacancies</mat-label>
+          <input matInput type="number" formControlName="numAvailableVacancies" required />
+        </mat-form-field>
+
+        <!-- Accepted Genders Select -->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-icon matPrefix>wc</mat-icon>
+          <mat-label>Accepted Genders</mat-label>
+          <mat-select formControlName="acceptedGenders" required>
+            <mat-option *ngFor="let gender of acceptedGenderOptions" [value]="gender">
+              {{ gender }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <!-- Pets Policy Select -->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-icon matPrefix>pets</mat-icon>
+          <mat-label>Pets Policy</mat-label>
+          <mat-select formControlName="petsPolicy" required>
+            <mat-option *ngFor="let policy of petsPolicyOptions" [value]="policy">
+              {{ policy }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <!-- City -->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-icon matPrefix>location_city</mat-icon>
+          <mat-label>City</mat-label>
+          <input matInput formControlName="city" required />
+        </mat-form-field>
+
+        <!-- Street -->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-icon matPrefix>map</mat-icon>
+          <mat-label>Street</mat-label>
+          <input matInput formControlName="street" required />
+        </mat-form-field>
+
+        <!-- State -->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-icon matPrefix>flag</mat-icon>
+          <mat-label>State</mat-label>
+          <input matInput formControlName="state" required />
+        </mat-form-field>
+
+        <!-- Zip Code -->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-icon matPrefix>markunread_mailbox</mat-icon>
+          <mat-label>Zip Code</mat-label>
+          <input matInput formControlName="zipCode" required />
+        </mat-form-field>
+
+        <!-- Upload Images -->
+        <div class="full-width">
+          <label for="imageUpload">
+            <mat-icon style="vertical-align: middle;">photo_camera</mat-icon>
+            Upload Images
+          </label>
+          <input
+            type="file"
+            id="imageUpload"
+            (change)="onFilesSelected($event)"
+            multiple
+            accept="image/*"
+          />
+        </div>
+
+        <!-- Preview Section -->
+        <div class="image-preview" *ngIf="imagePreviews.length > 0">
+          <h4>Image Preview</h4>
+          <div class="image-list">
+            <img *ngFor="let img of imagePreviews" [src]="img" class="preview-img" />
+          </div>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="button-container">
+          <button mat-raised-button color="primary" type="submit" [disabled]="cribForm.invalid">
+            Register
+          </button>
+        </div>
+
+      </form>
+    </div>
+  </mat-card>
+</div>
