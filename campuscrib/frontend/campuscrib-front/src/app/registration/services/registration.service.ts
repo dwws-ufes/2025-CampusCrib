@@ -13,7 +13,7 @@ export class RegistrationService {
   private auth = inject(AuthService);
   private router = inject(Router);
   private message = inject(MessageService);
-  private apiUrl = 'http://localhost:8080';
+  private apiUrl = '';
 
   register(formData: any) {
     const formDataToSend = new FormData();
