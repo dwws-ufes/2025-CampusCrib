@@ -15,7 +15,7 @@ import { LoginService } from '../services/login.service';
 @Component({
   selector: 'app-login',
   standalone: true,
-    imports: [MatCardModule, MatButtonModule, MatFormFieldModule, MatInputModule, MatIconModule, MatTooltipModule, FormsModule, ReactiveFormsModule],
+  imports: [MatCardModule, MatButtonModule, MatFormFieldModule, MatInputModule, MatIconModule, MatTooltipModule, FormsModule, ReactiveFormsModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
