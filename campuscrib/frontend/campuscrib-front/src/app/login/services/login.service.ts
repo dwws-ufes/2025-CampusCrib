@@ -13,7 +13,7 @@ export class LoginService {
   private auth = inject(AuthService);
   private router = inject(Router);
   private message = inject(MessageService);
-  private apiUrl = '';
+  private apiUrl = 'localhost:8080';
 
   login(credentials: any) {
     const loginData = {
