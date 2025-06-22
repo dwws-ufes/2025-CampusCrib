@@ -1,4 +1,5 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, inject } from '@angular/core';
+import { Router } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -19,9 +20,10 @@ import { Crib } from '../../models/crib.model';
 })
 export class CribCardComponent {
   @Input() crib!: Crib;
+  private router = inject(Router);
 
   onViewDetails() {
-    console.log('View details for crib:', this.crib.id);
+    this.router.navigate(['/crib', this.crib.id]);
   }
 
   onContact() {
