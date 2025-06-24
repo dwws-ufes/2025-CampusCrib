@@ -7,7 +7,11 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+
+import { AuthService } from '../auth/auth.service';
+import { CribService } from '../crib/services/crib.service';
 
 @Component({
   selector: 'app-crib-registration',
@@ -20,7 +24,8 @@ import { Router } from '@angular/router';
     MatSelectModule,
     MatButtonModule,
     MatCardModule,
-    MatIconModule
+    MatIconModule,
+    MatSnackBarModule
   ],
   templateUrl: './crib-registration.component.html',
   styleUrls: ['./crib-registration.component.css']
@@ -34,13 +39,17 @@ export class CribRegistrationComponent {
   petsPolicyOptions = ['No Pets Allowed', 'Small Pets Only', 'All Pets Allowed'];
 
   private router = inject(Router);
+  private route = inject(ActivatedRoute);
+  private authService = inject(AuthService);
+  private cribService = inject(CribService);
+  private snackBar = inject(MatSnackBar);
 
   constructor(private fb: FormBuilder) {
     this.cribForm = this.fb.group({
       name: ['', Validators.required],
       description: ['', Validators.required],
-       price: ['', [Validators.required, Validators.min(0)]],
-  priceDecimalPlaces: [2, Validators.required], // default 2 casas decimais
+      price: ['', [Validators.required, Validators.min(0)]],
+      priceDecimalPlaces: [2, Validators.required],
       numRooms: ['', Validators.required],
       numBathrooms: ['', Validators.required],
       numAvailableVacancies: ['', Validators.required],
@@ -71,15 +80,63 @@ export class CribRegistrationComponent {
 
   onSubmit(): void {
     if (this.cribForm.valid) {
-      console.log('Dados do formulário:', this.cribForm.value);
-      console.log('Imagens selecionadas:', this.selectedImages.map(f => f.name));
-      alert('Cadastro realizado com sucesso!');
-      this.cribForm.reset();
-      this.selectedImages = [];
-      this.imagePreviews = [];
-      this.router.navigate(['/home']);;
+      const currentUser = this.authService.currentUser();
+      
+      if (!currentUser || currentUser.role !== 'LANDLORD') {
+        this.snackBar.open('Only landlords can create cribs.', 'Close', {
+          duration: 3000,
+          horizontalPosition: 'right',
+          verticalPosition: 'top'
+        });
+        return;
+      }
+
+      const formValue = this.cribForm.value;
+      
+      const petsPolicy = formValue.petsPolicy !== 'No Pets Allowed';
+      
+      const newCrib = {
+        title: formValue.name,
+        description: formValue.description,
+        price: parseFloat(formValue.price),
+        numRooms: parseInt(formValue.numRooms),
+        numBathrooms: parseInt(formValue.numBathrooms),
+        numPeopleAlreadyIn: 0, 
+        numAvailableVacancies: parseInt(formValue.numAvailableVacancies),
+        acceptedGenders: formValue.acceptedGenders,
+        petsPolicy: petsPolicy,
+        landlordId: currentUser.id!,
+        location: {
+          street: formValue.street,
+          city: formValue.city,
+          state: formValue.state,
+          zipCode: formValue.zipCode,
+          latitude: 0,
+          longitude: 0
+        }
+      };
+
+      const createdCrib = this.cribService.createCrib(newCrib);
+      
+      if (createdCrib) {
+        this.snackBar.open('Property registered successfully!', 'Close', {
+          duration: 3000,
+          horizontalPosition: 'right',
+          verticalPosition: 'top'
+        });
+        
+        this.cribForm.reset();
+        this.selectedImages = [];
+        this.imagePreviews = [];
+        
+        this.router.navigate(['/landlord-dashboard']);
+      } else {
+        this.snackBar.open('Failed to register property. Please try again.', 'Close', {
+          duration: 3000,
+          horizontalPosition: 'right',
+          verticalPosition: 'top'
+        });
+      }
     }
   }
-
-
 }

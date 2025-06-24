@@ -20,4 +20,18 @@ export class AuthService {
   isAuthenticated(): boolean {
     return this._currentUser() !== null;
   }
+
+ loginAsMockLandlord() {
+    const mockLandlord: User = {
+      id: '1',
+      firstName: 'John',
+      lastName: 'Smith',
+      email: 'john.smith@example.com',
+      emailConfirmed: true,
+      birthDate: new Date('1980-05-15'),
+      profileImage: '',
+      role: 'LANDLORD'
+    };
+    this.login(mockLandlord);
+  }
 } 

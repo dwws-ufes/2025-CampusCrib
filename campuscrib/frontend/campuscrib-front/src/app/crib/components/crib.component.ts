@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
@@ -13,6 +13,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 import { CribSearchComponent } from '../../crib-search/components/crib-search.component';
 import { CribListComponent } from '../../crib-list/components/crib-list.component';
+import { CribService } from '../services/crib.service';
 import { Crib } from '../../models/crib.model';
 
 @Component({
@@ -36,12 +37,14 @@ import { Crib } from '../../models/crib.model';
   styleUrls: ['./crib.component.css']
 })
 export class CribComponent {
+  private cribService = inject(CribService);
+  
   cribs: Crib[] = [];
-  mockCribs: Crib[] = [];
+  allCribs: Crib[] = [];
   loading = false;
   searchQuery = '';
   filterForm: FormGroup;
-  showFilters: boolean = false; // ✅ [ajuste] - controle de exibição da barra de filtros
+  showFilters: boolean = false;
 
   constructor(private fb: FormBuilder) {
     this.filterForm = this.fb.group({
@@ -52,70 +55,9 @@ export class CribComponent {
       minVacancies: [null]
     });
 
-    this.mockCribs = [
-      {
-        id: '1',
-        title: 'Cozy Student Apartment Near Campus',
-        description: 'Perfect for students! Walking distance to university with modern amenities.',
-        price: 850,
-        numRooms: 2,
-        numBathrooms: 1,
-        numPeopleAlreadyIn: 1,
-        numAvailableVacancies: 1,
-        acceptedGenders: 'Any',
-        petsPolicy: false,
-        location: {
-          street: '123 University Ave',
-          city: 'College Town',
-          state: 'CA',
-          zipCode: '90210',
-          latitude: 34.0522,
-          longitude: -118.2437
-        }
-      },
-      {
-        id: '2',
-        title: 'Luxury Downtown Loft',
-        description: 'Modern loft in the heart of downtown with great amenities and city views.',
-        price: 1200,
-        numRooms: 1,
-        numBathrooms: 1,
-        numPeopleAlreadyIn: 0,
-        numAvailableVacancies: 1,
-        acceptedGenders: 'Female',
-        petsPolicy: true,
-        location: {
-          street: '456 Main St',
-          city: 'Downtown',
-          state: 'CA',
-          zipCode: '90211',
-          latitude: 34.0525,
-          longitude: -118.2440
-        }
-      },
-      {
-        id: '3',
-        title: 'Shared House with Garden',
-        description: 'Beautiful house with private garden, perfect for nature lovers.',
-        price: 650,
-        numRooms: 3,
-        numBathrooms: 2,
-        numPeopleAlreadyIn: 2,
-        numAvailableVacancies: 1,
-        acceptedGenders: 'Male',
-        petsPolicy: true,
-        location: {
-          street: '789 Oak Street',
-          city: 'Suburbia',
-          state: 'CA',
-          zipCode: '90212',
-          latitude: 34.0530,
-          longitude: -118.2445
-        }
-      }
-    ];
-
-    this.cribs = [...this.mockCribs];
+    // Load cribs from service
+    this.allCribs = this.cribService.getAllCribs();
+    this.cribs = [...this.allCribs];
   }
 
   applyFilters(sidenav?: any): void {
@@ -127,7 +69,7 @@ export class CribComponent {
       minVacancies
     } = this.filterForm.value;
 
-    this.cribs = this.mockCribs.filter(crib => {
+    this.cribs = this.allCribs.filter(crib => {
       return (
         (!maxPrice || crib.price <= maxPrice) &&
         (!acceptedGenders || crib.acceptedGenders === acceptedGenders) &&

@@ -1,0 +1,159 @@
+<div class="dashboard-container">
+  <!-- Header Section -->
+  <div class="dashboard-header">
+    <div class="header-content">
+      <h1 class="dashboard-title">
+        <mat-icon>dashboard</mat-icon>
+        My Cribs
+      </h1>
+      <p class="dashboard-subtitle">Manage Your Cribs</p>
+    </div>
+    
+    <div class="header-actions">
+      <button mat-icon-button (click)="toggleViewMode()" matTooltip="Toggle view mode">
+        <mat-icon>{{ viewMode === 'grid' ? 'view_list' : 'view_module' }}</mat-icon>
+      </button>
+      <button mat-raised-button color="primary" (click)="onCreateCrib()">
+        <mat-icon>add</mat-icon>
+        Add Crib
+      </button>
+    </div>
+  </div>
+
+  <!-- Cribs Section -->
+  <div class="cribs-section">
+    <div class="section-header">
+      <h2 class="section-title">
+        <mat-icon>home_work</mat-icon>
+        Your Cribs ({{ myCribs().length }})
+      </h2>
+    </div>
+
+    <!-- Empty State -->
+    @if(myCribs().length === 0) {
+      <div class="empty-state">
+        <mat-card class="empty-card" appearance="outlined">
+          <mat-card-content>
+            <div class="empty-content">
+              <mat-icon class="empty-icon">home_work</mat-icon>
+              <h3>No Cribs Yet</h3>
+              <p>Start by adding your first Crib to the platform</p>
+              <button mat-raised-button color="primary" (click)="onCreateCrib()">
+                <mat-icon>add</mat-icon>
+                Add Your First Crib
+              </button>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    }
+
+    <!-- Cribs Grid/List -->
+    @else {
+      <div class="cribs-container" [class.list-view]="viewMode === 'list'" [class.grid-view]="viewMode === 'grid'">
+        @for(crib of myCribs(); track crib.id) {
+          <mat-card class="crib-card" appearance="outlined">
+            <!-- Crib Image Placeholder -->
+            <div class="crib-image-section">
+              <div class="crib-image-placeholder">
+                <mat-icon>home</mat-icon>
+              </div>
+              <div class="crib-status-badge">
+                <mat-chip [color]="getOccupancyColor(getOccupancyStatus(crib))">
+                  {{ getOccupancyStatus(crib) }}
+                </mat-chip>
+              </div>
+            </div>
+
+            <mat-card-content>
+              <!-- Crib Header -->
+              <div class="crib-header">
+                <h3 class="crib-title">{{ crib.title }}</h3>
+                <div class="crib-actions">
+                  <button mat-icon-button [matMenuTriggerFor]="cribMenu" class="action-menu">
+                    <mat-icon>more_vert</mat-icon>
+                  </button>
+                  <mat-menu #cribMenu="matMenu">
+                    <button mat-menu-item (click)="onViewCrib(crib)">
+                      <mat-icon>visibility</mat-icon>
+                      <span>View Details</span>
+                    </button>
+                    <button mat-menu-item (click)="onEditCrib(crib)">
+                      <mat-icon>edit</mat-icon>
+                      <span>Edit</span>
+                    </button>
+                    <button mat-menu-item (click)="onDeleteCrib(crib)" class="delete-action">
+                      <mat-icon>delete</mat-icon>
+                      <span>Delete</span>
+                    </button>
+                  </mat-menu>
+                </div>
+              </div>
+
+              <!-- Crib Details -->
+              <div class="crib-location">
+                <mat-icon>location_on</mat-icon>
+                <span>{{ crib.location.city }}, {{ crib.location.state }}</span>
+              </div>
+
+              <p class="crib-description">{{ crib.description }}</p>
+
+              <!-- Crib Stats -->
+              <div class="crib-stats">
+                <div class="stat-item">
+                  <mat-icon>attach_money</mat-icon>
+                  <span class="stat-value">${{ crib.price }}/month</span>
+                </div>
+                <div class="stat-item">
+                  <mat-icon>bed</mat-icon>
+                  <span class="stat-value">{{ crib.numRooms }} rooms</span>
+                </div>
+                <div class="stat-item">
+                  <mat-icon>bathroom</mat-icon>
+                  <span class="stat-value">{{ crib.numBathrooms }} baths</span>
+                </div>
+                <div class="stat-item">
+                  <mat-icon>people</mat-icon>
+                  <span class="stat-value">{{ crib.numPeopleAlreadyIn }}/{{ crib.numPeopleAlreadyIn + crib.numAvailableVacancies }} occupied</span>
+                </div>
+              </div>
+
+              <!-- Crib Tags -->
+              <div class="crib-tags">
+                <mat-chip-set>
+                  <mat-chip>{{ crib.acceptedGenders }} Welcome</mat-chip>
+                  @if(crib.petsPolicy) {
+                    <mat-chip>
+                      <mat-icon matChipAvatar>pets</mat-icon>
+                      Pets OK
+                    </mat-chip>
+                  } @else {
+                    <mat-chip>No Pets</mat-chip>
+                  }
+                </mat-chip-set>
+              </div>
+            </mat-card-content>
+
+            <!-- Quick Actions -->
+            <mat-card-actions class="crib-card-actions">
+              <button mat-button color="primary" (click)="onViewCrib(crib)">
+                <mat-icon>visibility</mat-icon>
+                View
+              </button>
+              <button mat-button color="primary" (click)="onEditCrib(crib)">
+                <mat-icon>edit</mat-icon>
+                Edit
+              </button>
+            </mat-card-actions>
+          </mat-card>
+        }
+      </div>
+    }
+  </div>
+
+  <!-- Floating Action Button -->
+  <button mat-raised-button color="primary" class="fab-add" (click)="onCreateCrib()" matTooltip="Add New Crib">
+    <mat-icon>add</mat-icon>
+    Add Crib
+  </button>
+</div> 
