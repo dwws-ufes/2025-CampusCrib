@@ -16,7 +16,7 @@ export const routes: Routes = [
     { path: 'crib/:id', component: CribDetailComponent },
     { path: 'profile', component: ProfileComponent, canActivate: [authGuard] },
     { path: 'crib-registration', component: CribRegistrationComponent, canActivate: [landlordGuard] },
-    { path: 'landlord-dashboard', component: LandlordDashboardComponent },
+    { path: 'landlord-dashboard', component: LandlordDashboardComponent, canActivate: [landlordGuard] },
     { path: 'my-cribs', redirectTo: '/landlord-dashboard', pathMatch: 'full' },
     { path: '**', redirectTo: '', pathMatch: 'full' }
 ];

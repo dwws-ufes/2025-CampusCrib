@@ -33,24 +33,50 @@ export class RegistrationService {
       formDataToSend.append('profileImage', formData.profileImage);
     }
 
-
     return this.http.post(`${this.apiUrl}/api/registration/users/register`, formDataToSend).subscribe({
       next: (response: any) => {
-        const newUser: User = {
-          id: response.id,
-          firstName: response.firstName,
-          lastName: response.lastName,
-          email: response.email,
-          emailConfirmed: response.emailConfirmed,
-          birthDate: response.birthDate,
-          profileImage: response.profileImage,
-          role: response.role,
-          legalGuardian: response.legalGuardian
-        };
-        
-        this.auth.login(newUser);
-        this.message.success('Registration successful');
-        this.router.navigate(['/profile']);
+        try {
+          if (response.accessToken && response.refreshToken) {
+            const tokens = {
+              accessToken: response.accessToken,
+              refreshToken: response.refreshToken
+            };
+
+            const userData: Partial<User> = {
+              id: response.id,
+              firstName: formData.firstName,
+              lastName: formData.lastName,
+              email: formData.email,
+              emailConfirmed: response.emailConfirmed ?? false,
+              birthDate: formData.birthDate,
+              profileImage: response.profileImage || '',
+              role: formData.role,
+              legalGuardian: formData.legalGuardian
+            };
+
+            this.auth.loginWithTokens(tokens);
+          } else {
+            const newUser: User = {
+              id: response.id,
+              firstName: response.firstName,
+              lastName: response.lastName,
+              email: response.email,
+              emailConfirmed: response.emailConfirmed,
+              birthDate: response.birthDate,
+              profileImage: response.profileImage,
+              role: response.role,
+              legalGuardian: response.legalGuardian
+            };
+            
+            this.auth.login(newUser);
+          }
+          
+          this.message.success('Registration successful');
+          this.router.navigate(['/profile']);
+        } catch (error) {
+          console.error('Error processing registration response:', error);
+          this.message.error('Registration successful but failed to process user data');
+        }
       },
       error: (error) => {
         this.message.error('Registration failed');

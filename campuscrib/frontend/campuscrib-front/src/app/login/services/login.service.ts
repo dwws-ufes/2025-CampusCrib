@@ -1,7 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { AuthService } from '../../auth/auth.service';
-import { User } from '../../models/user.model';
 import { Router } from '@angular/router';
 import { MessageService } from '../../shared/message-dialog/services/message.service';
 
@@ -23,19 +22,20 @@ export class LoginService {
 
     return this.http.post(`${this.apiUrl}/api/auth/login`, loginData).subscribe({
       next: (response: any) => {
-        const mockUser: User = {
-          firstName: 'Mock',
-          lastName: 'User',
-          email: credentials.email,
-          emailConfirmed: true,
-          passwordHashed: credentials.password,
-          birthDate: '2000-01-01',
-          profileImage: '',
-          role: 'TENANT'
-        };
-        this.auth.login(mockUser);
-        this.message.success('Login successful');
-        this.router.navigate(['/profile']);
+        try {
+          const tokens = {
+            accessToken: response.accessToken,
+            refreshToken: response.refreshToken
+          };
+
+          this.auth.loginWithTokens(tokens);
+          
+          this.message.success('Login successful');
+          this.router.navigate(['/profile']);
+        } catch (error) {
+          console.error('Error processing login response:', error);
+          this.message.error('Login successful but failed to process user data');
+        }
       },
       error: (error) => {
         this.message.error('Invalid credentials');
@@ -45,7 +45,10 @@ export class LoginService {
   }
 
   logout() {
-    return this.http.post(`${this.apiUrl}/api/auth/logout`, {}).subscribe({
+    const refreshToken = this.auth.getRefreshToken();
+    const logoutData = refreshToken ? { refreshToken } : {};
+    
+    return this.http.post(`${this.apiUrl}/api/auth/logout`, logoutData).subscribe({
       next: (response: any) => {
         this.auth.logout();
         this.message.success('Logout successful');
