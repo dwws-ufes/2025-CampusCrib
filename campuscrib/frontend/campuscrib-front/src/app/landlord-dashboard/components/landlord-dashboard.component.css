@@ -1,0 +1,339 @@
+.dashboard-container {
+  padding: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+  min-height: calc(100vh - 120px);
+}
+
+/* Header Section */
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 32px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.header-content {
+  flex: 1;
+}
+
+.dashboard-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0 0 8px 0;
+  font-size: 2rem;
+  font-weight: 500;
+  color: #1976d2;
+}
+
+.dashboard-subtitle {
+  margin: 0;
+  color: #666;
+  font-size: 1.1rem;
+}
+
+.header-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+
+.cribs-section {
+  margin-bottom: 80px; 
+}
+
+.section-header {
+  margin-bottom: 24px;
+}
+
+.section-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 500;
+  color: #333;
+}
+
+.empty-state {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 300px;
+}
+
+.empty-card {
+  max-width: 400px;
+  text-align: center;
+}
+
+.empty-content {
+  padding: 32px 16px;
+}
+
+.empty-icon {
+  font-size: 64px;
+  width: 64px;
+  height: 64px;
+  color: #ccc;
+  margin-bottom: 16px;
+}
+
+.empty-content h3 {
+  margin: 0 0 8px 0;
+  color: #333;
+}
+
+.empty-content p {
+  margin: 0 0 24px 0;
+  color: #666;
+}
+
+.cribs-container.grid-view {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 24px;
+}
+
+.cribs-container.list-view {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.cribs-container.list-view .crib-card {
+  display: flex;
+  flex-direction: row;
+  min-height: 200px;
+}
+
+.cribs-container.list-view .crib-image-section {
+  width: 200px;
+  min-width: 200px;
+}
+
+.cribs-container.list-view mat-card-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Crib Cards */
+.crib-card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  border-radius: 12px;
+  overflow: hidden;
+  position: relative;
+}
+
+.crib-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+.crib-image-section {
+  position: relative;
+  height: 200px;
+  background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.crib-image-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+.crib-image-placeholder mat-icon {
+  font-size: 48px;
+  width: 48px;
+  height: 48px;
+  color: #1976d2;
+  opacity: 0.7;
+}
+
+.crib-status-badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+}
+
+/* Crib Content */
+.crib-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
+}
+
+.crib-title {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #333;
+  flex: 1;
+  margin-right: 8px;
+}
+
+.crib-actions .action-menu {
+  color: #666;
+}
+
+.crib-location {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 12px;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.crib-location mat-icon {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+}
+
+.crib-description {
+  margin: 0 0 16px 0;
+  color: #666;
+  font-size: 0.95rem;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Crib Stats */
+.crib-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 16px;
+  padding: 12px 0;
+  border-top: 1px solid #f0f0f0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.stat-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.stat-item mat-icon {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+  color: #1976d2;
+}
+
+.stat-value {
+  font-weight: 500;
+  color: #333;
+}
+
+/* Crib Tags */
+.crib-tags {
+  margin-bottom: 16px;
+}
+
+.crib-tags mat-chip-set {
+  margin: 0;
+}
+
+.crib-tags mat-chip {
+  font-size: 0.8rem;
+}
+
+/* Card Actions */
+.crib-card-actions {
+  padding: 8px 16px 16px 16px;
+  display: flex;
+  gap: 8px;
+}
+
+/* Menu Styling */
+.delete-action {
+  color: #d32f2f !important;
+}
+
+/* Floating Action Button */
+.fab-add {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .dashboard-container {
+    padding: 16px;
+  }
+  
+  .dashboard-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+  
+  .header-actions {
+    width: 100%;
+    justify-content: space-between;
+  }
+  
+  .cribs-container.grid-view {
+    grid-template-columns: 1fr;
+  }
+  
+  .cribs-container.list-view .crib-card {
+    flex-direction: column;
+  }
+  
+  .cribs-container.list-view .crib-image-section {
+    width: 100%;
+    height: 150px;
+  }
+  
+  .crib-stats {
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .fab-add {
+    bottom: 16px;
+    right: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .dashboard-title {
+    font-size: 1.5rem;
+  }
+  
+  .header-actions {
+    flex-direction: column;
+    gap: 12px;
+    align-items: stretch;
+  }
+  
+  .header-actions button {
+    width: 100%;
+  }
+} 

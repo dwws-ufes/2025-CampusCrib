@@ -54,7 +54,8 @@ export class CribDetailComponent implements OnInit {
         zipCode: '90210',
         latitude: 34.0522,
         longitude: -118.2437
-      }
+      },
+      landlordId: '1'
     },
     {
       id: '2',
@@ -74,7 +75,8 @@ export class CribDetailComponent implements OnInit {
         zipCode: '90211',
         latitude: 34.0525,
         longitude: -118.2440
-      }
+      },
+      landlordId: '1'
     },
     {
       id: '3',
@@ -94,7 +96,8 @@ export class CribDetailComponent implements OnInit {
         zipCode: '90212',
         latitude: 34.0530,
         longitude: -118.2445
-      }
+      },
+      landlordId: '1'
     }
   ];
 

@@ -21,4 +21,5 @@ export interface Crib {
   acceptedGenders: Gender;
   petsPolicy: boolean;
   location: Location;
+  landlordId: string;
 } 

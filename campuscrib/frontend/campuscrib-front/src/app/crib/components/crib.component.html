@@ -1,15 +1,72 @@
+
 <div class="crib-container">
+
+  <!-- Botão para mostrar ou esconder a barra de filtros -->
+  <button mat-raised-button color="primary" (click)="showFilters = !showFilters" class="toggle-filters-btn">
+    {{ showFilters ? 'Hide Filters' : 'Show Filters' }}
+  </button>
+
+  <!-- Barra de filtros exibida somente se showFilters for true -->
+  <mat-card class="horizontal-filter-card" *ngIf="showFilters">
+    <form [formGroup]="filterForm" (ngSubmit)="applyFilters()" class="horizontal-form">
+
+      <!-- Preço máximo -->
+      <mat-form-field appearance="outline" class="filter-field">
+        <mat-label>Max Price</mat-label>
+        <input matInput type="number" formControlName="maxPrice" placeholder="e.g. 1000" />
+      </mat-form-field>
+
+      <!-- Gênero aceito -->
+      <mat-form-field appearance="outline" class="filter-field">
+        <mat-label>Gender</mat-label>
+        <mat-select formControlName="acceptedGenders">
+          <mat-option value="">Any</mat-option>
+          <mat-option value="Male">Male</mat-option>
+          <mat-option value="Female">Female</mat-option>
+          <mat-option value="Any">All</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <!-- Pets permitidos -->
+      <mat-form-field appearance="outline" class="filter-field">
+        <mat-label>Pets Allowed</mat-label>
+        <mat-select formControlName="petsAllowed">
+          <mat-option [value]="null">All</mat-option>
+          <mat-option [value]="true">Yes</mat-option>
+          <mat-option [value]="false">No</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <!-- Cidade -->
+      <mat-form-field appearance="outline" class="filter-field">
+        <mat-label>City</mat-label>
+        <input matInput formControlName="city" placeholder="e.g. São Paulo" />
+      </mat-form-field>
+
+      <!-- Vagas mínimas -->
+      <mat-form-field appearance="outline" class="filter-field">
+        <mat-label>Min Vacancies</mat-label>
+        <input matInput type="number" formControlName="minVacancies" placeholder="e.g. 2" />
+      </mat-form-field>
+
+      <!-- Botão de aplicar filtros -->
+      <button mat-raised-button color="accent" type="submit" class="apply-btn">
+        Apply
+      </button>
+
+    </form>
+  </mat-card>
   <div class="search-section">
-    <app-crib-search 
-      (search)="onSearch($event)" 
+    <app-crib-search
+      (search)="onSearch($event)"
       (filtersChange)="onFiltersChange($event)">
     </app-crib-search>
   </div>
 
   <div class="results-section">
-    <app-crib-list 
-      [cribs]="cribs" 
+    <app-crib-list
+      [cribs]="cribs"
       [loading]="loading">
     </app-crib-list>
   </div>
-</div> 
+</div>
