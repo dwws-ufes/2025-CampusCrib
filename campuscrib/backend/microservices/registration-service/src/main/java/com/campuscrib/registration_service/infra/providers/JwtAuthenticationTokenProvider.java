@@ -1,45 +1,29 @@
 package com.campuscrib.registration_service.infra.providers;
 
 import com.campuscrib.registration_service.application.ports.AuthenticationTokenProvider;
-import com.campuscrib.registration_service.application.ports.EmailConfirmationTokenProvider;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
-import java.util.Date;
 import java.util.UUID;
 
 @Service
-public class JwtEmailConfirmationTokenProvider implements EmailConfirmationTokenProvider {
+public class JwtAuthenticationTokenProvider implements AuthenticationTokenProvider {
 
     private final SecretKey key;
     private final long expirationMillis;
 
-    public JwtEmailConfirmationTokenProvider(
-            @Value("${jwt.email-confirmation.secret}") String secret,
-            @Value("${jwt.email-confirmation.expiration-millis}") long expirationMillis
+    public JwtAuthenticationTokenProvider(
+            @Value("${jwt.authentication.secret}") String secret,
+            @Value("${jwt.authentication.expiration-millis}") long expirationMillis
     ) {
         this.key = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
         this.expirationMillis = expirationMillis;
-    }
-
-    @Override
-    public String generateToken(UUID userId) {
-        Date now = new Date();
-        Date expiryDate = new Date(now.getTime() + expirationMillis);
-
-        return Jwts.builder()
-                .setSubject(userId.toString())
-                .setIssuedAt(now)
-                .setExpiration(expiryDate)
-                .signWith(key, SignatureAlgorithm.HS256)
-                .compact();
     }
 
     @Override

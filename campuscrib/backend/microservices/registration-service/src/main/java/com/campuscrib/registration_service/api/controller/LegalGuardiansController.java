@@ -1,7 +1,7 @@
 package com.campuscrib.registration_service.api.controller;
 
 import com.campuscrib.registration_service.api.dto.LegalGuardianResponse;
-import com.campuscrib.registration_service.api.mapper.UserMapper;
+import com.campuscrib.registration_service.api.mapper.RegisterMapper;
 import com.campuscrib.registration_service.application.ports.ListLegalGuardiansUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,7 +24,7 @@ public class LegalGuardiansController {
     public List<LegalGuardianResponse> listLegalGuardians() {
         return listLegalGuardiansUseCase.execute()
                 .stream()
-                .map(UserMapper::toLegalGuardianResponse)
+                .map(RegisterMapper::toLegalGuardianResponse)
                 .toList();
     }
 }

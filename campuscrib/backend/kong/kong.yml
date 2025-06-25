@@ -1,0 +1,23 @@
+_format_version: "3.0"
+services:
+  - name: registration
+    url: http://registration-service:8080
+    routes:
+      - name: register-route
+        paths:
+          - /api/registration
+        strip_path: false
+        methods: [POST]
+
+  - name: authentication
+    url: http://authentication-service:8082
+    routes:
+      - name: protected-auth-route
+        paths:
+          - /api/protected
+        strip_path: false
+        methods: [GET]
+
+plugins:
+  - name: jwt
+    service: authentication
