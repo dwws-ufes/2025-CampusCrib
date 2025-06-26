@@ -1,10 +1,7 @@
 package com.campuscrib.authentication_service.api.handlers;
 
-import com.campuscrib.authentication_service.domain.exceptions.DuplicateEmailException;
-import com.campuscrib.authentication_service.domain.exceptions.InvalidCredentialsException;
+import com.campuscrib.authentication_service.domain.exceptions.*;
 import com.campuscrib.authentication_service.api.dto.ErrorResponse;
-import com.campuscrib.authentication_service.domain.exceptions.InvalidRefreshTokenException;
-import com.campuscrib.authentication_service.domain.exceptions.UserPersistenceException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -42,5 +39,13 @@ public class ApiExceptionHandler {
                 .message(ex.getMessage())
                 .build();
         return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
+    }
+
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleUserNotFound(UserNotFoundException ex) {
+        ErrorResponse error = ErrorResponse.builder()
+                .message(ex.getMessage())
+                .build();
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
     }
 }

@@ -19,6 +19,11 @@ public class UserRepositoryAdapter implements UserRepository {
     }
 
     @Override
+    public Optional<User> findById(String id) {
+        return mongoUserRepository.findById(id).map(UserEntityMapper::toDomain);
+    }
+
+    @Override
     public void save(User user) {
         mongoUserRepository.save(UserEntityMapper.toEntity(user));
     }

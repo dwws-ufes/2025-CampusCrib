@@ -1,7 +1,8 @@
 package com.campuscrib.registration_service.application.ports;
 
-import java.util.UUID;
+import com.campuscrib.registration_service.domain.model.AuthTokenData;
+
 
 public interface AuthenticationTokenProvider {
-    UUID parseToken(String token);
+    AuthTokenData parseToken(String token);
 }

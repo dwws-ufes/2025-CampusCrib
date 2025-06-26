@@ -27,6 +27,7 @@ public class RegisterUserRequest {
     @NotBlank
     private String password;
 
+    @NotBlank
     private UserRole role;
 
     @NotBlank

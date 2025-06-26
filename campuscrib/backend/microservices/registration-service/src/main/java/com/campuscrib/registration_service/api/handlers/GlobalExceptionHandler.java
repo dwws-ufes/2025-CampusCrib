@@ -1,9 +1,7 @@
 package com.campuscrib.registration_service.api.handlers;
 
 import com.campuscrib.registration_service.api.dto.ErrorResponse;
-import com.campuscrib.registration_service.application.exceptions.EmailAlreadyConfirmedException;
-import com.campuscrib.registration_service.application.exceptions.ExternalServiceException;
-import com.campuscrib.registration_service.application.exceptions.UserPersistenceException;
+import com.campuscrib.registration_service.application.exceptions.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -25,6 +23,22 @@ public class GlobalExceptionHandler {
                 .message(ex.getMessage())
                 .build();
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
+    }
+
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleUserNotFound(UserNotFoundException ex) {
+        ErrorResponse error = ErrorResponse.builder()
+                .message(ex.getMessage())
+                .build();
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+    }
+
+    @ExceptionHandler(InvalidAuthTokenException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidAuthToken(InvalidAuthTokenException ex) {
+        ErrorResponse error = ErrorResponse.builder()
+                .message(ex.getMessage())
+                .build();
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error);
     }
 
     @ExceptionHandler(ExternalServiceException.class)

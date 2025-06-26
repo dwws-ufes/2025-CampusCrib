@@ -1,0 +1,207 @@
+type: collection.insomnia.rest/5.0
+name: CampusCrib CribManager API
+meta:
+  id: wrk_cf59fc02bb404bd0bb2b9becf92cada3
+  created: 1750861021463
+  modified: 1750909352331
+  description: ""
+collection:
+  - url: "{{ _.baseUrl }}/api/manager/cribs/register"
+    name: Register Crib
+    meta:
+      id: req_ee2481bde7c84ec2bb4e46f977308e46
+      created: 1750861035325
+      modified: 1750909556203
+      isPrivate: false
+      description: ""
+      sortKey: -1750861035326
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+        	"title": "My Crib",
+        	"description": "This is my first crib.",
+        	"numRooms": 3,
+        	"numBathrooms": 2,
+        	"numAvailableVacancies": 3,
+        	"price": 600,
+        	"acceptedGenders": "MALE",
+        	"petsPolicy": true,
+        	"location": {
+        		"street": "Av. Tal tal",
+        		"city": "Vitória",
+        		"state": "Espírito Santo",
+        		"zipCode": "29090-010",
+        		"latitude": -20.26028,
+        		"longitude": -40.26502
+        	}
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+        id: pair_ab2cb6b424e04210af711f5e09e63ad3
+      - id: pair_070289a7442e44669249e536b17b8ea3
+        name: Authorization
+        value: Bearer
+          eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI1OGQ0MWRlMC1iZDNkLTQxOWUtYjY2MC1mNDNlNjRmOTViOGEiLCJpYXQiOjE3NTA5MDM2NzcsImV4cCI6MTc1MDkwNDU3Nywicm9sZSI6IkxBTkRMT1JEIn0.NkN1uzbk7YrzSdENGXo0gRJuoxbOHGfYNu3mvPjuplE
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: "{{ _.baseUrl }}/api/manager/cribs/all-my"
+    name: All My Cribs
+    meta:
+      id: req_56657f47f6414561ab83a7856c2588c9
+      created: 1750898224976
+      modified: 1750909435877
+      isPrivate: false
+      description: ""
+      sortKey: -1750898224976
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/11.2.0
+        id: pair_762d0a5cdc5b421f940872bab60822dd
+      - id: pair_d3441979771140b281c59d45f6e6fc33
+        name: Authorization
+        value: Bearer
+          eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI1OGQ0MWRlMC1iZDNkLTQxOWUtYjY2MC1mNDNlNjRmOTViOGEiLCJpYXQiOjE3NTA5MDU4NTUsImV4cCI6MTc1MDkwNjc1NSwicm9sZSI6IkxBTkRMT1JEIn0.7yuNEkJr0aIs0yac85KR2pYRMqQ2W2WIAXlOWRSf1Wc
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: "{{ _.baseUrl
+      }}/api/manager/cribs/crib/78d03b33-9bd6-4106-a1a4-d7d8339e7d89"
+    name: Delete Crib
+    meta:
+      id: req_5cfee910653b4f3f857e77aa73880c7a
+      created: 1750901685878
+      modified: 1750909621228
+      isPrivate: false
+      description: ""
+      sortKey: -1750901685878
+    method: DELETE
+    headers:
+      - name: User-Agent
+        value: insomnia/11.2.0
+        id: pair_884daed14ead4480bc4cf2b3859568ba
+      - id: pair_eb457497594746efab479bfe6587ea6b
+        name: Authorization
+        value: Bearer
+          eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI1OGQ0MWRlMC1iZDNkLTQxOWUtYjY2MC1mNDNlNjRmOTViOGEiLCJpYXQiOjE3NTA5MDE3NDEsImV4cCI6MTc1MDkwMjY0MSwicm9sZSI6IkxBTkRMT1JEIn0.L6CZzgWJ8yL4X9B_HFZjgVCM6fGYkVvr3SW8RQXk_44
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: "{{ _.baseUrl
+      }}/api/manager/cribs/crib/bcc0a0f9-50c6-4d25-9dd8-a7d6405a67df"
+    name: Fetch Crib
+    meta:
+      id: req_328b8dcfb4cf4213ab4bb1e81a0b89e0
+      created: 1750903706487
+      modified: 1750909620025
+      isPrivate: false
+      description: ""
+      sortKey: -1750903706487
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/11.2.0
+        id: pair_1f04acbd07944c4c90e2b0129b71c25f
+      - id: pair_91e6cb90e204423dace3129b52b44bb6
+        name: Authorization
+        value: Bearer
+          eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI1OGQ0MWRlMC1iZDNkLTQxOWUtYjY2MC1mNDNlNjRmOTViOGEiLCJpYXQiOjE3NTA5MDM2NzcsImV4cCI6MTc1MDkwNDU3Nywicm9sZSI6IkxBTkRMT1JEIn0.NkN1uzbk7YrzSdENGXo0gRJuoxbOHGfYNu3mvPjuplE
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: "{{ _.baseUrl
+      }}/api/manager/cribs/crib/bcc0a0f9-50c6-4d25-9dd8-a7d6405a67df"
+    name: Update Crib
+    meta:
+      id: req_7f52f8f75ba84d68a0e5c8e490246bc5
+      created: 1750905771586
+      modified: 1750909563310
+      isPrivate: false
+      description: ""
+      sortKey: -1750905771586
+    method: PATCH
+    body:
+      mimeType: application/json
+      text: |-
+        {
+        	"title": "Crib new title",
+        	"price": 1000.50
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+        id: pair_349a100a77094f1ea9a63fc8ddc2c503
+      - name: User-Agent
+        value: insomnia/11.2.0
+        id: pair_1a098bc3c9ea45cf8d6d51a885cc443c
+      - id: pair_6131db2b936b408aabe87d7af1d9dbd7
+        name: Authorization
+        value: Bearer
+          eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI1OGQ0MWRlMC1iZDNkLTQxOWUtYjY2MC1mNDNlNjRmOTViOGEiLCJpYXQiOjE3NTA5MDU4NTUsImV4cCI6MTc1MDkwNjc1NSwicm9sZSI6IkxBTkRMT1JEIn0.7yuNEkJr0aIs0yac85KR2pYRMqQ2W2WIAXlOWRSf1Wc
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+cookieJar:
+  name: Default Jar
+  meta:
+    id: jar_009ae8b681ebb47b7c77616b73e14cf10dd5d9bb
+    created: 1750861021472
+    modified: 1750901715548
+  cookies:
+    - key: JSESSIONID
+      value: B93CFF091399A6BF0A9CE697BB0348ED
+      domain: localhost
+      path: /
+      httpOnly: true
+      hostOnly: true
+      creation: 2025-06-25T14:29:35.088Z
+      lastAccessed: 2025-06-26T01:35:15.547Z
+      id: 5f66c741-fecf-4426-8038-b536dacc7a9a
+environments:
+  name: Base Environment
+  meta:
+    id: env_009ae8b681ebb47b7c77616b73e14cf10dd5d9bb
+    created: 1750861021466
+    modified: 1750909612287
+    isPrivate: false
+  data:
+    baseUrl: http://localhost:8083

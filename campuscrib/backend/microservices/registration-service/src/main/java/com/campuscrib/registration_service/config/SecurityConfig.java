@@ -1,5 +1,8 @@
 package com.campuscrib.registration_service.config;
 
+import com.campuscrib.registration_service.infra.filters.JwtAuthenticationFilter;
+import com.campuscrib.registration_service.infra.providers.JwtAuthenticationTokenProvider;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -9,18 +12,24 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 public class SecurityConfig {
 
+    private final JwtAuthenticationTokenProvider tokenProvider;
+
+    @Autowired
+    public SecurityConfig(JwtAuthenticationTokenProvider tokenProvider) {
+        this.tokenProvider = tokenProvider;
+    }
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http
+        return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/registration/users/me").permitAll()
                         .requestMatchers("/api/registration/users/register").permitAll()
                         .requestMatchers("/api/registration/users/confirm-email").permitAll()
                         .requestMatchers("/api/registration/users/legal-guardians").permitAll()
                         .anyRequest().authenticated()
-                );
-
-        return http.build();
+                )
+                .addFilterBefore(new JwtAuthenticationFilter(tokenProvider), org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter.class)
+                .build();
     }
 }

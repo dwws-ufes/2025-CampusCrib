@@ -2,6 +2,7 @@ package com.campuscrib.authentication_service.infra.providers;
 
 import com.campuscrib.authentication_service.application.ports.TokenServicePort;
 import com.campuscrib.authentication_service.domain.model.LoginAuthentication;
+import com.campuscrib.authentication_service.domain.model.UserRole;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +30,7 @@ public class JwtTokenServiceProvider implements TokenServicePort {
     }
 
     @Override
-    public String generateAccessToken(String userId) {
+    public String generateAccessToken(String userId, UserRole role) {
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + accessTokenExpirationMillis);
 
@@ -37,6 +38,7 @@ public class JwtTokenServiceProvider implements TokenServicePort {
                 .setSubject(userId)
                 .setIssuedAt(now)
                 .setExpiration(expiryDate)
+                .claim("role", role)
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
     }

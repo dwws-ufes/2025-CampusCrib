@@ -38,7 +38,7 @@ public class LoginService implements LoginUseCase {
             throw new InvalidCredentialsException();
         }
 
-        String accessToken = tokenServicePort. generateAccessToken(user.getId());
+        String accessToken = tokenServicePort. generateAccessToken(user.getId(), user.getRole());
         String refreshToken = tokenServicePort.generateRefreshToken();
 
         refreshTokenCacheRepository.storeRefreshToken(user.getId(), refreshToken);

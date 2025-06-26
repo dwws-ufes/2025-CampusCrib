@@ -1,5 +1,6 @@
 package com.campuscrib.registration_service.application.services;
 
+import com.campuscrib.registration_service.application.exceptions.UserNotFoundException;
 import com.campuscrib.registration_service.application.ports.AuthenticationTokenProvider;
 import com.campuscrib.registration_service.application.ports.FetchUserUseCase;
 import com.campuscrib.registration_service.domain.model.User;
@@ -23,17 +24,9 @@ public class FetchUserService implements FetchUserUseCase {
 
 
     @Override
-    public User execute(String accessToken) {
-        if (accessToken != null && accessToken.startsWith("Bearer ")) {
-            accessToken = accessToken.substring(7);
-        }
+    public User execute(UUID userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(UserNotFoundException::new);
 
-        UUID userId = authenticationTokenProvider.parseToken(accessToken);
-        Optional<User> userFetched = userRepository.findById(userId);
-        if(userFetched.isPresent()) {
-            return userFetched.get();
-        } else {
-            throw new IllegalArgumentException("User not found.");
-        }
     }
 }

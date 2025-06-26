@@ -19,7 +19,22 @@ public class RegisterCribService implements RegisterCribUseCase {
     }
 
     @Override
-    public Crib execute(String title, String description, AccpetedGender gender, Boolean petsPolicy, UUID landlordId, Integer numberOfRooms, Integer numberOfBathrooms, Integer numberOfPeopleAlreadyIn, Integer numberOfAvailableVacancies, BigDecimal price, Location location) {
-        return null;
+    public Crib execute(Crib crib) {
+        Crib cribToSave = Crib.builder()
+                .id(UUID.randomUUID())
+                .title(crib.getTitle())
+                .description(crib.getDescription())
+                .gender(crib.getGender())
+                .petsPolicy(crib.getPetsPolicy())
+                .landlordId(crib.getLandlordId())
+                .numberOfRooms(crib.getNumberOfRooms())
+                .numberOfBathrooms(crib.getNumberOfBathrooms())
+                .numberOfAvailableVacancies(crib.getNumberOfAvailableVacancies())
+                .numberOfPeopleAlreadyIn(0)
+                .price(crib.getPrice())
+                .location(crib.getLocation())
+                .build();
+
+        return cribRepository.save(cribToSave);
     }
 }

@@ -30,11 +30,10 @@ public class RegisterUserController {
             @RequestPart("data") String data,
             @RequestPart(value = "profileImage", required = false) MultipartFile profileImage
     ) {
-        System.out.println(data);
         try {
             ObjectMapper mapper = new ObjectMapper();
             RegisterUserRequest request = mapper.readValue(data, RegisterUserRequest.class);
-            System.out.println(request);
+
             byte[] profileImageBytes = null;
             if (profileImage != null && !profileImage.isEmpty()) {
                 profileImageBytes = profileImage.getBytes();

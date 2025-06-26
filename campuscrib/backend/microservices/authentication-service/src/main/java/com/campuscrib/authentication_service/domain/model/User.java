@@ -9,4 +9,5 @@ public class User {
     private String id;
     private String email;
     private String passwordHashed;
+    private UserRole role;
 }

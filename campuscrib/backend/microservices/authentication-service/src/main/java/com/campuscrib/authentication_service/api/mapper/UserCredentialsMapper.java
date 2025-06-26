@@ -9,6 +9,7 @@ public class UserCredentialsMapper {
                 .id(request.getUserId())
                 .email(request.getEmail())
                 .passwordHashed(request.getPasswordHashed())
+                .role(request.getRole())
                 .build();
     }
 }

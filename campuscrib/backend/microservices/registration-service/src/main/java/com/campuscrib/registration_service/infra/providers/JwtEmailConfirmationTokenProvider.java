@@ -53,6 +53,7 @@ public class JwtEmailConfirmationTokenProvider implements EmailConfirmationToken
 
             return UUID.fromString(claims.getSubject());
         } catch (JwtException e) {
+            e.printStackTrace();
             throw new IllegalArgumentException("Invalid or expired token");
         }
     }

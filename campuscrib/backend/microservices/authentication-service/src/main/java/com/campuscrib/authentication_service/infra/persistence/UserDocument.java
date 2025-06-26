@@ -19,4 +19,6 @@ public class UserDocument {
     private String email;
 
     private String passwordHashed;
+
+    private String role;
 }

@@ -6,10 +6,12 @@ import com.campuscrib.registration_service.application.ports.FetchUserUseCase;
 import com.campuscrib.registration_service.domain.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/registration/users")
@@ -23,8 +25,9 @@ public class FetchUserController {
     }
 
     @GetMapping("/me")
-    public ResponseEntity<UserResponse> fetchUser(@RequestHeader("Authorization") String authorization) {
-        User user = fetchUserUseCase.execute(authorization);
+    public ResponseEntity<UserResponse> fetchUser(Authentication authentication) {
+        UUID userId = (UUID) authentication.getPrincipal();
+        User user = fetchUserUseCase.execute(userId);
         return ResponseEntity.ok(UserMapper.toResponse(user));
     }
 }

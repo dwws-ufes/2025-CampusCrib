@@ -13,5 +13,5 @@ public interface CribRepository {
 
     List<Crib> fetchAll(UUID landlordId);
 
-    Boolean delete(UUID id);
+    void deleteById(UUID id);
 }

@@ -1,6 +1,9 @@
 package com.campuscrib.registration_service.infra.providers;
 
+import com.campuscrib.registration_service.application.exceptions.InvalidAuthTokenException;
 import com.campuscrib.registration_service.application.ports.AuthenticationTokenProvider;
+import com.campuscrib.registration_service.domain.model.AuthTokenData;
+import com.campuscrib.registration_service.domain.model.UserRole;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
@@ -27,7 +30,7 @@ public class JwtAuthenticationTokenProvider implements AuthenticationTokenProvid
     }
 
     @Override
-    public UUID parseToken(String token) {
+    public AuthTokenData parseToken(String token) {
         try {
             Claims claims = Jwts.parserBuilder()
                     .setSigningKey(key)
@@ -35,9 +38,13 @@ public class JwtAuthenticationTokenProvider implements AuthenticationTokenProvid
                     .parseClaimsJws(token)
                     .getBody();
 
-            return UUID.fromString(claims.getSubject());
+            return AuthTokenData.builder()
+                    .userId(UUID.fromString(claims.getSubject()))
+                    .role(UserRole.valueOf(claims.get("role", String.class)))
+                    .build();
         } catch (JwtException e) {
-            throw new IllegalArgumentException("Invalid or expired token");
+            e.printStackTrace();
+            throw new InvalidAuthTokenException("Invalid or expired token");
         }
     }
 }
