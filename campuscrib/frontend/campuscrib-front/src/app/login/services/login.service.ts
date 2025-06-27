@@ -46,8 +46,8 @@ export class LoginService {
   }
 
   logout() {
-    const refreshToken = this.auth.getRefreshToken();
-    const logoutData = refreshToken ? { refreshToken } : {};
+    const accessToken = this.auth.getAccessToken();
+    const logoutData = accessToken ? { accessToken } : {};
     
     return this.http.post(`${this.apiUrl}/api/auth/logout`, logoutData).subscribe({
       next: (response: any) => {

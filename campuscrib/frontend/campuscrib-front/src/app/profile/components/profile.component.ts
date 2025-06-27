@@ -22,7 +22,6 @@ export class ProfileComponent {
   readonly isLoading = this.auth.isLoading;
 
   logout() {
-    this.auth.logout();
     this.login.logout();
     this.router.navigate(['/login']);
   }
