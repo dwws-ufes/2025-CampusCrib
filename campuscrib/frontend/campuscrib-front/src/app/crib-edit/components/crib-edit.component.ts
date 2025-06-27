@@ -29,7 +29,7 @@ import { Crib } from '../../models/crib.model';
 })
 export class CribEditComponent {
   cribForm: FormGroup;
-  acceptedGenderOptions = ['Any', 'Male', 'Female', 'Other'];
+  acceptedGenderOptions = ['ANY', 'MALE', 'FEMALE', 'Other'];
   petsPolicyOptions = ['No Pets Allowed', 'Small Pets Only', 'All Pets Allowed'];
 
   constructor(

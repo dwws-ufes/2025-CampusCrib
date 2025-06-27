@@ -45,7 +45,7 @@ export class CribDetailComponent implements OnInit {
       numBathrooms: 1,
       numPeopleAlreadyIn: 1,
       numAvailableVacancies: 1,
-      acceptedGenders: 'Any',
+      acceptedGenders: 'ANY',
       petsPolicy: false,
       location: {
         street: '123 University Ave',
@@ -66,7 +66,7 @@ export class CribDetailComponent implements OnInit {
       numBathrooms: 1,
       numPeopleAlreadyIn: 0,
       numAvailableVacancies: 1,
-      acceptedGenders: 'Female',
+      acceptedGenders: 'FEMALE',
       petsPolicy: true,
       location: {
         street: '456 Main St',
@@ -87,7 +87,7 @@ export class CribDetailComponent implements OnInit {
       numBathrooms: 2,
       numPeopleAlreadyIn: 2,
       numAvailableVacancies: 1,
-      acceptedGenders: 'Male',
+      acceptedGenders: 'MALE',
       petsPolicy: true,
       location: {
         street: '789 Oak Street',

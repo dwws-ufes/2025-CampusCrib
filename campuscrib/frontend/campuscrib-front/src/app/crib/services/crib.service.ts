@@ -82,7 +82,7 @@ export class CribService {
         numBathrooms: 1,
         numPeopleAlreadyIn: 1,
         numAvailableVacancies: 1,
-        acceptedGenders: 'Any',
+        acceptedGenders: 'ANY',
         petsPolicy: false,
         landlordId: 'landlord-1',
         location: {
@@ -103,7 +103,7 @@ export class CribService {
         numBathrooms: 1,
         numPeopleAlreadyIn: 0,
         numAvailableVacancies: 1,
-        acceptedGenders: 'Female',
+        acceptedGenders: 'FEMALE',
         petsPolicy: true,
         landlordId: 'landlord-2',
         location: {
@@ -124,7 +124,7 @@ export class CribService {
         numBathrooms: 2,
         numPeopleAlreadyIn: 2,
         numAvailableVacancies: 1,
-        acceptedGenders: 'Male',
+        acceptedGenders: 'MALE',
         petsPolicy: true,
         landlordId: 'landlord-1',
         location: {
@@ -145,7 +145,7 @@ export class CribService {
         numBathrooms: 1,
         numPeopleAlreadyIn: 0,
         numAvailableVacancies: 1,
-        acceptedGenders: 'Any',
+        acceptedGenders: 'ANY',
         petsPolicy: false,
         landlordId: 'landlord-1',
         location: {
@@ -166,7 +166,7 @@ export class CribService {
         numBathrooms: 3,
         numPeopleAlreadyIn: 2,
         numAvailableVacancies: 2,
-        acceptedGenders: 'Any',
+        acceptedGenders: 'ANY',
         petsPolicy: true,
         landlordId: 'landlord-3',
         location: {
