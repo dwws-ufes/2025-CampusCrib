@@ -61,7 +61,7 @@ export class CribEditComponent {
     if (this.cribForm.valid) {
       const formValue = this.cribForm.value;
       const petsPolicy = formValue.petsPolicy !== 'No Pets Allowed';
-      
+
       const updates: Partial<Crib> = {
         title: formValue.title,
         description: formValue.description,
@@ -81,8 +81,10 @@ export class CribEditComponent {
         }
       };
 
-      const result = this.cribService.updateCrib(this.data.crib.id, updates);
-      this.dialogRef.close(result);
+      this.cribService.updateCrib(this.data.crib.id, updates).subscribe({
+        next: (updated) => this.dialogRef.close(updated),
+        error: () => this.dialogRef.close(null)
+      });
     }
   }
 

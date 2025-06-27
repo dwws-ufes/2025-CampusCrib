@@ -6,6 +6,7 @@ import { MessageService } from '../../shared/message-dialog/services/message.ser
 import { Router } from '@angular/router';
 import { AuthService } from '../../auth/auth.service';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
 export class CribService {
@@ -44,8 +45,14 @@ export class CribService {
     return this.http.get<Crib[]>(`${this.apiUrl}/api/manager/cribs/all-my`,httpOptions);
   }
 
-  getCribById(id: string): Crib | undefined {
-    return this._cribs().find(crib => crib.id === id);
+  getCribById(id: string): Observable<Crib> {
+    const token = this.auth.getAccessToken();
+
+    const httpOptions = token
+      ? { headers: new HttpHeaders({ Authorization: `Bearer ${token}` }) }
+      : {};
+
+    return this.http.get<Crib>(`${this.apiUrl}/api/manager/cribs/crib/${id}`, httpOptions);
   }
 
   createCrib(crib: Omit<Crib, 'id'> & { landlordId: string }) {
@@ -99,9 +106,10 @@ export class CribService {
     return this.http.delete<void>(`${this.apiUrl}/api/manager/cribs/crib/${id}`, httpOptions);
   }
 
-  canEditCrib(cribId: string, landlordId: string): boolean {
-    const crib = this.getCribById(cribId);
-    return crib?.landlordId === landlordId;
+  canEditCrib(cribId: string, landlordId: string): Observable<boolean> {
+    return this.getCribById(cribId).pipe(
+      map(crib => crib.landlordId === landlordId)
+    );
   }
 
   

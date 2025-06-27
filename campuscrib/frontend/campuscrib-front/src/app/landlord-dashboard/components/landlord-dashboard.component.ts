@@ -46,12 +46,18 @@ export class LandlordDashboardComponent implements OnInit {
   loading = false;
   viewMode: 'grid' | 'list' = 'grid';
 
+  private reloadCribs() {
+    this.myCribs$ = this.cribService.getCribsByLandlord();
+  }
+
   ngOnInit() {
     const user = this.currentUser();
     if (!user || user.role !== 'LANDLORD') {
       this.router.navigate(['/']);
       return;
     }
+
+    this.reloadCribs();
   }
 
   onCreateCrib() {
@@ -71,6 +77,7 @@ export class LandlordDashboardComponent implements OnInit {
           horizontalPosition: 'right',
           verticalPosition: 'top'
         });
+        this.reloadCribs();
       }
     });
   }
@@ -86,6 +93,7 @@ export class LandlordDashboardComponent implements OnInit {
             horizontalPosition: 'right',
             verticalPosition: 'top'
           });
+          this.reloadCribs();
         },
         error: () => {
           this.snackBar.open('Failed to delete Crib. Please try again.', 'Close', {
