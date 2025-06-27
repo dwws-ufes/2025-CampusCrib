@@ -11,11 +11,11 @@ mat-card {
 
 .registration-card {
   margin: 40px 0;
-  padding-bottom: 80px; /* space for footer */
+  padding-bottom: 80px; /* espaço para o rodapé */
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: calc(100vh - 120px); /* header + footer */
+  min-height: calc(100vh - 120px); /* cabeçalho + rodapé */
   box-sizing: border-box;
 }
 
@@ -95,20 +95,6 @@ button[mat-raised-button]:hover {
   color: #555;
 }
 
-.image-preview {
-  margin-top: 8px;
-  border-radius: 50%;
-  overflow: hidden;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-}
-
-img[alt="Profile Preview"] {
-  border-radius: 50%;
-  width: 100px;
-  height: 100px;
-  object-fit: cover;
-}
-
 .upload-button {
   width: 100%;
   display: flex;
@@ -124,15 +110,6 @@ img[alt="Profile Preview"] {
   word-break: break-word;
 }
 
-.preview-img {
-  width: 120px;
-  height: 120px;
-  object-fit: cover;
-  border-radius: 0; /* sem bordas arredondadas */
-  border: 1px solid #ccc;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
-}
-
 .info-icon {
   font-size: 18px;
   vertical-align: middle;
@@ -141,23 +118,28 @@ img[alt="Profile Preview"] {
   color: #1976d2;
 }
 
-/* .image-preview {
+/* GALERIA DE IMAGENS RESPONSIVA */
+.image-preview-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 16px;
   margin-top: 16px;
+  width: 100%;
 }
 
-.image-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  margin-top: 8px;
-}
-
-.preview-img {
-  width: 120px;
-  height: 120px;
-  object-fit: cover;
-  border-radius: 8px;
+.image-preview {
   border: 1px solid #ccc;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  height: auto;
 }
- */
+
+.image-preview img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+  border-radius: 0; 
+}
