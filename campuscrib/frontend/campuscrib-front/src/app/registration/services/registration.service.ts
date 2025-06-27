@@ -71,8 +71,9 @@ export class RegistrationService {
             this.auth.login(newUser);
           }
           
-          this.message.success('Registration successful');
-          this.router.navigate(['/profile']);
+          this.message.success('Registration successful').afterClosed().subscribe(()=>{
+            this.router.navigate(['/profile']);
+          });
         } catch (error) {
           console.error('Error processing registration response:', error);
           this.message.error('Registration successful but failed to process user data');

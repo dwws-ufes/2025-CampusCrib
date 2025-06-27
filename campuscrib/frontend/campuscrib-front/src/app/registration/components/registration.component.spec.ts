@@ -45,7 +45,7 @@ describe('RegistrationComponent Form', () => {
       password: '123456',
       confirmPassword: '654321',
       birthDate: '2000-01-01',
-      role: 'Tenant'
+      role: 'TENANT'
     });
     expect(component.registrationForm.valid).toBeFalsy();
     expect(component.registrationForm.hasError('passwordsMismatch')).toBeTruthy();
@@ -59,7 +59,7 @@ describe('RegistrationComponent Form', () => {
       password: '123456',
       confirmPassword: '123456',
       birthDate: '2000-01-01',
-      role: 'Tenant'
+      role: 'TENANT'
     });
     expect(component.registrationForm.valid).toBeTruthy();
   });

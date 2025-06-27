@@ -7,17 +7,17 @@ export class MessageService {
   private dialog = inject(MatDialog);
 
   private open(data: MessageDialogData) {
-    this.dialog.open(MessageDialogComponent, {
+    return this.dialog.open(MessageDialogComponent, {
       width: '360px',
       data,
     });
   }
 
   success(message: string, title = 'Success') {
-    this.open({ title, message, type: 'success' });
+    return this.open({ title, message, type: 'success' });
   }
 
   error(message: string, title = 'Error') {
-    this.open({ title, message, type: 'error' });
+    return this.open({ title, message, type: 'error' });
   }
 } 

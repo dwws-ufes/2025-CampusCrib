@@ -29,9 +29,10 @@ export class LoginService {
           };
 
           this.auth.loginWithTokens(tokens);
-          
-          this.message.success('Login successful');
-          this.router.navigate(['/profile']);
+          this.message.success('Login successful').afterClosed().subscribe(() => {
+            this.router.navigate(['/profile']);
+          });
+          return;
         } catch (error) {
           console.error('Error processing login response:', error);
           this.message.error('Login successful but failed to process user data');
