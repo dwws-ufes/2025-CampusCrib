@@ -26,6 +26,9 @@ export class ProfileComponent {
     this.router.navigate(['/login']);
   }
 
+  goTolandlord(){
+    this.router.navigate(['/landlord-dashboard']);
+  }
   refreshProfile() {
     this.auth.refreshUserData();
   }
