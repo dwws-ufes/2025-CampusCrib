@@ -1,9 +1,18 @@
-import { Injectable, signal } from '@angular/core';
+import { Injectable, signal, inject } from '@angular/core';
 import { Crib } from '../../models/crib.model';
 import { User } from '../../models/user.model';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { MessageService } from '../../shared/message-dialog/services/message.service';
+import { Router } from '@angular/router';
+import { AuthService } from '../../auth/auth.service';
 
 @Injectable({ providedIn: 'root' })
 export class CribService {
+  private http = inject(HttpClient);
+  private message = inject(MessageService);
+  private apiUrl = 'http://localhost:8083';
+  private auth = inject(AuthService);
+  private router = inject(Router);
   private _cribs = signal<Crib[]>([]);
 
   constructor() {
@@ -26,14 +35,31 @@ export class CribService {
     return this._cribs().find(crib => crib.id === id);
   }
 
-  createCrib(crib: Omit<Crib, 'id'> & { landlordId: string }): Crib {
-    const newCrib: Crib = {
-      ...crib,
-      id: this.generateId()
-    };
+  createCrib(crib: Omit<Crib, 'id'> & { landlordId: string }) {
+    const token = this.auth.getAccessToken();
+
+    const httpOptions = token
+      ? { headers: new HttpHeaders({ Authorization: `Bearer ${token}` }) }
+      : {};
+
+    return this.http.post(`${this.apiUrl}/api/manager/cribs/register`, crib, httpOptions).subscribe({
+      next: (response: any) => {
+        try {
+          this.message.success('Crib Registration successful').afterClosed().subscribe(()=>{
+            console.log(response);
+            return response;
+          });
+        } catch (error) {
+          console.error('Error processing registration response:', error);
+          this.message.error('Registration successful but failed to process user data');
+        }
+      },
+      error: (error) => {
+        this.message.error('Registration failed');
+        console.error('Registration error:', error);
+      }
+    });
     
-    this._cribs.update(cribs => [...cribs, newCrib]);
-    return newCrib;
   }
 
   updateCrib(id: string, updates: Partial<Crib>): Crib | null {

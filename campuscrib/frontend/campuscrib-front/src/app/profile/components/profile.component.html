@@ -3,25 +3,29 @@
     <mat-spinner></mat-spinner>
     <p>Loading user data...</p>
   </div>
-
-  <mat-card class="profile-card" appearance="outlined" *ngIf="user() && !isLoading()">
-    <mat-card-header>
-      <mat-card-title>User Profile</mat-card-title>
-    </mat-card-header>
-    <mat-card-content>
-      <div class="user-info">
-        <p><strong>Name:</strong> {{ user()?.firstName }} {{ user()?.lastName }}</p>
-        <p><strong>Email:</strong> {{ user()?.email }}</p>
-        <p><strong>Role:</strong> {{ user()?.role }}</p>
-        <p><strong>Date of Birth:</strong> {{ user()?.birthDate | date }}</p>
-      </div>
-    </mat-card-content>
-    <mat-card-actions>
-      <button mat-raised-button color="primary" (click)="refreshProfile()">Refresh</button>
-      <button mat-raised-button color="warn" (click)="logout()">Logout</button>
-      <button mat-raised-button color="primary" (click)="goTolandlord()">LandLord Dashboard</button>
-    </mat-card-actions>
-  </mat-card>
+  @if(user() && !isLoading()){
+    <mat-card class="profile-card" appearance="outlined">
+      <mat-card-header>
+        <mat-card-title>User Profile</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="user-info">
+          <p><strong>Name:</strong> {{ user()?.firstName }} {{ user()?.lastName }}</p>
+          <p><strong>Email:</strong> {{ user()?.email }}</p>
+          <p><strong>Role:</strong> {{ user()?.role }}</p>
+          <p><strong>Date of Birth:</strong> {{ user()?.birthDate | date }}</p>
+        </div>
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-raised-button color="primary" (click)="refreshProfile()">Refresh</button>
+        <button mat-raised-button color="warn" (click)="logout()">Logout</button>
+        @if(user()?.role == 'LANDLORD'){
+          <button mat-raised-button color="primary" (click)="goTolandlord()">LandLord Dashboard</button>
+        }
+      </mat-card-actions>
+    </mat-card>
+  }
+  
 
   <mat-card appearance="outlined" *ngIf="!user() && !isLoading()">
     <mat-card-content>
