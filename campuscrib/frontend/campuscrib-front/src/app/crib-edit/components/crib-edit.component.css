@@ -1,7 +1,6 @@
 .edit-dialog {
-  width: 100%;
-  min-width: 900px;
-  max-width: 1200px;
+  min-width: 100%;
+  max-width: 100%;
 }
 
 .full-width {
