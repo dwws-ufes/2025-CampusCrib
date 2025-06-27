@@ -18,4 +18,5 @@ public class UserResponse {
     private LocalDate birthDate;
     private UUID legalGuardian;
     private String profileImage;
+    private Boolean emailConfirmed;
 }
