@@ -4,6 +4,7 @@ import com.campuscrib.crib_manager_service.api.dto.ErrorResponse;
 import com.campuscrib.crib_manager_service.domain.exceptions.CribNotFoundException;
 import com.campuscrib.crib_manager_service.domain.exceptions.DeleteNotMyCribException;
 import com.campuscrib.crib_manager_service.domain.exceptions.NotMyCribException;
+import com.campuscrib.crib_manager_service.domain.exceptions.InvalidAuthTokenException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
