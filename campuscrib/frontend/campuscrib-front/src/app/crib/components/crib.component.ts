@@ -56,7 +56,10 @@ export class CribComponent {
     });
 
     // Load cribs from service
-    this.allCribs = this.cribService.getAllCribs();
+    this.cribService.getAllCribs().subscribe((cribs) => {
+      this.allCribs = cribs;
+      this.cribs = [...this.allCribs];
+    });
     this.cribs = [...this.allCribs];
   }
 

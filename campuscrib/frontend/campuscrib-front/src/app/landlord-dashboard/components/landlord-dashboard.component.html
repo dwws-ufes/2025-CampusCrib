@@ -25,12 +25,12 @@
     <div class="section-header">
       <h2 class="section-title">
         <mat-icon>home_work</mat-icon>
-        Your Cribs ({{ myCribs().length }})
+        Your Cribs ({{ (myCribs$ | async)?.length || 0 }})
       </h2>
     </div>
 
     <!-- Empty State -->
-    @if(myCribs().length === 0) {
+    @if((myCribs$ | async)?.length === 0) {
       <div class="empty-state">
         <mat-card class="empty-card" appearance="outlined">
           <mat-card-content>
@@ -51,7 +51,7 @@
     <!-- Cribs Grid/List -->
     @else {
       <div class="cribs-container" [class.list-view]="viewMode === 'list'" [class.grid-view]="viewMode === 'grid'">
-        @for(crib of myCribs(); track crib.id) {
+        @for(crib of (myCribs$ | async); track crib.id) {
           <mat-card class="crib-card" appearance="outlined">
             <!-- Crib Image Placeholder -->
             <div class="crib-image-section">

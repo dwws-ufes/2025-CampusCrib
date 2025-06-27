@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, computed } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
@@ -9,6 +9,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatDialogModule, MatDialog } from '@angular/material/dialog';
 import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { Observable } from 'rxjs';
 
 import { AuthService } from '../../auth/auth.service';
 import { CribService } from '../../crib/services/crib.service';
@@ -40,11 +41,7 @@ export class LandlordDashboardComponent implements OnInit {
   private snackBar = inject(MatSnackBar);
 
   currentUser = this.authService.currentUser;
-  myCribs = computed(() => {
-    const user = this.currentUser();
-    if (!user) return [];
-    return this.cribService.getCribsByLandlord();
-  });
+  myCribs$: Observable<Crib[]> = this.cribService.getCribsByLandlord();
 
   loading = false;
   viewMode: 'grid' | 'list' = 'grid';

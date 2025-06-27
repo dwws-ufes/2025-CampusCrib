@@ -5,6 +5,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { MessageService } from '../../shared/message-dialog/services/message.service';
 import { Router } from '@angular/router';
 import { AuthService } from '../../auth/auth.service';
+import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class CribService {
@@ -23,54 +24,24 @@ export class CribService {
     return this._cribs.asReadonly();
   }
 
-  getAllCribs() {
+  getAllCribs(): Observable<Crib[]> {
     const token = this.auth.getAccessToken();
 
     const httpOptions = token
       ? { headers: new HttpHeaders({ Authorization: `Bearer ${token}` }) }
       : {};
 
-    return this.http.post(`${this.apiUrl}/api/manager/cribs/all`, httpOptions).subscribe({
-      next: (response: any) => {
-        try {
-          this.message.success('getAllCribs successful').afterClosed().subscribe(()=>{
-            return response;
-          });
-        } catch (error) {
-          console.error('Error processing getAllCribs response:', error);
-          this.message.error('getAllCribs successful but failed to process user data');
-        }
-      },
-      error: (error) => {
-        this.message.error('getAllCribs failed');
-        console.error('getAllCribs error:', error);
-      }
-    });
+    return this.http.post<Crib[]>(`${this.apiUrl}/api/manager/cribs/all`, {}, httpOptions);
   }
 
-  getCribsByLandlord() {
+  getCribsByLandlord(): Observable<Crib[]> {
     const token = this.auth.getAccessToken();
 
     const httpOptions = token
       ? { headers: new HttpHeaders({ Authorization: `Bearer ${token}` }) }
       : {};
 
-    return this.http.post(`${this.apiUrl}/api/manager/cribs/all-my`, httpOptions).subscribe({
-      next: (response: any) => {
-        try {
-          this.message.success('getCribsByLandlord successful').afterClosed().subscribe(()=>{
-            return response;
-          });
-        } catch (error) {
-          console.error('Error processing getCribsByLandlord:', error);
-          this.message.error('getCribsByLandlord successful but failed to process user data');
-        }
-      },
-      error: (error) => {
-        this.message.error('getCribsByLandlord failed');
-        console.error('getCribsByLandlord error:', error);
-      }
-    });
+    return this.http.post<Crib[]>(`${this.apiUrl}/api/manager/cribs/all-my`, {}, httpOptions);
   }
 
   getCribById(id: string): Crib | undefined {
