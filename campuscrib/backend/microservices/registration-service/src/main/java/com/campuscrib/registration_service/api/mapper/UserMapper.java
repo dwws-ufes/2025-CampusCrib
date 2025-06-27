@@ -14,6 +14,7 @@ public class UserMapper {
                 .birthDate(user.getBirthDate())
                 .legalGuardian(user.getLegalGuardian())
                 .profileImage(user.getProfileImage())
+                .emailConfirmed(user.isEmailConfirmed())
                 .build();
     }
 }

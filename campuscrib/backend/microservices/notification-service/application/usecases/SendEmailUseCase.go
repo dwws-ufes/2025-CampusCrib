@@ -27,7 +27,7 @@ func (u *SendEmailUseCase) Handle(ctx context.Context, event events.UserRegister
       <p>Estamos felizes em ter você conosco!</p>
       <p>Por favor, confirme seu e-mail clicando no botão abaixo:</p>
       <div style="text-align: center; margin: 30px 0;">
-        <a href="http://localhost:8080/api/registration/users/confirm-email?token=%s" style="background-color: #4CAF50; color: white; padding: 12px 20px; text-decoration: none; border-radius: 5px;">Confirmar e-mail</a>
+        <a href="http://localhost:8080/api/registration/users/confirm-email?token=%s" style="background-color: #005CCB; color: white; padding: 12px 20px; text-decoration: none; border-radius: 5px;">Confirmar e-mail</a>
       </div>
       <p>Se você não realizou esse cadastro, apenas ignore esta mensagem.</p>
       <p>Com carinho,</p>
