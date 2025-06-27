@@ -2,15 +2,11 @@
   <mat-form-field appearance="outline" class="search-field">
     <mat-label>Search by location or property name</mat-label>
 
-    <!-- Ícone da esquerda comentado -->
-    <!-- <mat-icon matPrefix>search</mat-icon> -->
-
     <input matInput
            [(ngModel)]="searchQuery"
            (keyup.enter)="onSearch()"
            placeholder="Enter city, neighborhood, or property name">
 
-    <!-- Ícone da direita (botão funcional) mantido -->
     <button mat-icon-button matSuffix type="button" (click)="onSearch()">
       <mat-icon>search</mat-icon>
     </button>

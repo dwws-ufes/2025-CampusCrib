@@ -37,12 +37,13 @@ export class AuthService {
       try {
         const tokens: AuthTokens = JSON.parse(storedTokens);
         
-        if (this.isTokenValid(tokens.accessToken)) {
-          this._tokens.set(tokens);
-          this.fetchAndSetCurrentUser();
-        } else {
-          this.clearStorage();
-        }
+        // if (this.isTokenValid(tokens.accessToken)) {
+        this._tokens.set(tokens);
+        this.fetchAndSetCurrentUser();
+        // }
+        // } else {
+        //   this.clearStorage();
+        // }
       } catch (error) {
         console.error('Error parsing stored auth data:', error);
         this.clearStorage();
