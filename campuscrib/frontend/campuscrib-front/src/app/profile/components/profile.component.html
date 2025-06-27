@@ -24,10 +24,13 @@
         }
       </mat-card-content>
       <mat-card-actions>
+        @if(user()?.emailConfirmed){
         <button mat-raised-button color="primary" (click)="refreshProfile()">Refresh</button>
         <button mat-raised-button color="warn" (click)="logout()">Logout</button>
+        }
+
         @if(user()?.role == 'LANDLORD'){
-          <button mat-raised-button color="primary" (click)="goTolandlord()">LandLord Dashboard</button>
+        <button mat-raised-button color="primary" (click)="goTolandlord()">LandLord Dashboard</button>
         }
       </mat-card-actions>
     </mat-card>
