@@ -2,6 +2,7 @@ package com.campuscrib.authentication_service.api.dto;
 
 import com.campuscrib.authentication_service.domain.model.UserRole;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -17,6 +18,6 @@ public class RegisterUserCredentialsRequest {
     @NotBlank
     private String passwordHashed;
 
-    @NotBlank
+    @NotNull
     private UserRole role;
 }

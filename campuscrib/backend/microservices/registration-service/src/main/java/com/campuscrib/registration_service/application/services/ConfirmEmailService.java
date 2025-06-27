@@ -60,7 +60,8 @@ public class ConfirmEmailService implements ConfirmEmailUseCase {
             authenticationServiceClientPort.registerConfirmedUser(
                     savedUser.getId(),
                     savedUser.getEmail(),
-                    savedUser.getPasswordHash()
+                    savedUser.getPasswordHash(),
+                    savedUser.getRole()
             );
         } catch (Exception e) {
             throw new ExternalServiceException("Failed to enable user login", e);
