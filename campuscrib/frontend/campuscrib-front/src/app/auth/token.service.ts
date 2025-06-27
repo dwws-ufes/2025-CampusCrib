@@ -10,7 +10,7 @@ import { catchError, map } from 'rxjs/operators';
 export class TokenService {
   private http = inject(HttpClient);
   private auth = inject(AuthService);
-  private apiUrl = 'https://cribdwws.free.beeceptor.com';
+  private apiUrl = 'http://localhost:8081';
 
   refreshToken(): Observable<any> {
     const refreshToken = this.auth.getRefreshToken();

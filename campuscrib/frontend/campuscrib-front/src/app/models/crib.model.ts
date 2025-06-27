@@ -1,4 +1,4 @@
-export type Gender = 'Male' | 'Female' | 'Any';
+export type Gender = 'MALE' | 'FEMALE' | 'ANY';
 
 export interface Location {
   street: string;

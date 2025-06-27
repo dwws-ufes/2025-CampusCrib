@@ -35,7 +35,7 @@ export class CribRegistrationComponent {
   selectedImages: File[] = [];
   imagePreviews: string[] = [];
 
-  acceptedGenderOptions = ['Any', 'Male', 'Female', 'Other'];
+  acceptedGenderOptions = ['MALE', 'FEMALE', 'ANY'];
   petsPolicyOptions = ['No Pets Allowed', 'Small Pets Only', 'All Pets Allowed'];
 
   private router = inject(Router);

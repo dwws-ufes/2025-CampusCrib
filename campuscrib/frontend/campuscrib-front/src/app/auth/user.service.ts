@@ -9,7 +9,7 @@ import { User } from '../models/user.model';
 })
 export class UserService {
   private http = inject(HttpClient);
-  private apiUrl = 'https://cribdwws.free.beeceptor.com';
+  private apiUrl = 'http://localhost:8080';
 
   getCurrentUser(): Observable<User> {
     return this.http.get<any>(`${this.apiUrl}/api/registration/users/me`).pipe(
