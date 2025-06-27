@@ -31,7 +31,7 @@ export class CribService {
       ? { headers: new HttpHeaders({ Authorization: `Bearer ${token}` }) }
       : {};
 
-    return this.http.post<Crib[]>(`${this.apiUrl}/api/manager/cribs/all`, {}, httpOptions);
+    return this.http.get<Crib[]>(`${this.apiUrl}/api/manager/cribs/all`, httpOptions);
   }
 
   getCribsByLandlord(): Observable<Crib[]> {
@@ -41,7 +41,7 @@ export class CribService {
       ? { headers: new HttpHeaders({ Authorization: `Bearer ${token}` }) }
       : {};
 
-    return this.http.post<Crib[]>(`${this.apiUrl}/api/manager/cribs/all-my`, {}, httpOptions);
+    return this.http.get<Crib[]>(`${this.apiUrl}/api/manager/cribs/all-my`,httpOptions);
   }
 
   getCribById(id: string): Crib | undefined {
