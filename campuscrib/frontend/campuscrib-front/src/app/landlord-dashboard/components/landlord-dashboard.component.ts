@@ -43,7 +43,7 @@ export class LandlordDashboardComponent implements OnInit {
   myCribs = computed(() => {
     const user = this.currentUser();
     if (!user) return [];
-    return this.cribService.getCribsByLandlord(user.id!);
+    return this.cribService.getCribsByLandlord();
   });
 
   loading = false;

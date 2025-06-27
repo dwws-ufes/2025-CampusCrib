@@ -23,12 +23,54 @@ export class CribService {
     return this._cribs.asReadonly();
   }
 
-  getAllCribs(): Crib[] {
-    return this._cribs();
+  getAllCribs() {
+    const token = this.auth.getAccessToken();
+
+    const httpOptions = token
+      ? { headers: new HttpHeaders({ Authorization: `Bearer ${token}` }) }
+      : {};
+
+    return this.http.post(`${this.apiUrl}/api/manager/cribs/all`, httpOptions).subscribe({
+      next: (response: any) => {
+        try {
+          this.message.success('getAllCribs successful').afterClosed().subscribe(()=>{
+            return response;
+          });
+        } catch (error) {
+          console.error('Error processing getAllCribs response:', error);
+          this.message.error('getAllCribs successful but failed to process user data');
+        }
+      },
+      error: (error) => {
+        this.message.error('getAllCribs failed');
+        console.error('getAllCribs error:', error);
+      }
+    });
   }
 
-  getCribsByLandlord(landlordId: string): Crib[] {
-    return this._cribs().filter(crib => crib.landlordId === landlordId);
+  getCribsByLandlord() {
+    const token = this.auth.getAccessToken();
+
+    const httpOptions = token
+      ? { headers: new HttpHeaders({ Authorization: `Bearer ${token}` }) }
+      : {};
+
+    return this.http.post(`${this.apiUrl}/api/manager/cribs/all-my`, httpOptions).subscribe({
+      next: (response: any) => {
+        try {
+          this.message.success('getCribsByLandlord successful').afterClosed().subscribe(()=>{
+            return response;
+          });
+        } catch (error) {
+          console.error('Error processing getCribsByLandlord:', error);
+          this.message.error('getCribsByLandlord successful but failed to process user data');
+        }
+      },
+      error: (error) => {
+        this.message.error('getCribsByLandlord failed');
+        console.error('getCribsByLandlord error:', error);
+      }
+    });
   }
 
   getCribById(id: string): Crib | undefined {
@@ -46,17 +88,16 @@ export class CribService {
       next: (response: any) => {
         try {
           this.message.success('Crib Registration successful').afterClosed().subscribe(()=>{
-            console.log(response);
             return response;
           });
         } catch (error) {
-          console.error('Error processing registration response:', error);
-          this.message.error('Registration successful but failed to process user data');
+          console.error('Error processing rib registration response:', error);
+          this.message.error('Crib Registration successful but failed to process user data');
         }
       },
       error: (error) => {
-        this.message.error('Registration failed');
-        console.error('Registration error:', error);
+        this.message.error('Crib Registration failed');
+        console.error('Crib Registration error:', error);
       }
     });
     
@@ -93,10 +134,7 @@ export class CribService {
     return crib?.landlordId === landlordId;
   }
 
-  private generateId(): string {
-    return 'crib-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
-  }
-
+  
   private initializeMockData() {
     const mockCribs: Crib[] = [
       {
