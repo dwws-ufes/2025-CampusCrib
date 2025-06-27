@@ -79,21 +79,22 @@ export class LandlordDashboardComponent implements OnInit {
     const confirmed = confirm(`Are you sure you want to delete "${crib.title}"? This action cannot be undone.`);
     
     if (confirmed) {
-      const success = this.cribService.deleteCrib(crib.id);
-      
-      if (success) {
-        this.snackBar.open('Crib deleted successfully!', 'Close', {
-          duration: 3000,
-          horizontalPosition: 'right',
-          verticalPosition: 'top'
-        });
-      } else {
-        this.snackBar.open('Failed to delete Crib. Please try again.', 'Close', {
-          duration: 3000,
-          horizontalPosition: 'right',
-          verticalPosition: 'top'
-        });
-      }
+      this.cribService.deleteCrib(crib.id).subscribe({
+        next: () => {
+          this.snackBar.open('Crib deleted successfully!', 'Close', {
+            duration: 3000,
+            horizontalPosition: 'right',
+            verticalPosition: 'top'
+          });
+        },
+        error: () => {
+          this.snackBar.open('Failed to delete Crib. Please try again.', 'Close', {
+            duration: 3000,
+            horizontalPosition: 'right',
+            verticalPosition: 'top'
+          });
+        }
+      });
     }
   }
 

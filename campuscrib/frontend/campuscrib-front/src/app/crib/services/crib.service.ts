@@ -74,30 +74,29 @@ export class CribService {
     
   }
 
-  updateCrib(id: string, updates: Partial<Crib>): Crib | null {
-    const cribs = this._cribs();
-    const index = cribs.findIndex(crib => crib.id === id);
-    
-    if (index === -1) return null;
-    
-    const updatedCrib = { ...cribs[index], ...updates };
-    this._cribs.update(cribs => {
-      const newCribs = [...cribs];
-      newCribs[index] = updatedCrib;
-      return newCribs;
-    });
-    
-    return updatedCrib;
+
+  updateCrib(id: string, updates: Partial<Crib>): Observable<Crib> {
+    const token = this.auth.getAccessToken();
+
+    const httpOptions = token
+      ? { headers: new HttpHeaders({ Authorization: `Bearer ${token}` }) }
+      : {};
+
+    return this.http.patch<Crib>(
+      `${this.apiUrl}/api/manager/cribs/crib/${id}`,
+      updates,
+      httpOptions
+    );
   }
 
-  deleteCrib(id: string): boolean {
-    const cribs = this._cribs();
-    const filteredCribs = cribs.filter(crib => crib.id !== id);
-    
-    if (filteredCribs.length === cribs.length) return false;
-    
-    this._cribs.set(filteredCribs);
-    return true;
+  deleteCrib(id: string): Observable<void> {
+    const token = this.auth.getAccessToken();
+
+    const httpOptions = token
+      ? { headers: new HttpHeaders({ Authorization: `Bearer ${token}` }) }
+      : {};
+
+    return this.http.delete<void>(`${this.apiUrl}/api/manager/cribs/crib/${id}`, httpOptions);
   }
 
   canEditCrib(cribId: string, landlordId: string): boolean {
