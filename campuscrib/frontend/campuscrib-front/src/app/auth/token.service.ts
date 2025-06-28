@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { AuthService } from './auth.service';
+import { StorageService } from './storage.service';
 import { Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 
@@ -9,11 +9,11 @@ import { catchError, map } from 'rxjs/operators';
 })
 export class TokenService {
   private http = inject(HttpClient);
-  private auth = inject(AuthService);
+  private storageService = inject(StorageService);
   private apiUrl = 'http://localhost:8081';
 
   refreshToken(): Observable<any> {
-    const refreshToken = this.auth.getRefreshToken();
+    const refreshToken = this.storageService.getRefreshToken();
     
     if (!refreshToken) {
       return throwError(() => new Error('No refresh token available'));
@@ -29,31 +29,22 @@ export class TokenService {
             refreshToken: response.refreshToken
           };
           
-          // Update tokens while preserving current user data
-          const currentUser = this.auth.currentUser();
-          if (currentUser) {
-            this.auth.loginWithTokens(tokens);
-          }
+          // Update tokens in storage
+          this.storageService.setTokens(tokens);
           
           return response;
         }
         throw new Error('Invalid refresh response');
       }),
       catchError((error) => {
-        // If refresh fails, logout user
-        this.auth.logout();
+        // If refresh fails, clear tokens
+        this.storageService.clearTokens();
         return throwError(() => error);
       })
     );
   }
 
   isTokenExpired(token: string): boolean {
-    try {
-      const payload = JSON.parse(atob(token.split('.')[1]));
-      const currentTime = Math.floor(Date.now() / 1000);
-      return payload.exp ? payload.exp < currentTime : false;
-    } catch {
-      return true;
-    }
+    return this.storageService.isTokenExpired(token);
   }
 } 
