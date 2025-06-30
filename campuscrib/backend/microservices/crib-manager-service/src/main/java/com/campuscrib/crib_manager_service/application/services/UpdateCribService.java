@@ -1,7 +1,9 @@
 package com.campuscrib.crib_manager_service.application.services;
 
 import com.campuscrib.crib_manager_service.api.dto.UpdateCribRequest;
+import com.campuscrib.crib_manager_service.application.ports.CribEventPublisherPort;
 import com.campuscrib.crib_manager_service.application.ports.CribRepository;
+import com.campuscrib.crib_manager_service.domain.events.CribUpdatedEvent;
 import com.campuscrib.crib_manager_service.domain.exceptions.CribNotFoundException;
 import com.campuscrib.crib_manager_service.domain.exceptions.NotMyCribException;
 import com.campuscrib.crib_manager_service.domain.models.AccpetedGender;
@@ -18,6 +20,9 @@ import java.util.UUID;
 public class UpdateCribService implements UpdateCribUseCase {
     @Autowired
     private CribRepository cribRepository;
+
+    @Autowired
+    private CribEventPublisherPort cribEventPublisherPort;
 
     @Override
     public Crib execute(UUID cribId, UUID landlordId, UpdateCribRequest request) {
@@ -38,9 +43,26 @@ public class UpdateCribService implements UpdateCribUseCase {
         if(request.getPetsPolicy() != null) crib.setPetsPolicy(request.getPetsPolicy());
         if(request.getLocation() != null) crib.setLocation(request.getLocation());
 
-        cribRepository.save(crib);
+        Crib cribSaved = cribRepository.save(crib);
 
-        return cribRepository.findById(cribId)
-                .orElseThrow(CribNotFoundException::new);
+        CribUpdatedEvent updatedEvent = new CribUpdatedEvent(
+                cribSaved.getId(),
+                cribSaved.getTitle(),
+                cribSaved.getDescription(),
+                cribSaved.getGender(),
+                cribSaved.getPetsPolicy(),
+                cribSaved.getLandlordId(),
+                cribSaved.getNumberOfRooms(),
+                cribSaved.getNumberOfBathrooms(),
+                cribSaved.getNumberOfPeopleAlreadyIn(),
+                cribSaved.getNumberOfAvailableVacancies(),
+                cribSaved.getPrice(),
+                cribSaved.getLocation(),
+                cribSaved.getImages()
+        );
+
+        cribEventPublisherPort.publishCribUpdatedEvent(updatedEvent);
+
+        return cribSaved;
     }
 }

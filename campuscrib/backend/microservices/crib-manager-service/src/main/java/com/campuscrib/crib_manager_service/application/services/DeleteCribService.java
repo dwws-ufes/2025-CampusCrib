@@ -1,6 +1,8 @@
 package com.campuscrib.crib_manager_service.application.services;
 
+import com.campuscrib.crib_manager_service.application.ports.CribEventPublisherPort;
 import com.campuscrib.crib_manager_service.application.ports.CribRepository;
+import com.campuscrib.crib_manager_service.domain.events.CribDeletedEvent;
 import com.campuscrib.crib_manager_service.domain.exceptions.CribNotFoundException;
 import com.campuscrib.crib_manager_service.domain.exceptions.DeleteNotMyCribException;
 import com.campuscrib.crib_manager_service.domain.models.Crib;
@@ -15,6 +17,9 @@ public class DeleteCribService implements DeleteCribUseCase {
     @Autowired
     private CribRepository cribRepository;
 
+    @Autowired
+    private CribEventPublisherPort cribEventPublisherPort;
+
     @Override
     public void execute(UUID cribId, UUID requesterId) {
         Crib crib = cribRepository.findById(cribId)
@@ -25,5 +30,8 @@ public class DeleteCribService implements DeleteCribUseCase {
         }
 
         cribRepository.deleteById(crib.getId());
+
+        CribDeletedEvent deletedEvent = new CribDeletedEvent(cribId);
+        cribEventPublisherPort.publishCribDeletedEventEvent(deletedEvent);
     }
 }
