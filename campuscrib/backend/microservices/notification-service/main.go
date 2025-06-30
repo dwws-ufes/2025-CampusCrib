@@ -55,10 +55,10 @@ func main() {
 		}
 	}()
 
-	log.Println("📬 Notification Service iniciado. Aguardando eventos...")
+	log.Println("📬 Notification Service started. Waiting events...")
 
 	sig := make(chan os.Signal, 1)
 	signal.Notify(sig, os.Interrupt, syscall.SIGTERM)
 	<-sig
-	log.Println("Encerrando Notification Service.")
+	log.Println("Finishing Notification Service.")
 }
