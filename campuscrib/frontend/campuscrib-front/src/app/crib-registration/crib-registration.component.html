@@ -106,6 +106,27 @@
           <input matInput formControlName="zipCode" required />
         </mat-form-field>
 
+        <!-- Location Map -->
+        <div class="full-width location-section">
+          <h3>
+            <mat-icon>location_on</mat-icon>
+            Pin Your Exact Location
+          </h3>
+          <p class="location-help">Click on the map to set the exact location of your property</p>
+          <div class="map-container">
+            <app-map 
+              [isEditable]="true"
+              height="350px"
+              (locationSelected)="onLocationSelected($event)">
+            </app-map>
+          </div>
+          <div class="location-info" *ngIf="selectedLocation">
+            <small>
+              Selected: {{ selectedLocation.latitude.toFixed(6) }}, {{ selectedLocation.longitude.toFixed(6) }}
+            </small>
+          </div>
+        </div>
+
         <!-- Upload Images -->
         <div class="full-width">
           <label for="imageUpload">

@@ -12,6 +12,7 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 
 import { AuthService } from '../auth/auth.service';
 import { CribService } from '../crib/services/crib.service';
+import { MapComponent, LocationCoordinates } from '../shared/map/map.component';
 
 @Component({
   selector: 'app-crib-registration',
@@ -25,7 +26,8 @@ import { CribService } from '../crib/services/crib.service';
     MatButtonModule,
     MatCardModule,
     MatIconModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MapComponent
   ],
   templateUrl: './crib-registration.component.html',
   styleUrls: ['./crib-registration.component.css']
@@ -34,6 +36,7 @@ export class CribRegistrationComponent {
   cribForm: FormGroup;
   selectedImages: File[] = [];
   imagePreviews: string[] = [];
+  selectedLocation: LocationCoordinates | null = null;
 
   acceptedGenderOptions = ['MALE', 'FEMALE', 'ANY'];
   petsPolicyOptions = ['No Pets Allowed', 'Small Pets Only', 'All Pets Allowed'];
@@ -78,6 +81,10 @@ export class CribRegistrationComponent {
     }
   }
 
+  onLocationSelected(location: LocationCoordinates): void {
+    this.selectedLocation = location;
+  }
+
   onSubmit(): void {
     if (this.cribForm.valid) {
       const currentUser = this.authService.currentUser();
@@ -111,8 +118,8 @@ export class CribRegistrationComponent {
           city: formValue.city,
           state: formValue.state,
           zipCode: formValue.zipCode,
-          latitude: 0,
-          longitude: 0
+          latitude: this.selectedLocation?.latitude || 0,
+          longitude: this.selectedLocation?.longitude || 0
         }
       };
 

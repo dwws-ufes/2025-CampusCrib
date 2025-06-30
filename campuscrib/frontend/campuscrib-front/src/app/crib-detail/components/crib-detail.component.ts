@@ -11,6 +11,7 @@ import { MatInputModule } from '@angular/material/input';
 import { Crib } from '../../models/crib.model';
 import { Review } from '../../models/review.model';
 import { CribService } from '../../crib/services/crib.service';
+import { MapComponent } from '../../shared/map/map.component';
 import { first } from 'rxjs/operators';
 
 @Component({
@@ -24,7 +25,8 @@ import { first } from 'rxjs/operators';
     MatChipsModule,
     MatDividerModule,
     MatFormFieldModule,
-    MatInputModule
+    MatInputModule,
+    MapComponent
   ],
   templateUrl: './crib-detail.component.html',
   styleUrl: './crib-detail.component.css'

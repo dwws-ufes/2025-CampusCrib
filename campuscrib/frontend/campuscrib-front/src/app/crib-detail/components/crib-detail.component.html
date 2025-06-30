@@ -136,10 +136,13 @@
               <p>{{ crib.location.city }}, {{ crib.location.state }} {{ crib.location.zipCode }}</p>
             </div>
             
-            <div class="map-placeholder">
-              <mat-icon>map</mat-icon>
-              <p>Interactive map coming soon</p>
-              <small>Lat: {{ crib.location.latitude }}, Lng: {{ crib.location.longitude }}</small>
+            <div class="map-container">
+              <app-map 
+                [latitude]="crib.location.latitude" 
+                [longitude]="crib.location.longitude"
+                [isEditable]="false"
+                height="300px">
+              </app-map>
             </div>
           </div>
         </mat-card-content>

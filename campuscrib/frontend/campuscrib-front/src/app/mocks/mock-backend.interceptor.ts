@@ -195,9 +195,7 @@ export const mockBackendInterceptor: HttpInterceptorFn = (req, next) => {
       birthDate: newUser.birthDate,
       profileImage: newUser.profileImage,
       role: newUser.role,
-      legalGuardian: newUser.legalGuardian,
-      accessToken: authTokens.accessToken,
-      refreshToken: authTokens.refreshToken
+      legalGuardian: newUser.legalGuardian
     });
   }
 

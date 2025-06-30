@@ -1,0 +1,8 @@
+<div class="map-wrapper">
+  <div class="map-controls" *ngIf="isEditable">
+    <button type="button" class="location-btn" (click)="getCurrentLocation()">
+      Use Current Location
+    </button>
+  </div>
+  <div #mapContainer class="map-container" [style.height]="height"></div>
+</div>
