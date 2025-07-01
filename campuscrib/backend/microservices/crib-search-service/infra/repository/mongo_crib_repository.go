@@ -3,7 +3,6 @@ package repository
 import (
 	"context"
 	"crib-search-service/domain/models"
-	"crib-search-service/domain/repository"
 
 	"github.com/google/uuid"
 	"go.mongodb.org/mongo-driver/bson"
@@ -14,7 +13,7 @@ type MongoCribRepository struct {
 	collection *mongo.Collection
 }
 
-func NewMongoCribRepository(db *mongo.Database, collectionName string) repository.CribRepository {
+func NewMongoCribRepository(db *mongo.Database, collectionName string) *MongoCribRepository {
 	return &MongoCribRepository{
 		collection: db.Collection(collectionName),
 	}

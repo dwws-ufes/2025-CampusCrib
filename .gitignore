@@ -1,2 +1,3 @@
 campuscrib/backend/microservices/notification-service/.env
+campuscrib/backend/microservices/crib-search-service/.env
 campuscrib/backend/.env

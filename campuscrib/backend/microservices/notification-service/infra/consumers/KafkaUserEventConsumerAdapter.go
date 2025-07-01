@@ -25,18 +25,18 @@ func (kf *KafkaUserEventConsumerAdapter) StartConsuming(ctx context.Context) err
 	for {
 		msg, err := kf.Reader.ReadMessage(ctx)
 		if err != nil {
-			log.Printf("Error ao ler mensagem do Kafka: %v\n", err)
+			log.Printf("Error reading message from Kafka: %v\n", err)
 			continue
 		}
 
 		var event events.UserRegisteredEvent
 		if err := json.Unmarshal(msg.Value, &event); err != nil {
-			log.Printf("Error ao desserializar evento: %v\n", err)
+			log.Printf("Error desserializing event: %v\n", err)
 			continue
 		}
 
 		if err := kf.Handler(ctx, event); err != nil {
-			log.Printf("Error ao processar evento: %v\n", err)
+			log.Printf("Error processing event: %v\n", err)
 		}
 	}
 }
