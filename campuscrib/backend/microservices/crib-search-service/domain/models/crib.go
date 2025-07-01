@@ -9,8 +9,8 @@ type Crib struct {
 	Title                      string    `bson:"title" json:"title"`
 	Description                string    `bson:"description" json:"description"`
 	Gender                     Gender    `bson:"gender" json:"gender"`
-	PetsPolicy                 bool      `bson:"pets_policy" json:"pets_policy"`
-	LandlordID                 uuid.UUID `bson:"landlord_id" json:"landlord_id"`
+	PetsPolicy                 bool      `bson:"petsPolicy" json:"petsPolicy"`
+	LandlordID                 uuid.UUID `bson:"landlordId" json:"landlordId"`
 	NumberOfRooms              int       `bson:"number_of_rooms" json:"number_of_rooms"`
 	NumberOfBathrooms          int       `bson:"number_of_bathrooms" json:"number_of_bathrooms"`
 	NumberOfPeopleAlreadyIn    int       `bson:"number_of_people_already_in" json:"number_of_people_already_in"`

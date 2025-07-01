@@ -29,6 +29,24 @@ func getCacheTTL() time.Duration {
 	return time.Second * time.Duration(ttl)
 }
 
+func corsMiddleware(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		// Libera CORS para o frontend local
+		w.Header().Set("Access-Control-Allow-Origin", "http://localhost:4200")
+		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
+		w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
+
+		// Requisição preflight
+		if r.Method == http.MethodOptions {
+			w.WriteHeader(http.StatusNoContent)
+			return
+		}
+
+		// Continua o fluxo
+		next.ServeHTTP(w, r)
+	})
+}
+
 func main() {
 	if os.Getenv("ENV") != "production" {
 		if err := godotenv.Load(); err != nil {
@@ -101,7 +119,7 @@ func main() {
 	}()
 
 	cribSearchController := api.NewCribSerachController(cribRepo)
-	http.Handle("/api/search/cribs", cribSearchController)
+	http.Handle("/api/search/cribs", corsMiddleware(cribSearchController))
 	port := os.Getenv("CRIB_SEARCH_SERVER_PORT")
 	if port == "" {
 		port = "8085"
