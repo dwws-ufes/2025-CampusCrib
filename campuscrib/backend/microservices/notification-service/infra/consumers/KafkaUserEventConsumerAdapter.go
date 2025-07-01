@@ -37,6 +37,8 @@ func (kf *KafkaUserEventConsumerAdapter) StartConsuming(ctx context.Context) err
 
 		if err := kf.Handler(ctx, event); err != nil {
 			log.Printf("Error processing event: %v\n", err)
+		} else {
+			log.Printf("✅ Event processed: %s - Email %s\n", event.Email)
 		}
 	}
 }

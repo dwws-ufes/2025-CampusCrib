@@ -5,7 +5,7 @@ import (
 )
 
 type Crib struct {
-	ID                         uuid.UUID `bson:"_id" json:"id"`
+	ID                         uuid.UUID `bson:"cribId" json:"cribId"`
 	Title                      string    `bson:"title" json:"title"`
 	Description                string    `bson:"description" json:"description"`
 	Gender                     Gender    `bson:"gender" json:"gender"`

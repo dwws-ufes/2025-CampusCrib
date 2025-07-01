@@ -25,7 +25,7 @@ func (r *MongoCribRepository) Save(ctx context.Context, crib *models.Crib) error
 }
 
 func (r *MongoCribRepository) Update(ctx context.Context, crib *models.Crib) error {
-	filter := bson.M{"id": crib.ID}
+	filter := bson.M{"cribId": crib.ID}
 	update := bson.M{"$set": crib}
 
 	_, err := r.collection.UpdateOne(ctx, filter, update)
@@ -33,13 +33,13 @@ func (r *MongoCribRepository) Update(ctx context.Context, crib *models.Crib) err
 }
 
 func (r *MongoCribRepository) Delete(ctx context.Context, id uuid.UUID) error {
-	_, err := r.collection.DeleteOne(ctx, bson.M{"id": id})
+	_, err := r.collection.DeleteOne(ctx, bson.M{"cribId": id})
 	return err
 }
 
 func (r *MongoCribRepository) FindById(ctx context.Context, id uuid.UUID) (*models.Crib, error) {
 	var crib models.Crib
-	err := r.collection.FindOne(ctx, bson.M{"id": id}).Decode(&crib)
+	err := r.collection.FindOne(ctx, bson.M{"cribId": id}).Decode(&crib)
 
 	if err != nil {
 		return nil, err

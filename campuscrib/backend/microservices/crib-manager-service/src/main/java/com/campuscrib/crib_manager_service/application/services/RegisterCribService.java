@@ -40,22 +40,22 @@ public class RegisterCribService implements RegisterCribUseCase {
                 .build();
 
         Crib cribSaved = cribRepository.save(cribToSave);
-
-        CribRegisteredEvent registeredEvent = new CribRegisteredEvent(
-                cribSaved.getId(),
-                cribSaved.getTitle(),
-                cribSaved.getDescription(),
-                cribSaved.getGender(),
-                cribSaved.getPetsPolicy(),
-                cribSaved.getLandlordId(),
-                cribSaved.getNumberOfRooms(),
-                cribSaved.getNumberOfBathrooms(),
-                cribSaved.getNumberOfPeopleAlreadyIn(),
-                cribSaved.getNumberOfAvailableVacancies(),
-                cribSaved.getPrice(),
-                cribSaved.getLocation(),
-                cribSaved.getImages()
-        );
+        System.out.println(cribSaved.getId());
+        CribRegisteredEvent registeredEvent = CribRegisteredEvent.builder()
+                .cribId(cribSaved.getId())
+                .title(cribSaved.getTitle())
+                .description(cribSaved.getDescription())
+                .gender(cribSaved.getGender())
+                .petsPolicy(cribSaved.getPetsPolicy())
+                .landlordId(cribSaved.getLandlordId())
+                .numberOfRooms(cribSaved.getNumberOfRooms())
+                .numberOfBathrooms(cribSaved.getNumberOfBathrooms())
+                .numberOfPeopleAlreadyIn(cribSaved.getNumberOfPeopleAlreadyIn())
+                .numberOfAvailableVacancies(cribSaved.getNumberOfAvailableVacancies())
+                .price(cribSaved.getPrice())
+                .location(cribSaved.getLocation())
+                .images(cribSaved.getImages())
+                .build();
 
         cribEventPublisherPort.publishCribRegisteredEvent(registeredEvent);
 

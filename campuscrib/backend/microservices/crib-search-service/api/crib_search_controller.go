@@ -29,8 +29,7 @@ func (c *CribSerachController) ServeHTTP(w http.ResponseWriter, r *http.Request)
 
 	filters := make(map[string]interface{})
 	query := r.URL.Query()
-	fmt.Println("query")
-	fmt.Println(query)
+	fmt.Println("query", query)
 
 	id := query.Get("id")
 	if id != "" {

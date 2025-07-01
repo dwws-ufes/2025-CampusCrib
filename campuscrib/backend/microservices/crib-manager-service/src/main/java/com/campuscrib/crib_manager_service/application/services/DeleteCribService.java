@@ -31,7 +31,7 @@ public class DeleteCribService implements DeleteCribUseCase {
 
         cribRepository.deleteById(crib.getId());
 
-        CribDeletedEvent deletedEvent = new CribDeletedEvent(cribId);
+        CribDeletedEvent deletedEvent = CribDeletedEvent.builder().cribId(cribId).build();
         cribEventPublisherPort.publishCribDeletedEventEvent(deletedEvent);
     }
 }

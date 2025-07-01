@@ -3,6 +3,7 @@ package com.campuscrib.crib_manager_service.domain.events;
 import com.campuscrib.crib_manager_service.domain.models.AccpetedGender;
 import com.campuscrib.crib_manager_service.domain.models.Location;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 
 import java.math.BigDecimal;
@@ -10,7 +11,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Getter
-@AllArgsConstructor
+@Builder
 public class CribRegisteredEvent {
     private UUID cribId;
     private String title;
