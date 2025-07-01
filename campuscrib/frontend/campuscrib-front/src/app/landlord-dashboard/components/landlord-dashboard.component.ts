@@ -1,6 +1,6 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import { Router, NavigationEnd } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -9,7 +9,8 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatDialogModule, MatDialog } from '@angular/material/dialog';
 import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
+import { filter } from 'rxjs/operators';
 
 import { AuthService } from '../../auth/auth.service';
 import { CribService } from '../../crib/services/crib.service';
@@ -33,12 +34,13 @@ import { CribEditComponent } from '../../crib-edit/components/crib-edit.componen
   templateUrl: './landlord-dashboard.component.html',
   styleUrl: './landlord-dashboard.component.css'
 })
-export class LandlordDashboardComponent implements OnInit {
+export class LandlordDashboardComponent implements OnInit, OnDestroy {
   private authService = inject(AuthService);
   private cribService = inject(CribService);
   private router = inject(Router);
   private dialog = inject(MatDialog);
   private snackBar = inject(MatSnackBar);
+  private routerSubscription?: Subscription;
 
   currentUser = this.authService.currentUser;
   myCribs$: Observable<Crib[]> = this.cribService.getCribsByLandlord();
@@ -58,6 +60,21 @@ export class LandlordDashboardComponent implements OnInit {
     }
 
     this.reloadCribs();
+
+    this.routerSubscription = this.router.events
+      .pipe(filter(event => event instanceof NavigationEnd))
+      .subscribe((event: NavigationEnd) => {
+        if (event.url === '/landlord-dashboard') {
+          console.log('Reloading cribs after navigation to dashboard');
+          this.reloadCribs();
+        }
+      });
+  }
+
+  ngOnDestroy() {
+    if (this.routerSubscription) {
+      this.routerSubscription.unsubscribe();
+    }
   }
 
   onCreateCrib() {

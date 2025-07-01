@@ -1,18 +1,41 @@
 import { Injectable, signal, inject } from '@angular/core';
 import { Crib } from '../../models/crib.model';
 import { User } from '../../models/user.model';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { MessageService } from '../../shared/message-dialog/services/message.service';
 import { Router } from '@angular/router';
 import { AuthService } from '../../auth/auth.service';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
+export interface SearchFilters {
+  id?: string;
+  gender?: string;
+  petsPolicy?: boolean;
+  numberOfRooms?: number;
+  numberOfBathrooms?: number;
+  availableVacancies?: number;
+  price?: number;
+  landlordId?: string;
+  city?: string;
+  state?: string;
+  neighborhood?: string;
+    numberOfRoomsMin?: number;
+  numberOfRoomsMax?: number;
+  numberOfBathroomsMin?: number;
+  numberOfBathroomsMax?: number;
+  availableVacanciesMin?: number;
+  availableVacanciesMax?: number;
+  priceMin?: number;
+  priceMax?: number;
+}
+
 @Injectable({ providedIn: 'root' })
 export class CribService {
   private http = inject(HttpClient);
   private message = inject(MessageService);
   private apiUrl = 'http://localhost:8083';
+  private searchApiUrl = 'http://localhost:8085';
   private auth = inject(AuthService);
   private router = inject(Router);
   private _cribs = signal<Crib[]>([]);
@@ -23,6 +46,26 @@ export class CribService {
 
   get cribs() {
     return this._cribs.asReadonly();
+  }
+
+  searchCribs(filters: SearchFilters): Observable<Crib[]> {
+    let params = new HttpParams();
+    
+    Object.keys(filters).forEach(key => {
+      const value = filters[key as keyof SearchFilters];
+      if (value !== undefined && value !== null && value !== '') {
+        let apiParamName = key;
+        if (key === 'numberOfRooms') apiParamName = 'numberOfRooms';
+        if (key === 'numberOfBathrooms') apiParamName = 'numberOfBathrooms';
+        if (key === 'availableVacancies') apiParamName = 'availableVacancies';
+        
+        params = params.set(apiParamName, value.toString());
+      }
+    });
+
+    return this.http.get<Crib[]>(`${this.searchApiUrl}/api/search/cribs`, {
+      params
+    });
   }
 
   getAllCribs(): Observable<Crib[]> {
@@ -55,30 +98,14 @@ export class CribService {
     return this.http.get<Crib>(`${this.apiUrl}/api/manager/cribs/crib/${id}`, httpOptions);
   }
 
-  createCrib(crib: Omit<Crib, 'id'> & { landlordId: string }) {
+  createCrib(crib: Omit<Crib, 'id'> & { landlordId: string }): Observable<any> {
     const token = this.auth.getAccessToken();
 
     const httpOptions = token
       ? { headers: new HttpHeaders({ Authorization: `Bearer ${token}` }) }
       : {};
 
-    return this.http.post(`${this.apiUrl}/api/manager/cribs/register`, crib, httpOptions).subscribe({
-      next: (response: any) => {
-        try {
-          this.message.success('Crib Registration successful').afterClosed().subscribe(()=>{
-            return response;
-          });
-        } catch (error) {
-          console.error('Error processing rib registration response:', error);
-          this.message.error('Crib Registration successful but failed to process user data');
-        }
-      },
-      error: (error) => {
-        this.message.error('Crib Registration failed');
-        console.error('Crib Registration error:', error);
-      }
-    });
-    
+    return this.http.post(`${this.apiUrl}/api/manager/cribs/register`, crib, httpOptions);
   }
 
 

@@ -54,3 +54,94 @@ body, html {
 router-outlet {
   flex: 1 0 auto;
 }
+
+/* User Menu Styles */
+.user-menu-trigger {
+  color: #333 !important;
+  transition: all 0.2s ease;
+}
+
+.user-menu-trigger:hover {
+  background-color: rgba(0, 0, 0, 0.1) !important;
+  transform: scale(1.05);
+}
+
+.user-menu .user-menu-header {
+  pointer-events: none;
+  background-color: #f5f5f5 !important;
+  padding: 16px !important;
+  min-height: auto !important;
+}
+
+.user-menu .user-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 200px;
+}
+
+.user-menu .user-name {
+  font-weight: 600;
+  font-size: 1rem;
+  color: #333;
+}
+
+.user-menu .user-email {
+  font-size: 0.875rem;
+  color: #666;
+}
+
+.user-menu .user-role {
+  font-size: 0.75rem;
+  color: #1976d2;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.user-menu mat-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  min-height: 48px;
+  transition: all 0.2s ease;
+}
+
+.user-menu mat-menu-item:hover {
+  background-color: rgba(25, 118, 210, 0.08);
+}
+
+.user-menu mat-menu-item mat-icon {
+  color: #666;
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
+}
+
+.user-menu .logout-item {
+  color: #d32f2f !important;
+}
+
+.user-menu .logout-item mat-icon {
+  color: #d32f2f !important;
+}
+
+.user-menu .logout-item:hover {
+  background-color: rgba(211, 47, 47, 0.08) !important;
+}
+
+/* Navbar responsiveness */
+@media (max-width: 600px) {
+  .user-menu .user-info {
+    min-width: 180px;
+  }
+  
+  .user-menu .user-name {
+    font-size: 0.9rem;
+  }
+  
+  .user-menu .user-email {
+    font-size: 0.8rem;
+  }
+}

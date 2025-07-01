@@ -55,12 +55,23 @@ export class CribComponent {
       minVacancies: [null]
     });
 
-    // Load cribs from service
-    this.cribService.getAllCribs().subscribe((cribs) => {
-      this.allCribs = cribs;
-      this.cribs = [...this.allCribs];
+    // Load all cribs initially
+    this.loadAllCribs();
+  }
+
+  loadAllCribs(): void {
+    this.loading = true;
+    this.cribService.getAllCribs().subscribe({
+      next: (cribs) => {
+        this.allCribs = cribs;
+        this.cribs = [...this.allCribs];
+        this.loading = false;
+      },
+      error: (error) => {
+        console.error('Error loading cribs:', error);
+        this.loading = false;
+      }
     });
-    this.cribs = [...this.allCribs];
   }
 
   applyFilters(sidenav?: any): void {
@@ -90,6 +101,21 @@ export class CribComponent {
   onSearch(query: string): void {
     this.searchQuery = query;
     console.log('Search query:', query);
+    
+    if (!query || query.trim() === '') {
+      this.cribs = [...this.allCribs];
+    } else {
+      const searchTerm = query.toLowerCase().trim();
+      this.cribs = this.allCribs.filter(crib => {
+        return (
+          crib.title.toLowerCase().includes(searchTerm) ||
+          crib.description.toLowerCase().includes(searchTerm) ||
+          crib.location.city.toLowerCase().includes(searchTerm) ||
+          crib.location.state.toLowerCase().includes(searchTerm) ||
+          crib.location.street.toLowerCase().includes(searchTerm)
+        );
+      });
+    }
   }
 
   onFiltersChange(filters: any): void {

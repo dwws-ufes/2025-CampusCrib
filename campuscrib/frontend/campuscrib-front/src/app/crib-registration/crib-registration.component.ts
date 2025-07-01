@@ -123,27 +123,29 @@ export class CribRegistrationComponent {
         }
       };
 
-      const createdCrib = this.cribService.createCrib(newCrib);
-      
-      if (createdCrib) {
-        this.snackBar.open('Property registered successfully!', 'Close', {
-          duration: 3000,
-          horizontalPosition: 'right',
-          verticalPosition: 'top'
-        });
-        
-        this.cribForm.reset();
-        this.selectedImages = [];
-        this.imagePreviews = [];
-        
-        this.router.navigate(['/landlord-dashboard']);
-      } else {
-        this.snackBar.open('Failed to register property. Please try again.', 'Close', {
-          duration: 3000,
-          horizontalPosition: 'right',
-          verticalPosition: 'top'
-        });
-      }
+      this.cribService.createCrib(newCrib).subscribe({
+        next: (response) => {
+          this.snackBar.open('Property registered successfully!', 'Close', {
+            duration: 3000,
+            horizontalPosition: 'right',
+            verticalPosition: 'top'
+          });
+          
+          this.cribForm.reset();
+          this.selectedImages = [];
+          this.imagePreviews = [];
+          
+          this.router.navigate(['/landlord-dashboard']);
+        },
+        error: (error) => {
+          console.error('Crib registration error:', error);
+          this.snackBar.open('Failed to register property. Please try again.', 'Close', {
+            duration: 3000,
+            horizontalPosition: 'right',
+            verticalPosition: 'top'
+          });
+        }
+      });
     }
   }
 }
