@@ -13,7 +13,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 import { CribSearchComponent } from '../../crib-search/components/crib-search.component';
 import { CribListComponent } from '../../crib-list/components/crib-list.component';
-import { CribService } from '../services/crib.service';
+import { CribService, SearchFilters } from '../services/crib.service';
 import { Crib } from '../../models/crib.model';
 
 @Component({
@@ -40,7 +40,6 @@ export class CribComponent {
   private cribService = inject(CribService);
   
   cribs: Crib[] = [];
-  allCribs: Crib[] = [];
   loading = false;
   searchQuery = '';
   filterForm: FormGroup;
@@ -61,10 +60,9 @@ export class CribComponent {
 
   loadAllCribs(): void {
     this.loading = true;
-    this.cribService.getAllCribs().subscribe({
+    this.cribService.searchCribs({}).subscribe({
       next: (cribs) => {
-        this.allCribs = cribs;
-        this.cribs = [...this.allCribs];
+        this.cribs = cribs;
         this.loading = false;
       },
       error: (error) => {
@@ -83,14 +81,24 @@ export class CribComponent {
       minVacancies
     } = this.filterForm.value;
 
-    this.cribs = this.allCribs.filter(crib => {
-      return (
-        (!maxPrice || crib.price <= maxPrice) &&
-        (!acceptedGenders || crib.acceptedGenders === acceptedGenders) &&
-        (petsAllowed === null || crib.petsPolicy === petsAllowed) &&
-        (!city || crib.location.city.toLowerCase().includes(city.toLowerCase())) &&
-        (!minVacancies || crib.numAvailableVacancies >= minVacancies)
-      );
+    const searchFilters: SearchFilters = {};
+    
+    if (maxPrice) searchFilters.priceMax = maxPrice;
+    if (acceptedGenders && acceptedGenders !== '') searchFilters.gender = acceptedGenders;
+    if (petsAllowed !== null) searchFilters.petsPolicy = petsAllowed;
+    if (city && city.trim() !== '') searchFilters.city = city.trim();
+    if (minVacancies) searchFilters.availableVacanciesMin = minVacancies;
+
+    this.loading = true;
+    this.cribService.searchCribs(searchFilters).subscribe({
+      next: (cribs) => {
+        this.cribs = cribs;
+        this.loading = false;
+      },
+      error: (error) => {
+        console.error('Error applying filters:', error);
+        this.loading = false;
+      }
     });
 
     if (sidenav) {
@@ -103,17 +111,24 @@ export class CribComponent {
     console.log('Search query:', query);
     
     if (!query || query.trim() === '') {
-      this.cribs = [...this.allCribs];
+      this.loadAllCribs();
     } else {
+      this.loading = true;
       const searchTerm = query.toLowerCase().trim();
-      this.cribs = this.allCribs.filter(crib => {
-        return (
-          crib.title.toLowerCase().includes(searchTerm) ||
-          crib.description.toLowerCase().includes(searchTerm) ||
-          crib.location.city.toLowerCase().includes(searchTerm) ||
-          crib.location.state.toLowerCase().includes(searchTerm) ||
-          crib.location.street.toLowerCase().includes(searchTerm)
-        );
+      
+      const searchFilters: SearchFilters = {
+        city: searchTerm  
+      };
+      
+      this.cribService.searchCribs(searchFilters).subscribe({
+        next: (cribs) => {
+          this.cribs = cribs;
+          this.loading = false;
+        },
+        error: (error) => {
+          console.error('Error searching cribs:', error);
+          this.loading = false;
+        }
       });
     }
   }
