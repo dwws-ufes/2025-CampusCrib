@@ -81,7 +81,7 @@ export class CribEditComponent {
         }
       };
 
-      this.cribService.updateCrib(this.data.crib.id, updates).subscribe({
+      this.cribService.updateCrib(this.data.crib.id!, updates).subscribe({
         next: (updated) => this.dialogRef.close(updated),
         error: () => this.dialogRef.close(null)
       });

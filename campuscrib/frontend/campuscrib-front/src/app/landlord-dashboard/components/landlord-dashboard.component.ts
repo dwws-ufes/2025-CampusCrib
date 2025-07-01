@@ -103,7 +103,7 @@ export class LandlordDashboardComponent implements OnInit, OnDestroy {
     const confirmed = confirm(`Are you sure you want to delete "${crib.title}"? This action cannot be undone.`);
     
     if (confirmed) {
-      this.cribService.deleteCrib(crib.id).subscribe({
+      this.cribService.deleteCrib(crib.id!).subscribe({
         next: () => {
           this.snackBar.open('Crib deleted successfully!', 'Close', {
             duration: 3000,
@@ -124,7 +124,7 @@ export class LandlordDashboardComponent implements OnInit, OnDestroy {
   }
 
   onViewCrib(crib: Crib) {
-    this.router.navigate(['/crib', crib.id]);
+    this.router.navigate(['/crib', crib.id!]);
   }
 
   toggleViewMode() {

@@ -10,7 +10,8 @@ export interface Location {
 }
 
 export interface Crib {
-  id: string; // uuid
+  id?: string; // uuid
+  cribId?:string;
   title: string;
   description: string;
   price: number;

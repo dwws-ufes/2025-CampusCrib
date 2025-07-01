@@ -34,7 +34,7 @@ import { first } from 'rxjs/operators';
 export class CribDetailComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
-  private cirbService = inject(CribService);
+  private cribService = inject(CribService);
 
   crib: Crib | null = null;
   reviews: Review[] = [];
@@ -130,11 +130,11 @@ export class CribDetailComponent implements OnInit {
   loadCribDetails(id: string) {
     this.loading = true;
 
-    this.cirbService
+    this.cribService
       .getCribById(id)
       .pipe(first())
       .subscribe({
-        next: (crib) => {
+        next: (crib: Crib) => {
           this.crib = crib;
           this.reviews = this.mockReviews.filter((r) => r.cribId === id);
           this.cribNotFound = false;

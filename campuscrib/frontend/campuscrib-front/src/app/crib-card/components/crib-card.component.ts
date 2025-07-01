@@ -23,7 +23,7 @@ export class CribCardComponent {
   private router = inject(Router);
 
   onViewDetails() {
-    this.router.navigate(['/crib', this.crib.id]);
+    this.router.navigate(['/crib', this.crib.cribId]);
   }
 
   onContact() {

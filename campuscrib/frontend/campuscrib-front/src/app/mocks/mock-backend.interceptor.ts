@@ -38,10 +38,11 @@ const mockUsers: User[] = [
   }
 ];
 
-const mockCribs: Crib[] = [
-  {
-    id: '1',
-    title: 'Cozy Student Apartment Near Campus',
+  const mockCribs: Crib[] = [
+    {
+      id: '1',
+      cribId: '1',
+      title: 'Cozy Student Apartment Near Campus',
     description: 'Perfect for students! Walking distance to university with modern amenities.',
     price: 850,
     numRooms: 2,
@@ -60,9 +61,10 @@ const mockCribs: Crib[] = [
       longitude: -118.2437
     }
   },
-  {
-    id: '2',
-    title: 'Luxury Downtown Loft',
+      {
+      id: '2',
+      cribId: '2',
+      title: 'Luxury Downtown Loft',
     description: 'Modern loft in the heart of downtown with great amenities and city views.',
     price: 1200,
     numRooms: 1,
@@ -81,9 +83,10 @@ const mockCribs: Crib[] = [
       longitude: -118.2440
     }
   },
-  {
-    id: '3',
-    title: 'Shared House with Garden',
+      {
+      id: '3',
+      cribId: '3',
+      title: 'Shared House with Garden',
     description: 'Beautiful house with private garden, perfect for nature lovers.',
     price: 650,
     numRooms: 3,
@@ -255,7 +258,8 @@ export const mockBackendInterceptor: HttpInterceptorFn = (req, next) => {
 
   if (url.includes('/manager/cribs/crib/') && method === 'GET') {
     const cribId = url.split('/').pop();
-    const crib = mockCribs.find(c => c.id === cribId);
+    // Try to find by both id and cribId to handle different routing scenarios
+    const crib = mockCribs.find(c => c.id === cribId || c.cribId === cribId);
     if (crib) {
       return mockResponse(crib);
     } else {
@@ -271,6 +275,7 @@ export const mockBackendInterceptor: HttpInterceptorFn = (req, next) => {
     const cribData = body as any;
     const newCrib: Crib = {
       id: (mockCribs.length + 1).toString(),
+      cribId: (mockCribs.length + 1).toString(),
       title: cribData.title,
       description: cribData.description,
       price: cribData.price,
@@ -315,6 +320,134 @@ export const mockBackendInterceptor: HttpInterceptorFn = (req, next) => {
     
     mockCribs.splice(cribIndex, 1);
     return mockResponse({ message: 'Crib deleted successfully' });
+  }
+
+  // SEARCH ENDPOINTS
+  if (url.includes('/api/search/cribs') && method === 'GET') {
+    const urlObj = new URL(url, 'http://localhost');
+    const params = urlObj.searchParams;
+    
+    let filteredCribs = [...mockCribs];
+    
+    // Apply filters based on query parameters
+    if (params.get('id')) {
+      filteredCribs = filteredCribs.filter(c => c.cribId === params.get('id'));
+    }
+    
+    if (params.get('gender')) {
+      const gender = params.get('gender');
+      filteredCribs = filteredCribs.filter(c => 
+        c.acceptedGenders === 'ANY' || c.acceptedGenders === gender
+      );
+    }
+    
+    if (params.get('petsPolicy')) {
+      const petsAllowed = params.get('petsPolicy') === 'true';
+      filteredCribs = filteredCribs.filter(c => c.petsPolicy === petsAllowed);
+    }
+    
+    if (params.get('numberOfRooms')) {
+      const numRooms = parseInt(params.get('numberOfRooms')!);
+      filteredCribs = filteredCribs.filter(c => c.numRooms === numRooms);
+    }
+    
+    if (params.get('numberOfRoomsMin')) {
+      const minRooms = parseInt(params.get('numberOfRoomsMin')!);
+      filteredCribs = filteredCribs.filter(c => c.numRooms >= minRooms);
+    }
+    
+    if (params.get('numberOfRoomsMax')) {
+      const maxRooms = parseInt(params.get('numberOfRoomsMax')!);
+      filteredCribs = filteredCribs.filter(c => c.numRooms <= maxRooms);
+    }
+    
+    if (params.get('numberOfBathrooms')) {
+      const numBathrooms = parseInt(params.get('numberOfBathrooms')!);
+      filteredCribs = filteredCribs.filter(c => c.numBathrooms === numBathrooms);
+    }
+    
+    if (params.get('numberOfBathroomsMin')) {
+      const minBathrooms = parseInt(params.get('numberOfBathroomsMin')!);
+      filteredCribs = filteredCribs.filter(c => c.numBathrooms >= minBathrooms);
+    }
+    
+    if (params.get('numberOfBathroomsMax')) {
+      const maxBathrooms = parseInt(params.get('numberOfBathroomsMax')!);
+      filteredCribs = filteredCribs.filter(c => c.numBathrooms <= maxBathrooms);
+    }
+    
+    if (params.get('availableVacancies')) {
+      const vacancies = parseInt(params.get('availableVacancies')!);
+      filteredCribs = filteredCribs.filter(c => c.numAvailableVacancies === vacancies);
+    }
+    
+    if (params.get('availableVacanciesMin')) {
+      const minVacancies = parseInt(params.get('availableVacanciesMin')!);
+      filteredCribs = filteredCribs.filter(c => c.numAvailableVacancies >= minVacancies);
+    }
+    
+    if (params.get('availableVacanciesMax')) {
+      const maxVacancies = parseInt(params.get('availableVacanciesMax')!);
+      filteredCribs = filteredCribs.filter(c => c.numAvailableVacancies <= maxVacancies);
+    }
+    
+    if (params.get('price')) {
+      const price = parseFloat(params.get('price')!);
+      filteredCribs = filteredCribs.filter(c => c.price === price);
+    }
+    
+    if (params.get('priceMin')) {
+      const minPrice = parseFloat(params.get('priceMin')!);
+      filteredCribs = filteredCribs.filter(c => c.price >= minPrice);
+    }
+    
+    if (params.get('priceMax')) {
+      const maxPrice = parseFloat(params.get('priceMax')!);
+      filteredCribs = filteredCribs.filter(c => c.price <= maxPrice);
+    }
+    
+    if (params.get('landlordId')) {
+      const landlordId = params.get('landlordId');
+      filteredCribs = filteredCribs.filter(c => c.landlordId === landlordId);
+    }
+    
+    if (params.get('city')) {
+      const city = params.get('city')!.toLowerCase();
+      filteredCribs = filteredCribs.filter(c => 
+        c.title.toLowerCase().includes(city) ||
+        c.description.toLowerCase().includes(city) ||
+        c.location.city.toLowerCase().includes(city) ||
+        c.location.state.toLowerCase().includes(city) ||
+        c.location.street.toLowerCase().includes(city)
+      );
+    }
+    
+    if (params.get('state')) {
+      const state = params.get('state')!.toLowerCase();
+      filteredCribs = filteredCribs.filter(c => 
+        c.location.state.toLowerCase().includes(state)
+      );
+    }
+    
+    if (params.get('neighborhood')) {
+      const neighborhood = params.get('neighborhood')!.toLowerCase();
+      filteredCribs = filteredCribs.filter(c => 
+        c.location.street.toLowerCase().includes(neighborhood)
+      );
+    }
+
+    if (params.get('q') || params.get('search')) {
+      const searchTerm = (params.get('q') || params.get('search'))!.toLowerCase();
+      filteredCribs = filteredCribs.filter(c => 
+        c.title.toLowerCase().includes(searchTerm) ||
+        c.description.toLowerCase().includes(searchTerm) ||
+        c.location.city.toLowerCase().includes(searchTerm) ||
+        c.location.state.toLowerCase().includes(searchTerm) ||
+        c.location.street.toLowerCase().includes(searchTerm)
+      );
+    }
+    
+    return mockResponse(filteredCribs);
   }
 
   return next(req);
