@@ -46,6 +46,7 @@ CampusCrib é uma aplicação baseada em microsserviços voltada para gestão e 
 ---
 
 ### 2. 🌠 Executando o Frontend
+```bash
 cd campuscrib/frontend/campuscrib-front
 npm install
 ng serve
