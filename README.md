@@ -50,19 +50,24 @@ CampusCrib é uma aplicação baseada em microsserviços voltada para gestão e 
 cd campuscrib/frontend/campuscrib-front
 npm install
 ng serve
+```
 
 ### 3. 🗄️ Executando o Backend
 É necessário rodar cada microsserviço separadamente. Além disso, rode o elasticsearch via docker e os SGBDs.
 
 Para executar o docker basta fazer:
+```bash
 cd campuscrib/backend
 docker-compose up --build
+```
 
 Caso tenha instalado os bancos de dados (Postgresql, MongoDB e Redis) e o Kafka via Homebrew, basta executá-los:
-- brew services stop postgresql@14
-- brew services start mongodb-community@7.0
-- brew services start redis
-- brew services start kafka
+```bash
+brew services stop postgresql@14
+brew services start mongodb-community@7.0
+brew services start redis
+brew services start kafka
+```
 
 Para executar os microsserviços:
 
@@ -87,8 +92,10 @@ spring.kafka.producer.value-serializer=org.springframework.kafka.support.seriali
 kafka.topics.user-registered=${KAFKA_TOPIC_USER_REGISTERED}
 
 Em seguida execute:
+```bash
 cd campuscrib/backend/microservices/registration-service
 ./mvnw spring-boot:run
+```
 
 #### Authentication Service
 Tenha o application.properties com as variáveis de ambiente:
@@ -100,8 +107,10 @@ jwt.secret=${JWT_SECRET}
 jwt.access-token.expiration-millis=${JWT_ACCESS_TOKEN_EXPIRATION_MILLIS}
 
 Em seguida execute:
+```bash
 cd campuscrib/backend/microservices/authentication-service
 ./mvnw spring-boot:run
+```
 
 #### CribManager Service
 Tenha o application.properties com as variáveis de ambiente:
@@ -123,12 +132,16 @@ kafka.topics.crib-updated=${KAFKA_TOPIC_CRIB_UPDATED}
 kafka.topics.crib-deleted=${KAFKA_TOPIC_CRIB_DELETED}
 
 Em seguida execute:
+```bash
 cd campuscrib/backend/microservices/crib-manager-service
 ./mvnw spring-boot:run
+```
 
 #### CribSearch Service
 Vá até a pasta do microsserviço:
+```bash
 cd campuscrib/backend/microservices/crib-search-service
+```
 
 Crie um arquivo .ENV com as seguintes variáveis:
 ENV=development
@@ -147,14 +160,20 @@ KAFKA_TOPIC_UPDATED=crib.updated
 KAFKA_TOPIC_DELETED=crib.deleted
 
 Baixe as dependências:
+```bash
 go mod tidy
+```
 
 Execute:
+```bash
 go run main.go
+```
 
 #### Notification Service
 Vá até a pasta do microsserviço:
+```bash
 cd campuscrib/backend/microservices/notification-service
+```
 
 Crie um arquivo .ENV com as seguintes variáveis:
 ENV=development
@@ -167,10 +186,14 @@ AWS_SECRET_ACCESS_KEY={SUA SECRET ACCESS KEY}
 AWS_SES_SOURCE_EMAIL={SEU EMAIL FONTE DE ENVIO}
 
 Baixe as dependências:
+```bash
 go mod tidy
+```
 
 Execute:
+```bash
 go run main.go
+```
 
 # 2025-CampusCrib
 Assignment for the 2025 edition of the "Web Development and the Semantic Web" course, by Gabriel Zonatelle Borges and Kaio Silva Rosa.
