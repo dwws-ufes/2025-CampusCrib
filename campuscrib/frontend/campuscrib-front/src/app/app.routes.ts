@@ -8,10 +8,12 @@ import { landlordGuard } from './auth/landlord.guard';
 import { CribRegistrationComponent } from './crib-registration/crib-registration.component';
 import { LandlordDashboardComponent } from './landlord-dashboard/components/landlord-dashboard.component';
 import { CribComponent } from './crib/components/crib.component';
+import { LearnMoreComponent } from './learn-more/components/learn-more.component';
 
 export const routes: Routes = [
     { path: '', component: CribComponent },
     { path: 'login', component: LoginComponent },
+    { path: 'learn-more', component: LearnMoreComponent },
     { path: 'registration', component: RegistrationComponent },
     { path: 'crib/:id', component: CribDetailComponent },
     { path: 'profile', component: ProfileComponent, canActivate: [authGuard] },
