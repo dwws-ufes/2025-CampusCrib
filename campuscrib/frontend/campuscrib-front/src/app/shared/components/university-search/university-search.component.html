@@ -1,0 +1,273 @@
+<div class="university-search-container">
+  <mat-card class="search-header-card">
+    <mat-card-header>
+      <mat-card-title>
+        <mat-icon>school</mat-icon>
+        University Finder with Linked Data
+      </mat-card-title>
+      <mat-card-subtitle>
+        Discover universities and colleges using SPARQL queries on DBpedia
+      </mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <p class="header-description">
+        This tool uses <strong>Semantic Web technologies</strong> to search for educational institutions 
+        in Brazilian cities. It demonstrates <strong>SPARQL queries</strong>, <strong>RDF data processing</strong>, 
+        and <strong>Linked Data integration</strong> with DBpedia.
+      </p>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card class="search-input-card">
+    <mat-card-header>
+      <mat-card-title>Search Universities by City</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <form [formGroup]="searchForm" (ngSubmit)="onSearchSubmit()" class="search-form">
+        <div class="search-row">
+          <mat-form-field appearance="outline" class="city-input">
+            <mat-label>Enter City Name</mat-label>
+            <input 
+              matInput 
+              formControlName="cityName" 
+              placeholder="e.g., Vitória, Aracruz, São Paulo, Rio de Janeiro"
+              [disabled]="loading">
+            <mat-icon matSuffix>location_city</mat-icon>
+            @if (searchForm.get('cityName')?.hasError('required')) {
+              <mat-error>City name is required</mat-error>
+            }
+            @if (searchForm.get('cityName')?.hasError('minlength')) {
+              <mat-error>City name must be at least 2 characters</mat-error>
+            }
+          </mat-form-field>
+          
+        </div>
+      </form>
+
+      <div class="popular-cities">
+        <h4>Quick Search:</h4>
+        <mat-chip-set>
+          @for (city of popularCities; track city) {
+            <mat-chip (click)="quickSearch(city)" [disabled]="loading">
+              {{ city }}
+            </mat-chip>
+          }
+        </mat-chip-set>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  @if (hasSearched && searchResult) {
+    <div class="results-section">
+      <mat-card class="stats-card">
+        <mat-card-content>
+          <div class="search-stats">
+            <mat-icon color="primary">analytics</mat-icon>
+            <span class="stats-text">{{ getSearchStats() }}</span>
+            <span class="search-time">Searched at {{ searchResult.searchExecutedAt | date:'medium' }}</span>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="results-card">
+        <mat-card-header>
+          <mat-card-title>Search Results for {{ searchResult.city.name }}</mat-card-title>
+          <div class="header-actions">
+            <button mat-icon-button (click)="clearResults()" matTooltip="Clear Results">
+              <mat-icon>clear</mat-icon>
+            </button>
+          </div>
+        </mat-card-header>
+        <mat-card-content>
+          <mat-tab-group class="results-tabs">
+            <mat-tab label="City & Universities">
+              <div class="tab-content">
+                <div class="city-section">
+                  <h3>
+                    <mat-icon>location_city</mat-icon>
+                    City Information
+                  </h3>
+                  
+                  <mat-card class="city-info-card">
+                    <mat-card-header>
+                      <mat-card-title>{{ searchResult.city.name }}</mat-card-title>
+                      <mat-card-subtitle>
+                        <a [href]="searchResult.city.dbpediaUri" target="_blank" class="dbpedia-link">
+                          View on DBpedia <mat-icon>open_in_new</mat-icon>
+                        </a>
+                      </mat-card-subtitle>
+                    </mat-card-header>
+                    <mat-card-content>
+                      <p class="city-description">{{ searchResult.city.description }}</p>
+                      
+                      <div class="city-details">
+                        <div class="detail-item">
+                          <mat-icon>place</mat-icon>
+                          <span><strong>Coordinates:</strong> {{ formatCoordinates(searchResult.city) }}</span>
+                        </div>
+                        <div class="detail-item">
+                          <mat-icon>link</mat-icon>
+                          <span><strong>DBpedia URI:</strong> 
+                            <code class="uri-code">{{ searchResult.city.dbpediaUri }}</code>
+                          </span>
+                        </div>
+                      </div>
+                    </mat-card-content>
+                  </mat-card>
+                </div>
+
+                <mat-divider></mat-divider>
+
+                <div class="universities-section">
+                  <h3>
+                    <mat-icon>school</mat-icon>
+                    Universities & Colleges ({{ searchResult.universities.length }})
+                  </h3>
+                  
+                  @if (searchResult.universities.length === 0) {
+                    <mat-card class="no-results-card">
+                      <mat-card-content>
+                        <div class="no-results">
+                          <mat-icon>school_off</mat-icon>
+                          <h4>No Universities Found</h4>
+                          <p>No educational institutions were found in {{ searchResult.city.name }} using our SPARQL query.</p>
+                          <p>This could mean:</p>
+                          <ul>
+                            <li>The city has no universities recorded in DBpedia</li>
+                            <li>The institutions are classified differently</li>
+                            <li>The city name needs to be more specific</li>
+                          </ul>
+                        </div>
+                      </mat-card-content>
+                    </mat-card>
+                  } @else {
+                    <div class="universities-grid">
+                      @for (university of searchResult.universities; track university.dbpediaUri) {
+                        <mat-card class="university-card">
+                          <mat-card-header>
+                            <mat-card-title>
+                              <mat-icon [color]="getUniversityTypeColor(university.type)">
+                                {{ getUniversityTypeIcon(university.type) }}
+                              </mat-icon>
+                              {{ university.name }}
+                            </mat-card-title>
+                            <mat-card-subtitle>{{ university.type }}</mat-card-subtitle>
+                          </mat-card-header>
+                          <mat-card-content>
+                            <div class="university-info">
+                              @if (university.foundingYear) {
+                                <div class="info-item">
+                                  <mat-icon>event</mat-icon>
+                                  <span>{{ formatFoundingYear(university.foundingYear) }}</span>
+                                  <span class="years-old">{{ getYearsSinceFounding(university.foundingYear) }}</span>
+                                </div>
+                              }
+                              
+                              <div class="info-item">
+                                <mat-icon>link</mat-icon>
+                                <span class="uri-label">DBpedia URI:</span>
+                              </div>
+                              <code class="uri-code small">{{ university.dbpediaUri }}</code>
+                            </div>
+                          </mat-card-content>
+                          <mat-card-actions>
+                            <button mat-button (click)="openDbpediaResource(university.dbpediaUri)">
+                              <mat-icon>open_in_new</mat-icon>
+                              View Details
+                            </button>
+                          </mat-card-actions>
+                        </mat-card>
+                      }
+                    </div>
+                  }
+                </div>
+              </div>
+            </mat-tab>
+
+            <mat-tab label="SPARQL Query">
+              <div class="tab-content">
+                <div class="sparql-section">
+                  <h3>
+                    <mat-icon>code</mat-icon>
+                    SPARQL Query Used
+                  </h3>
+                  
+                  <p class="sparql-description">
+                    This is the exact SPARQL query executed against the DBpedia endpoint to find 
+                    universities in {{ searchResult.city.name }}. It demonstrates federated queries, 
+                    OPTIONAL clauses, and language filtering.
+                  </p>
+                  
+                  <mat-card class="sparql-card">
+                    <mat-card-header>
+                      <mat-card-title>DBpedia SPARQL Query</mat-card-title>
+                      <div class="card-actions">
+                        <button 
+                          mat-icon-button 
+                          (click)="copyToClipboard(getFormattedSparqlQuery(), 'SPARQL Query')"
+                          matTooltip="Copy Query">
+                          <mat-icon>content_copy</mat-icon>
+                        </button>
+                      </div>
+                    </mat-card-header>
+                    <mat-card-content>
+                      <pre class="sparql-code">{{ getFormattedSparqlQuery() }}</pre>
+                    </mat-card-content>
+                  </mat-card>
+                </div>
+              </div>
+            </mat-tab>
+
+            <mat-tab label="RDF Export">
+              <div class="tab-content">
+                <div class="export-section">
+                  <h3>
+                    <mat-icon>download</mat-icon>
+                    Export Semantic Data
+                  </h3>
+                  
+                  <p class="export-description">
+                    Download the search results as RDF data in standard formats. This demonstrates 
+                    how to serialize Linked Data for sharing and integration with other systems.
+                  </p>
+
+                  <div class="export-actions">
+                    <button mat-raised-button color="primary" (click)="exportResults('turtle')">
+                      <mat-icon>download</mat-icon>
+                      Export as Turtle (.ttl)
+                    </button>
+                    <button mat-stroked-button (click)="copyToClipboard(getFormattedRdf(), 'RDF Data')">
+                      <mat-icon>content_copy</mat-icon>
+                      Copy RDF to Clipboard
+                    </button>
+                  </div>
+
+                  <mat-card class="rdf-preview-card">
+                    <mat-card-header>
+                      <mat-card-title>Generated RDF (Turtle Format)</mat-card-title>
+                    </mat-card-header>
+                    <mat-card-content>
+                      <pre class="rdf-code">{{ getFormattedRdf() }}</pre>
+                    </mat-card-content>
+                  </mat-card>
+                </div>
+              </div>
+            </mat-tab>
+          </mat-tab-group>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  }
+
+  @if (loading) {
+    <mat-card class="loading-card">
+      <mat-card-content>
+        <div class="loading-content">
+          <mat-progress-spinner mode="indeterminate" diameter="50"></mat-progress-spinner>
+          <h3>Executing SPARQL Query...</h3>
+          <p>Searching DBpedia for universities and educational institutions</p>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  }
+</div>

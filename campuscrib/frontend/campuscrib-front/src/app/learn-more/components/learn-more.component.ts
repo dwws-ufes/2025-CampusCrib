@@ -5,6 +5,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
 import { RouterModule } from '@angular/router';
+import { UniversitySearchComponent } from '../../shared/components/university-search/university-search.component';
 
 @Component({
   selector: 'app-learn-more',
@@ -15,7 +16,8 @@ import { RouterModule } from '@angular/router';
     MatButtonModule,
     MatIconModule,
     MatDividerModule,
-    RouterModule
+    RouterModule,
+    UniversitySearchComponent
   ],
   templateUrl: './learn-more.component.html',
   styleUrls: ['./learn-more.component.css']
