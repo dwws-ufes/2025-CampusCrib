@@ -39,13 +39,24 @@ export interface SparqlResult {
   };
 }
 
+export interface SparqlProxyResponse {
+  data: SparqlResult;
+  metadata: {
+    endpoint: string;
+    format: string;
+    executionTime: number;
+    resultSize: number;
+    timestamp: string;
+    cached: boolean;
+  };
+}
+
 @Injectable({
   providedIn: 'root'
 })
 export class SemanticUniversityService {
-  private readonly DBPEDIA_ENDPOINT = 'https://dbpedia.org/sparql';
-  private readonly PROXY_URL = 'https://cors-anywhere.herokuapp.com/'; // fix this
-  private readonly DEMO_MODE = false; 
+  private readonly SPARQL_PROXY_URL = 'http://localhost:3001/api/sparql';
+ 
   private readonly searchCache = new Map<string, UniversitySearchResult>();
 
   constructor(private http: HttpClient) {}
@@ -56,91 +67,27 @@ export class SemanticUniversityService {
       return of(this.searchCache.get(cacheKey)!);
     }
 
-    if (this.DEMO_MODE) {
-      return this.getDemoUniversityData(cityName);
-    }
-
-    const query = this.buildSparqlQuery(cityName);
-    return this.executeSparqlQuery(query).pipe(
-      map(response => this.parseUniversitySearchResponse(cityName, query, response)),
-      catchError(error => {
-        console.error('SPARQL query failed, falling back to demo data:', error);
-        return this.getDemoUniversityData(cityName);
-      })
+    return this.executeUniversitySearch(cityName).pipe(
+      map(response => this.parseUniversitySearchResponse(cityName, response))
     );
   }
 
-  
-  private buildSparqlQuery(cityName: string): string {
-    const dbpediaCityName = this.formatCityNameForDBpedia(cityName);
-    
-    return `
-PREFIX dbo: <http://dbpedia.org/ontology/>
-PREFIX dbp: <http://dbpedia.org/property/>
-PREFIX dbr: <http://dbpedia.org/resource/>
-PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-PREFIX geo: <http://www.opengis.net/ont/geosparql#>
-PREFIX schema: <http://schema.org/>
-
-SELECT DISTINCT
-  ?cityLabel
-  ?cityDescription
-  ?cityLat
-  ?cityLong
-  ?universityName
-  ?foundingYear
-  ?university
-WHERE {
-  dbr:${dbpediaCityName} rdfs:label ?cityLabel .
-  dbr:${dbpediaCityName} rdfs:comment ?cityDescription .
-  dbr:${dbpediaCityName} geo:lat ?cityLat .
-  dbr:${dbpediaCityName} geo:long ?cityLong .
-
-  FILTER (langMatches(lang(?cityLabel), "EN"))
-  FILTER (langMatches(lang(?cityDescription), "EN"))
-
-  OPTIONAL {
-    { ?university a dbo:University . }
-    UNION
-    { ?university a schema:CollegeOrUniversity . }
-
-    { ?university dbo:city dbr:${dbpediaCityName} . }
-    UNION
-    { ?university dbo:campus dbr:${dbpediaCityName} . }
-
-    ?university rdfs:label ?universityName .
-    # Filter to ensure the university name is in English
-    FILTER (langMatches(lang(?universityName), "EN"))
-
-    OPTIONAL {
-      ?university dbp:established ?foundingYear .
-    }
-  }
-}
-LIMIT 20
-    `.trim();
-  }
-
-  private executeSparqlQuery(query: string): Observable<SparqlResult> {
-    // go back to the processing of the SPARQL Query
-    const endpoint = this.DEMO_MODE ? this.DBPEDIA_ENDPOINT : this.PROXY_URL + this.DBPEDIA_ENDPOINT;
-    
+  private executeUniversitySearch(cityName: string): Observable<any> {
     const headers = new HttpHeaders({
-      'Accept': 'application/sparql-results+json',
-      'Content-Type': 'application/x-www-form-urlencoded'
+      'Content-Type': 'application/json'
     });
 
-    const body = `query=${encodeURIComponent(query)}`;
-
-    return this.http.post<SparqlResult>(endpoint, body, { headers });
+    return this.http.get<any>(`${this.SPARQL_PROXY_URL}/universities/${encodeURIComponent(cityName)}`, { headers });
   }
+
+
 
   private parseUniversitySearchResponse(
     cityName: string, 
-    query: string, 
-    response: SparqlResult
+    response: any
   ): UniversitySearchResult {
-    const bindings = response.results.bindings;
+    const bindings = response.data.results.bindings;
+    const query = response.query;
     
     if (bindings.length === 0) {
       return this.createEmptyResult(cityName, query);
@@ -159,13 +106,20 @@ LIMIT 20
 
     const universitiesMap = new Map<string, UniversityInfo>();
     
-    bindings.forEach(binding => {
-      if (binding['university'] && binding['universityName']) {
-        const uri = binding['university'].value;
+    interface UniversityBinding {
+      university?: SparqlBinding;
+      label?: SparqlBinding;
+      foundingYear?: SparqlBinding;
+      [key: string]: SparqlBinding | undefined;
+    }
+
+    bindings.forEach((binding: UniversityBinding) => {
+      if (binding['university'] && binding['label']) {
+        const uri: string = binding['university'].value;
         if (!universitiesMap.has(uri)) {
           universitiesMap.set(uri, {
-            name: binding['universityName'].value,
-            foundingYear: binding['foundingYear'] ? parseInt(binding['foundingYear'].value) : undefined,
+            name: binding['label'].value,
+            foundingYear: undefined,
             dbpediaUri: uri,
             type: uri.includes('University') ? 'University' : 'College'
           });
@@ -176,7 +130,7 @@ LIMIT 20
     const result: UniversitySearchResult = {
       city,
       universities: Array.from(universitiesMap.values()),
-      rawSparqlData: response,
+      rawSparqlData: response.data,
       sparqlQuery: query,
       generatedRdf: '',
       searchExecutedAt: new Date().toISOString()
@@ -189,80 +143,7 @@ LIMIT 20
     return result;
   }
 
-  private getDemoUniversityData(cityName: string): Observable<UniversitySearchResult> {
-    const demoData = this.createDemoDataForCity(cityName);
-    
-    this.searchCache.set(cityName.toLowerCase().trim(), demoData);
-    
-    return of(demoData);
-  }
 
-  private createDemoDataForCity(cityName: string): UniversitySearchResult {
-    const normalizedCity = cityName.toLowerCase().trim();
-    
-    let city: CityInfo;
-    let universities: UniversityInfo[];
-
-    if (normalizedCity.includes('vitória') || normalizedCity.includes('vitoria')) {
-      city = {
-        name: 'Vitória',
-        description: 'Vitória is the capital of the state of Espírito Santo, Brazil, known for its port, beaches, and as an important economic center.',
-        coordinates: { lat: -20.3155, lng: -40.3128 },
-        dbpediaUri: 'http://dbpedia.org/resource/Vitória,_Espírito_Santo'
-      };
-      universities = [
-        {
-          name: 'Federal University of Espírito Santo',
-          foundingYear: 1954,
-          dbpediaUri: 'http://dbpedia.org/resource/Federal_University_of_Espírito_Santo',
-          type: 'University'
-        }
-      ];
-    } else if (normalizedCity.includes('aracruz')) {
-      city = {
-        name: 'Aracruz',
-        description: 'Aracruz is a municipality in the state of Espírito Santo, Brazil, known for its eucalyptus plantations and industrial development.',
-        coordinates: { lat: -19.8207, lng: -40.2734 },
-        dbpediaUri: 'http://dbpedia.org/resource/Aracruz'
-      };
-      universities = [
-        {
-          name: 'Instituto Federal do Espírito Santo - Campus Aracruz',
-          foundingYear: 2008,
-          dbpediaUri: 'http://dbpedia.org/resource/Instituto_Federal_do_Espírito_Santo',
-          type: 'College'
-        }
-      ];
-    } else {
-      city = {
-        name: cityName,
-        description: `${cityName} is a city with educational institutions and cultural significance.`,
-        coordinates: { lat: -15.7801, lng: -47.9292 },
-        dbpediaUri: `http://dbpedia.org/resource/${this.formatCityNameForDBpedia(cityName)}`
-      };
-      universities = [
-        {
-          name: `${cityName} State University`,
-          foundingYear: 1990,
-          dbpediaUri: `http://dbpedia.org/resource/${cityName}_State_University`,
-          type: 'University'
-        }
-      ];
-    }
-
-    const query = this.buildSparqlQuery(cityName);
-    const result: UniversitySearchResult = {
-      city,
-      universities,
-      rawSparqlData: { demo: true },
-      sparqlQuery: query,
-      generatedRdf: '',
-      searchExecutedAt: new Date().toISOString()
-    };
-
-    result.generatedRdf = this.generateCombinedRdf(result);
-    return result;
-  }
 
   private generateCombinedRdf(result: UniversitySearchResult): string {
     const cityUri = result.city.dbpediaUri;
@@ -319,19 +200,24 @@ LIMIT 20
   }
 
   private createEmptyResult(cityName: string, query: string): UniversitySearchResult {
-    return {
-      city: {
-        name: cityName,
-        description: `No information found for ${cityName}`,
-        coordinates: { lat: 0, lng: 0 },
-        dbpediaUri: `http://dbpedia.org/resource/${this.formatCityNameForDBpedia(cityName)}`
-      },
+    const city = {
+      name: cityName,
+      description: `No information found for ${cityName}`,
+      coordinates: { lat: 0, lng: 0 },
+      dbpediaUri: `http://dbpedia.org/resource/${this.formatCityNameForDBpedia(cityName)}`
+    };
+    
+    const result: UniversitySearchResult = {
+      city,
       universities: [],
       rawSparqlData: { empty: true },
       sparqlQuery: query,
       generatedRdf: '',
       searchExecutedAt: new Date().toISOString()
     };
+    
+    result.generatedRdf = this.generateCombinedRdf(result);
+    return result;
   }
 
 

@@ -171,9 +171,7 @@ export class UniversitySearchComponent implements OnInit {
     }
   }
 
-  isDemoMode(): boolean {
-    return this.searchResult?.rawSparqlData?.demo === true;
-  }
+
 
   clearResults() {
     this.searchResult = null;
