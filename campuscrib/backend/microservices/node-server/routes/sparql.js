@@ -11,6 +11,109 @@ const SPARQL_ENDPOINTS = {
 const queryCache = new Map();
 const CACHE_TTL = 5 * 60 * 1000; 
 
+router.get('/city-info/:cityName', async (req, res, next) => {
+  try {
+    const { cityName } = req.params;
+    
+    if (!cityName || cityName.trim().length < 2) {
+      return res.status(400).json({
+        error: 'Validation Error',
+        message: 'City name must be at least 2 characters long'
+      });
+    }
+
+    const query = buildCityInfoQuery(cityName);
+    const cacheKey = `city-info:${cityName.toLowerCase()}`;
+    const cachedResult = queryCache.get(cacheKey);
+    
+    if (cachedResult && (Date.now() - cachedResult.timestamp) < CACHE_TTL) {
+      console.log('Cache hit for city info search');
+      return res.json({
+        ...cachedResult.data,
+        cached: true,
+        cacheTimestamp: cachedResult.timestamp
+      });
+    }
+
+    const sparqlEndpoint = SPARQL_ENDPOINTS.dbpedia;
+    const headers = {
+      'Accept': 'application/sparql-results+json',
+      'Content-Type': 'application/x-www-form-urlencoded',
+    };
+
+    const body = `query=${encodeURIComponent(query)}`;
+
+    console.log(`Searching city info for ${cityName}`);
+
+    const startTime = Date.now();
+    const response = await axios.post(sparqlEndpoint, body, {
+      headers,
+      timeout: 15000,
+      maxContentLength: 50 * 1024 * 1024,
+      validateStatus: (status) => status < 500
+    });
+
+    const executionTime = Date.now() - startTime;
+
+    if (response.status >= 400) {
+      return res.status(response.status).json({
+        error: 'SPARQL Query Error',
+        message: 'The SPARQL endpoint returned an error',
+        details: response.data,
+        status: response.status
+      });
+    }
+
+    const result = {
+      data: response.data,
+      query: query,
+      cityName: cityName,
+      metadata: {
+        endpoint: 'dbpedia',
+        format: 'json',
+        executionTime,
+        resultSize: JSON.stringify(response.data).length,
+        timestamp: new Date().toISOString(),
+        cached: false
+      }
+    };
+
+    if (response.data.results) {
+      queryCache.set(cacheKey, {
+        data: result,
+        timestamp: Date.now()
+      });
+
+      if (queryCache.size > 100) {
+        const oldestKey = queryCache.keys().next().value;
+        queryCache.delete(oldestKey);
+      }
+    }
+
+    res.json(result);
+
+  } catch (error) {
+    console.error('City info search error:', error.message);
+    
+    if (error.code === 'ECONNABORTED') {
+      return res.status(408).json({
+        error: 'Request Timeout',
+        message: 'The city info search took too long to execute'
+      });
+    }
+
+    if (error.response) {
+      return res.status(error.response.status || 500).json({
+        error: 'SPARQL Endpoint Error',
+        message: error.message,
+        details: error.response.data
+      });
+    }
+
+    next(error);
+  }
+});
+
 router.get('/universities/:cityName', async (req, res, next) => {
   try {
     const { cityName } = req.params;
@@ -113,6 +216,28 @@ router.get('/universities/:cityName', async (req, res, next) => {
     next(error);
   }
 });
+
+function buildCityInfoQuery(cityName) {
+  const dbpediaCityName = formatCityNameForDBpedia(cityName);
+  
+  return `
+PREFIX dbo: <http://dbpedia.org/ontology/>
+PREFIX geo: <http://www.w3.org/2003/01/geo/wgs84_pos#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX dbr: <http://dbpedia.org/resource/>
+
+SELECT ?label ?abstract ?lat ?long
+WHERE {
+  dbr:${dbpediaCityName} rdfs:label ?label ;
+             dbo:abstract ?abstract ;
+             geo:lat ?lat ;
+             geo:long ?long .
+  FILTER (lang(?label) = "en")
+  FILTER (lang(?abstract) = "en")
+}
+LIMIT 1
+  `.trim();
+}
 
 function buildUniversityQuery(cityName) {
   const dbpediaCityName = formatCityNameForDBpedia(cityName);
