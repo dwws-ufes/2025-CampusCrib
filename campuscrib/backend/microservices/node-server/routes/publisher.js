@@ -10,6 +10,7 @@ const RDFS    = 'http://www.w3.org/2000/01/rdf-schema#';
 const SCHEMA  = 'http://schema.org/';
 const GEO     = 'http://www.w3.org/2003/01/geo/wgs84_pos#';
 const CC      = 'http://campuscrib.example.org/ontology#';
+const FOAF    = 'http://xmlns.com/foaf/0.1/';
 
 // URIs
 const BASE_CRIB      = 'http://localhost:3000/campuscrib/data/crib/';
@@ -110,7 +111,8 @@ async function buildCribsGraphTurtle(cribs) {
       schema: SCHEMA,
       geo: GEO,
       rdfs: RDFS,
-      rdf: RDF
+      rdf: RDF,
+      foaf: FOAF
     }
   });
 
@@ -152,17 +154,17 @@ async function buildCribsGraphTurtle(cribs) {
     }
 
     if (crib.landlordId) {
-        const landlordRes = namedNode(`${BASE_LANDLORD}${crib.landlordId}`);
-        writer.addQuad(quad(s, namedNode(CC + 'landlord'), landlordRes));
+      const landlordRes = namedNode(`${BASE_LANDLORD}${crib.landlordId}`);
+      writer.addQuad(quad(s, namedNode(CC + 'landlord'), landlordRes));
 
-        const landlord = mockLandlords.find(l => l.id === crib.landlordId);
-        if (landlord) {
-            writer.addQuad(quad(landlordRes, namedNode(RDF + 'type'), namedNode('http://xmlns.com/foaf/0.1/Person')));
-            writer.addQuad(quad(landlordRes, namedNode('http://xmlns.com/foaf/0.1/firstName'), literal(landlord.firstName)));
-            writer.addQuad(quad(landlordRes, namedNode('http://xmlns.com/foaf/0.1/lastName'), literal(landlord.lastName)));
-            writer.addQuad(quad(landlordRes, namedNode('http://xmlns.com/foaf/0.1/mbox'), literal(landlord.email)));
-            writer.addQuad(quad(landlordRes, namedNode('http://schema.org/birthDate'), literal(landlord.birthDate)));
-        }
+      const landlord = mockLandlords.find(l => l.id === crib.landlordId);
+      if (landlord) {
+        writer.addQuad(quad(landlordRes, namedNode(RDF + 'type'), namedNode(FOAF + 'Person')));
+        writer.addQuad(quad(landlordRes, namedNode(FOAF + 'firstName'), literal(landlord.firstName)));
+        writer.addQuad(quad(landlordRes, namedNode(FOAF + 'lastName'), literal(landlord.lastName)));
+        writer.addQuad(quad(landlordRes, namedNode(FOAF + 'mbox'), literal(landlord.email)));
+        writer.addQuad(quad(landlordRes, namedNode(SCHEMA + 'birthDate'), literal(landlord.birthDate)));
+      }
     }
 
     // Endereço e geoloc
