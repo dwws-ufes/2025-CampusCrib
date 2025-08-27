@@ -1,7 +1,7 @@
 .university-search-container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 1rem;
+  padding: 1rem 1rem 80px 1rem; /* space for fixed footer */
   display: flex;
   flex-direction: column;
   gap: 2rem;
@@ -484,7 +484,7 @@
 /* Responsive Design */
 @media (max-width: 768px) {
   .university-search-container {
-    padding: 0.5rem;
+    padding: 0.5rem 0.5rem 100px 0.5rem; /* increased bottom padding for mobile footer */
   }
   
   .search-row {
