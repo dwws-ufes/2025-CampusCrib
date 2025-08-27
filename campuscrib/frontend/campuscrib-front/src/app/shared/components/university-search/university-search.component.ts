@@ -16,7 +16,8 @@ import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar';
 import { 
   SemanticUniversityService, 
   UniversitySearchResult, 
-  CityInfo 
+  CityInfo,
+  CribsData 
 } from '../../services/semantic-university.service';
 
 @Component({
@@ -45,6 +46,10 @@ export class UniversitySearchComponent implements OnInit {
   loading = false;
   searchResult: UniversitySearchResult | null = null;
   hasSearched = false;
+  
+  // Cribs data properties
+  cribsData: CribsData | null = null;
+  loadingCribs = false;
   
   popularCities = [
     'London',
@@ -185,5 +190,38 @@ export class UniversitySearchComponent implements OnInit {
     const currentYear = new Date().getFullYear();
     const years = currentYear - foundingYear;
     return `(${years} years old)`;
+  }
+
+  // Cribs data methods
+  fetchCribsData() {
+    this.loadingCribs = true;
+    
+    this.semanticUniversityService.fetchCribsData().subscribe({
+      next: (data) => {
+        this.cribsData = data;
+        this.loadingCribs = false;
+        this.snackBar.open('Cribs data loaded successfully!', 'Close', { duration: 3000 });
+      },
+      error: (error) => {
+        console.error('Failed to fetch cribs data:', error);
+        this.loadingCribs = false;
+        this.snackBar.open('Failed to load cribs data. Please try again.', 'Close', { duration: 3000 });
+      }
+    });
+  }
+
+  copyCribsToClipboard() {
+    if (this.cribsData) {
+      navigator.clipboard.writeText(this.cribsData.turtleContent).then(() => {
+        this.snackBar.open('Cribs data copied to clipboard', 'Close', { duration: 2000 });
+      }).catch(err => {
+        console.error('Failed to copy cribs data: ', err);
+        this.snackBar.open('Failed to copy to clipboard', 'Close', { duration: 2000 });
+      });
+    }
+  }
+
+  clearCribsData() {
+    this.cribsData = null;
   }
 }

@@ -51,11 +51,16 @@ export interface SparqlProxyResponse {
   };
 }
 
+export interface CribsData {
+  turtleContent: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
 export class SemanticUniversityService {
   private readonly SPARQL_PROXY_URL = 'http://localhost:3001/api/sparql';
+  private readonly PUBLISHER_URL = 'http://localhost:3001/api/publish';
  
   private readonly searchCache = new Map<string, UniversitySearchResult>();
 
@@ -255,5 +260,22 @@ export class SemanticUniversityService {
   
   getCachedResults(): string[] {
     return Array.from(this.searchCache.keys());
+  }
+
+  fetchCribsData(): Observable<CribsData> {
+    const headers = new HttpHeaders({
+      'Accept': 'text/turtle'
+    });
+
+    return this.http.get(`${this.PUBLISHER_URL}/data/cribs`, { 
+      headers, 
+      responseType: 'text' 
+    }).pipe(
+      map((turtleContent: string) => ({ turtleContent })),
+      catchError(error => {
+        console.error('Error fetching cribs data:', error);
+        throw error;
+      })
+    );
   }
 }

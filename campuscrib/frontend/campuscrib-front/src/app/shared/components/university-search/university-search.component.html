@@ -253,6 +253,8 @@
                 </div>
               </div>
             </mat-tab>
+
+
           </mat-tab-group>
         </mat-card-content>
       </mat-card>
@@ -270,4 +272,67 @@
       </mat-card-content>
     </mat-card>
   }
+
+  <mat-card class="cribs-standalone-card">
+    <mat-card-header class="cribs-header">
+      <mat-card-title>
+        <mat-icon>home</mat-icon>
+        CampusCrib Student Housing Data
+      </mat-card-title>
+      <mat-card-subtitle>
+        Fetch and view the complete CampusCrib housing data in RDF Turtle format
+      </mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <p class="cribs-description">
+        This data includes student accommodations, landlord information, and property details 
+        published as RDF data using semantic web technologies.
+      </p>
+
+      <div class="cribs-actions">
+        <button 
+          mat-raised-button 
+          color="primary" 
+          (click)="fetchCribsData()" 
+          [disabled]="loadingCribs"
+          class="fetch-cribs-btn">
+          <mat-icon>cloud_download</mat-icon>
+          @if (loadingCribs) {
+            Loading...
+          } @else {
+            Fetch Cribs Data
+          }
+        </button>
+        
+        @if (cribsData) {
+          <button mat-stroked-button (click)="copyCribsToClipboard()">
+            <mat-icon>content_copy</mat-icon>
+            Copy to Clipboard
+          </button>
+          <button mat-stroked-button (click)="clearCribsData()">
+            <mat-icon>clear</mat-icon>
+            Clear Data
+          </button>
+        }
+      </div>
+
+      @if (loadingCribs) {
+        <div class="loading-cribs">
+          <mat-progress-spinner mode="indeterminate" diameter="40" color="primary"></mat-progress-spinner>
+          <p>Fetching CampusCrib data...</p>
+        </div>
+      }
+
+      @if (cribsData) {
+        <mat-card class="cribs-data-card">
+          <mat-card-header>
+            <mat-card-title>CampusCrib Data (Turtle Format)</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <pre class="turtle-code">{{ cribsData.turtleContent }}</pre>
+          </mat-card-content>
+        </mat-card>
+      }
+    </mat-card-content>
+  </mat-card>
 </div>
