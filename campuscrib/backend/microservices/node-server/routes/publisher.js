@@ -117,45 +117,45 @@ async function buildCribsGraphTurtle(cribs) {
   });
 
   for (const crib of cribs) {
-    const s = namedNode(`${BASE_CRIB}${crib.id}`);
+    const suj = namedNode(`${BASE_CRIB}${crib.id}`);
 
     // Tipo e label
-    writer.addQuad(quad(s, namedNode(RDF + 'type'), namedNode(CC + 'Crib')));
+    writer.addQuad(quad(suj, namedNode(RDF + 'type'), namedNode(CC + 'Crib')));
     if (crib.title) {
-      writer.addQuad(quad(s, namedNode(RDFS + 'label'), literal(crib.title)));
+      writer.addQuad(quad(suj, namedNode(RDFS + 'label'), literal(crib.title)));
     }
 
     // Descrição e preço
     if (crib.description) {
-      writer.addQuad(quad(s, namedNode(SCHEMA + 'description'), literal(crib.description)));
+      writer.addQuad(quad(suj, namedNode(SCHEMA + 'description'), literal(crib.description)));
     }
     if (crib.price != null) {
-      writer.addQuad(quad(s, namedNode(SCHEMA + 'price'), literal(crib.price)));
+      writer.addQuad(quad(suj, namedNode(SCHEMA + 'price'), literal(crib.price)));
     }
 
     // Atributos do crib
     if (crib.numRooms != null) {
-      writer.addQuad(quad(s, namedNode(CC + 'numRooms'), literal(crib.numRooms)));
+      writer.addQuad(quad(suj, namedNode(CC + 'numRooms'), literal(crib.numRooms)));
     }
     if (crib.numBathrooms != null) {
-      writer.addQuad(quad(s, namedNode(CC + 'numBathrooms'), literal(crib.numBathrooms)));
+      writer.addQuad(quad(suj, namedNode(CC + 'numBathrooms'), literal(crib.numBathrooms)));
     }
     if (crib.numPeopleAlreadyIn != null) {
-      writer.addQuad(quad(s, namedNode(CC + 'numPeopleAlreadyIn'), literal(crib.numPeopleAlreadyIn)));
+      writer.addQuad(quad(suj, namedNode(CC + 'numPeopleAlreadyIn'), literal(crib.numPeopleAlreadyIn)));
     }
     if (crib.numAvailableVacancies != null) {
-      writer.addQuad(quad(s, namedNode(CC + 'numAvailableVacancies'), literal(crib.numAvailableVacancies)));
+      writer.addQuad(quad(suj, namedNode(CC + 'numAvailableVacancies'), literal(crib.numAvailableVacancies)));
     }
     if (crib.acceptedGenders) {
-      writer.addQuad(quad(s, namedNode(CC + 'acceptedGenders'), literal(crib.acceptedGenders)));
+      writer.addQuad(quad(suj, namedNode(CC + 'acceptedGenders'), literal(crib.acceptedGenders)));
     }
     if (typeof crib.petsPolicy === 'boolean') {
-      writer.addQuad(quad(s, namedNode(CC + 'petsPolicy'), literal(crib.petsPolicy)));
+      writer.addQuad(quad(suj, namedNode(CC + 'petsPolicy'), literal(crib.petsPolicy)));
     }
 
     if (crib.landlordId) {
       const landlordSuj = namedNode(`${BASE_LANDLORD}${crib.landlordId}`);
-      writer.addQuad(quad(s, namedNode(CC + 'landlord'), landlordSuj));
+      writer.addQuad(quad(suj, namedNode(CC + 'landlord'), landlordSuj));
 
       const landlord = mockLandlords.find(l => l.id === crib.landlordId);
       if (landlord) {
@@ -171,22 +171,22 @@ async function buildCribsGraphTurtle(cribs) {
     if (crib.location) {
       const loc = crib.location;
       if (loc.street) {
-        writer.addQuad(quad(s, namedNode(SCHEMA + 'streetAddress'), literal(loc.street)));
+        writer.addQuad(quad(suj, namedNode(SCHEMA + 'streetAddress'), literal(loc.street)));
       }
       if (loc.city) {
-        writer.addQuad(quad(s, namedNode(SCHEMA + 'addressLocality'), literal(loc.city)));
+        writer.addQuad(quad(suj, namedNode(SCHEMA + 'addressLocality'), literal(loc.city)));
       }
       if (loc.state) {
-        writer.addQuad(quad(s, namedNode(SCHEMA + 'addressRegion'), literal(loc.state)));
+        writer.addQuad(quad(suj, namedNode(SCHEMA + 'addressRegion'), literal(loc.state)));
       }
       if (loc.zipCode) {
-        writer.addQuad(quad(s, namedNode(SCHEMA + 'postalCode'), literal(loc.zipCode)));
+        writer.addQuad(quad(suj, namedNode(SCHEMA + 'postalCode'), literal(loc.zipCode)));
       }
       if (loc.latitude != null) {
-        writer.addQuad(quad(s, namedNode(GEO + 'lat'), literal(loc.latitude)));
+        writer.addQuad(quad(suj, namedNode(GEO + 'lat'), literal(loc.latitude)));
       }
       if (loc.longitude != null) {
-        writer.addQuad(quad(s, namedNode(GEO + 'long'), literal(loc.longitude)));
+        writer.addQuad(quad(suj, namedNode(GEO + 'long'), literal(loc.longitude)));
       }
     }
   }
