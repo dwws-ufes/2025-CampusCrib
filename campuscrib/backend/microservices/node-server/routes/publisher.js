@@ -13,8 +13,8 @@ const CC      = 'http://campuscrib.example.org/ontology#';
 const FOAF    = 'http://xmlns.com/foaf/0.1/';
 
 // URIs
-const BASE_CRIB      = 'http://localhost:3000/campuscrib/data/crib/';
-const BASE_LANDLORD  = 'http://localhost:3000/campuscrib/data/landlord/';
+const BASE_CRIB      = 'http://localhost:3001/api/publish/data/cribs/';
+const BASE_LANDLORD  = 'http://localhost:3001/api/publish/data/landlords/';
 
 // Mocks
 const mockCribs = [
@@ -103,7 +103,16 @@ const mockLandlords = [
   }
 ];
 
-// Constroi grafo em Turtle
+// Funcao auxiliar para landlord
+function writeLandlordResource(writer, landlordSuj, landlord) {
+  writer.addQuad(quad(landlordSuj, namedNode(RDF + 'type'), namedNode(FOAF + 'Person')));
+  if (landlord.firstName) writer.addQuad(quad(landlordSuj, namedNode(FOAF + 'firstName'), literal(landlord.firstName)));
+  if (landlord.lastName)  writer.addQuad(quad(landlordSuj, namedNode(FOAF + 'lastName'),  literal(landlord.lastName)));
+  if (landlord.email)     writer.addQuad(quad(landlordSuj, namedNode(FOAF + 'mbox'),      literal(landlord.email)));
+  if (landlord.birthDate) writer.addQuad(quad(landlordSuj, namedNode(SCHEMA + 'birthDate'), literal(landlord.birthDate)));
+}
+
+// Constroi grafo em Turtle para os cribs
 async function buildCribsGraphTurtle(cribs) {
   const writer = new N3.Writer({
     prefixes: {
@@ -159,11 +168,7 @@ async function buildCribsGraphTurtle(cribs) {
 
       const landlord = mockLandlords.find(l => l.id === crib.landlordId);
       if (landlord) {
-        writer.addQuad(quad(landlordSuj, namedNode(RDF + 'type'), namedNode(FOAF + 'Person')));
-        writer.addQuad(quad(landlordSuj, namedNode(FOAF + 'firstName'), literal(landlord.firstName)));
-        writer.addQuad(quad(landlordSuj, namedNode(FOAF + 'lastName'), literal(landlord.lastName)));
-        writer.addQuad(quad(landlordSuj, namedNode(FOAF + 'mbox'), literal(landlord.email)));
-        writer.addQuad(quad(landlordSuj, namedNode(SCHEMA + 'birthDate'), literal(landlord.birthDate)));
+        writeLandlordResource(writer, landlordSuj, landlord);
       }
     }
 
@@ -196,6 +201,23 @@ async function buildCribsGraphTurtle(cribs) {
   });
 }
 
+// Constroi grafo em Turtle para os landlords
+async function buildLandlordsGraphTurtle(landlords) {
+  const writer = new N3.Writer({
+    prefixes: { cc: CC, schema: SCHEMA, geo: GEO, rdfs: RDFS, rdf: RDF, foaf: FOAF }
+  });
+
+  for (const landlord of landlords) {
+    const suj = namedNode(`${BASE_LANDLORD}${landlord.id}`);
+
+    writeLandlordResource(writer, suj, landlord);
+  }
+
+  return new Promise((resolve, reject) => {
+    writer.end((err, ttl) => (err ? reject(err) : resolve(ttl)));
+  });
+}
+
 // rota para todos os cribs
 router.get('/data/cribs', async (_req, res) => {
   try {
@@ -219,6 +241,32 @@ router.get('/data/cribs/:id', async (req, res) => {
   } catch (e) {
     console.error(e);
     res.status(500).send('Erro ao gerar RDF (Turtle)');
+  }
+});
+
+// rota para todos os landlords
+router.get('/data/landlords', async (_req, res) => {
+  try {
+    const ttl = await buildLandlordsGraphTurtle(mockLandlords);
+    res.type('text/turtle').send(ttl);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Erro ao gerar RDF');
+  }
+});
+
+// rota para o landlord especificado pelo id
+router.get('/data/landlords/:id', async (req, res) => {
+  try {
+    const id = req.params.id;
+    const landlord = mockLandlords.find(l => l.id === id);
+    if (!landlord) return res.status(404).send('Landlord não encontrado');
+
+    const ttl = await buildLandlordsGraphTurtle([landlord]);
+    res.type('text/turtle').send(ttl);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Erro ao gerar RDF');
   }
 });
 

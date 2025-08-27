@@ -42,6 +42,8 @@ app.listen(PORT, () => {
   console.log(`CampusCrib RDF server on http://localhost:${PORT}/api/publish`);
   console.log(`→ Todos os cribs:  http://localhost:${PORT}/api/publish/data/cribs`);
   console.log(`→ Crib por id:     http://localhost:${PORT}/api/publish/data/cribs/1`);
+  console.log(`→ Todos os landlords:  http://localhost:${PORT}/api/publish/data/landlords`);
+  console.log(`→ Landlord por id:     http://localhost:${PORT}/api/publish/data/landlords/1`);
 });
 
 module.exports = app;
