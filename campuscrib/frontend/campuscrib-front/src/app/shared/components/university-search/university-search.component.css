@@ -1,7 +1,7 @@
 .university-search-container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 1rem;
+  padding: 1rem 1rem 80px 1rem; /* space for fixed footer */
   display: flex;
   flex-direction: column;
   gap: 2rem;
@@ -484,7 +484,7 @@
 /* Responsive Design */
 @media (max-width: 768px) {
   .university-search-container {
-    padding: 0.5rem;
+    padding: 0.5rem 0.5rem 100px 0.5rem; /* increased bottom padding for mobile footer */
   }
   
   .search-row {
@@ -552,5 +552,139 @@
   
   .tab-content {
     padding: 1rem 0;
+  }
+}
+
+.cribs-section {
+  padding: 2rem 0;
+}
+
+.cribs-section h3 {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  color: #424242;
+}
+
+.cribs-section h3 mat-icon {
+  color: #1976d2;
+}
+
+.cribs-description {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #666;
+  margin-bottom: 2rem;
+}
+
+.cribs-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.fetch-cribs-btn {
+  background: linear-gradient(135deg, #1976d2 0%, #1565c0 100%) !important;
+  color: white !important;
+}
+
+.loading-cribs {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 2rem;
+  color: #666;
+}
+
+.loading-cribs mat-progress-spinner {
+  --mdc-circular-progress-active-indicator-color: #1976d2;
+}
+
+.cribs-data-card {
+  margin-top: 1rem;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.cribs-data-card mat-card-header {
+  background: linear-gradient(135deg, #1976d2 0%, #1565c0 100%);
+  color: white;
+  padding: 1.5rem;
+  margin: -1rem -1rem 1rem -1rem;
+}
+
+.cribs-data-card mat-card-title {
+  color: white !important;
+  font-weight: 500;
+}
+
+.cribs-data-card mat-card-subtitle {
+  color: rgba(255, 255, 255, 0.9) !important;
+  font-size: 0.9rem;
+}
+
+.turtle-code {
+  background: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 6px;
+  padding: 1.5rem;
+  font-family: 'Courier New', Consolas, monospace;
+  font-size: 0.85rem;
+  line-height: 1.4;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  max-height: 500px;
+  overflow-y: auto;
+  color: #495057;
+}
+
+/* Standalone CampusCrib Card */
+.cribs-standalone-card {
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.cribs-header {
+  background: linear-gradient(135deg, #1976d2 0%, #1565c0 100%);
+  color: white;
+  padding: 1.5rem;
+  margin: -1rem -1rem 1rem -1rem;
+}
+
+.cribs-header mat-card-title {
+  color: white !important;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1.5rem;
+}
+
+.cribs-header mat-card-title mat-icon {
+  color: white !important;
+  font-size: 1.8rem;
+  width: 1.8rem;
+  height: 1.8rem;
+}
+
+.cribs-header mat-card-subtitle {
+  color: rgba(255, 255, 255, 0.9) !important;
+  font-size: 1rem;
+  margin-top: 0.5rem;
+}
+
+@media (max-width: 768px) {
+  .cribs-actions {
+    flex-direction: column;
+  }
+  
+  .cribs-actions button {
+    width: 100%;
+  }
+  
+  .turtle-code {
+    font-size: 0.75rem;
+    padding: 1rem;
   }
 }
