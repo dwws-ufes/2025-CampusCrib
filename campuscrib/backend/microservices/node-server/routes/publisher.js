@@ -154,16 +154,16 @@ async function buildCribsGraphTurtle(cribs) {
     }
 
     if (crib.landlordId) {
-      const landlordRes = namedNode(`${BASE_LANDLORD}${crib.landlordId}`);
-      writer.addQuad(quad(s, namedNode(CC + 'landlord'), landlordRes));
+      const landlordSuj = namedNode(`${BASE_LANDLORD}${crib.landlordId}`);
+      writer.addQuad(quad(s, namedNode(CC + 'landlord'), landlordSuj));
 
       const landlord = mockLandlords.find(l => l.id === crib.landlordId);
       if (landlord) {
-        writer.addQuad(quad(landlordRes, namedNode(RDF + 'type'), namedNode(FOAF + 'Person')));
-        writer.addQuad(quad(landlordRes, namedNode(FOAF + 'firstName'), literal(landlord.firstName)));
-        writer.addQuad(quad(landlordRes, namedNode(FOAF + 'lastName'), literal(landlord.lastName)));
-        writer.addQuad(quad(landlordRes, namedNode(FOAF + 'mbox'), literal(landlord.email)));
-        writer.addQuad(quad(landlordRes, namedNode(SCHEMA + 'birthDate'), literal(landlord.birthDate)));
+        writer.addQuad(quad(landlordSuj, namedNode(RDF + 'type'), namedNode(FOAF + 'Person')));
+        writer.addQuad(quad(landlordSuj, namedNode(FOAF + 'firstName'), literal(landlord.firstName)));
+        writer.addQuad(quad(landlordSuj, namedNode(FOAF + 'lastName'), literal(landlord.lastName)));
+        writer.addQuad(quad(landlordSuj, namedNode(FOAF + 'mbox'), literal(landlord.email)));
+        writer.addQuad(quad(landlordSuj, namedNode(SCHEMA + 'birthDate'), literal(landlord.birthDate)));
       }
     }
 
