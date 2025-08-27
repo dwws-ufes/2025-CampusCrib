@@ -12,7 +12,7 @@
     <mat-card-content>
       <p class="header-description">
         This tool uses <strong>Semantic Web technologies</strong> to search for educational institutions 
-        in Brazilian cities. It demonstrates <strong>SPARQL queries</strong>, <strong>RDF data processing</strong>, 
+        in cities. It demonstrates <strong>SPARQL queries</strong>, <strong>RDF data processing</strong>, 
         and <strong>Linked Data integration</strong> with DBpedia.
       </p>
     </mat-card-content>
@@ -30,7 +30,7 @@
             <input 
               matInput 
               formControlName="cityName" 
-              placeholder="e.g., Vitória, Aracruz, São Paulo, Rio de Janeiro"
+              placeholder="e.g.,São Paulo, California, London"
               [disabled]="loading">
             <mat-icon matSuffix>location_city</mat-icon>
             @if (searchForm.get('cityName')?.hasError('required')) {

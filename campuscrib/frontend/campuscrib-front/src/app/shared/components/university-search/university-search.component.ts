@@ -47,8 +47,9 @@ export class UniversitySearchComponent implements OnInit {
   hasSearched = false;
   
   popularCities = [
-    'Vitória',
-    'Aracruz',
+    'London',
+    'California',
+    'Ohio'
   ];
 
   constructor(
@@ -57,12 +58,12 @@ export class UniversitySearchComponent implements OnInit {
     private snackBar: MatSnackBar
   ) {
     this.searchForm = this.fb.group({
-      cityName: ['Vitória', [Validators.required, Validators.minLength(2)]]
+      cityName: ['California', [Validators.required, Validators.minLength(2)]]
     });
   }
 
   ngOnInit() {
-    this.searchCity('Vitória', false);
+    this.searchCity('California', false);
   }
 
   onSearchSubmit() {
