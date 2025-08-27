@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
+import { Observable, of, forkJoin } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 
 export interface UniversitySearchResult {
@@ -67,9 +67,25 @@ export class SemanticUniversityService {
       return of(this.searchCache.get(cacheKey)!);
     }
 
-    return this.executeUniversitySearch(cityName).pipe(
-      map(response => this.parseUniversitySearchResponse(cityName, response))
+    return this.executeCombinedSearch(cityName).pipe(
+      map(([cityResponse, universityResponse]) => 
+        this.parseCombinedSearchResponse(cityName, cityResponse, universityResponse))
     );
+  }
+
+  private executeCombinedSearch(cityName: string): Observable<[any, any]> {
+    return forkJoin([
+      this.executeCityInfoSearch(cityName),
+      this.executeUniversitySearch(cityName)
+    ]);
+  }
+
+  private executeCityInfoSearch(cityName: string): Observable<any> {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+
+    return this.http.get<any>(`${this.SPARQL_PROXY_URL}/city-info/${encodeURIComponent(cityName)}`, { headers });
   }
 
   private executeUniversitySearch(cityName: string): Observable<any> {
@@ -82,27 +98,36 @@ export class SemanticUniversityService {
 
 
 
-  private parseUniversitySearchResponse(
-    cityName: string, 
-    response: any
+  private parseCombinedSearchResponse(
+    cityName: string,
+    cityResponse: any,
+    universityResponse: any
   ): UniversitySearchResult {
-    const bindings = response.data.results.bindings;
-    const query = response.query;
+    const cityBindings = cityResponse.data.results.bindings;
+    const universityBindings = universityResponse.data.results.bindings;
+    const cityQuery = cityResponse.query;
+    const universityQuery = universityResponse.query;
     
-    if (bindings.length === 0) {
-      return this.createEmptyResult(cityName, query);
+    let city: CityInfo;
+    if (cityBindings.length > 0) {
+      const cityBinding = cityBindings[0];
+      city = {
+        name: cityBinding['label']?.value || cityName,
+        description: cityBinding['abstract']?.value || `Information about ${cityName}`,
+        coordinates: {
+          lat: parseFloat(cityBinding['lat']?.value || '0'),
+          lng: parseFloat(cityBinding['long']?.value || '0')
+        },
+        dbpediaUri: `http://dbpedia.org/resource/${this.formatCityNameForDBpedia(cityName)}`
+      };
+    } else {
+      city = {
+        name: cityName,
+        description: `No detailed information found for ${cityName}`,
+        coordinates: { lat: 0, lng: 0 },
+        dbpediaUri: `http://dbpedia.org/resource/${this.formatCityNameForDBpedia(cityName)}`
+      };
     }
-
-    const firstBinding = bindings[0];
-    const city: CityInfo = {
-      name: firstBinding['cityLabel']?.value || cityName,
-      description: firstBinding['cityDescription']?.value || `Information about ${cityName}`,
-      coordinates: {
-        lat: parseFloat(firstBinding['cityLat']?.value || '0'),
-        lng: parseFloat(firstBinding['cityLong']?.value || '0')
-      },
-      dbpediaUri: `http://dbpedia.org/resource/${this.formatCityNameForDBpedia(cityName)}`
-    };
 
     const universitiesMap = new Map<string, UniversityInfo>();
     
@@ -113,7 +138,7 @@ export class SemanticUniversityService {
       [key: string]: SparqlBinding | undefined;
     }
 
-    bindings.forEach((binding: UniversityBinding) => {
+    universityBindings.forEach((binding: UniversityBinding) => {
       if (binding['university'] && binding['label']) {
         const uri: string = binding['university'].value;
         if (!universitiesMap.has(uri)) {
@@ -130,8 +155,11 @@ export class SemanticUniversityService {
     const result: UniversitySearchResult = {
       city,
       universities: Array.from(universitiesMap.values()),
-      rawSparqlData: response.data,
-      sparqlQuery: query,
+      rawSparqlData: {
+        cityInfo: cityResponse.data,
+        universities: universityResponse.data
+      },
+      sparqlQuery: `City Info Query:\n${cityQuery}\n\nUniversity Query:\n${universityQuery}`,
       generatedRdf: '',
       searchExecutedAt: new Date().toISOString()
     };
@@ -198,28 +226,6 @@ export class SemanticUniversityService {
       .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
       .join('_');
   }
-
-  private createEmptyResult(cityName: string, query: string): UniversitySearchResult {
-    const city = {
-      name: cityName,
-      description: `No information found for ${cityName}`,
-      coordinates: { lat: 0, lng: 0 },
-      dbpediaUri: `http://dbpedia.org/resource/${this.formatCityNameForDBpedia(cityName)}`
-    };
-    
-    const result: UniversitySearchResult = {
-      city,
-      universities: [],
-      rawSparqlData: { empty: true },
-      sparqlQuery: query,
-      generatedRdf: '',
-      searchExecutedAt: new Date().toISOString()
-    };
-    
-    result.generatedRdf = this.generateCombinedRdf(result);
-    return result;
-  }
-
 
   exportSearchResults(result: UniversitySearchResult, format: 'turtle' | 'jsonld' = 'turtle'): void {
     let content = '';
