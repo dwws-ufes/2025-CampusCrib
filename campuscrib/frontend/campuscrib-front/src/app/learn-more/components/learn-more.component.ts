@@ -23,4 +23,7 @@ import { UniversitySearchComponent } from '../../shared/components/university-se
   styleUrls: ['./learn-more.component.css']
 })
 export class LearnMoreComponent {
+  searchUniversities () {
+        console.log('Search initiated from Learn More component.');
+  }
 }
